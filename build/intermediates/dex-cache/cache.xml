@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-15b71fb8a7b598ffe8c964db516bf8d312aa8160.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/internal_impl-22.2.0-e0f90ce55d21de944c61e7e12bca8ab0f235e43f.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/com.google.android.support/wearable/1.1.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="27f19641b81b1078e653d2f0e5d1ed44d158a785">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/classes-def26e39aae772979cea82b8c130af6653b3c455.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-c0d17b43f65cdfe5417de505ec3c4555cc088352.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/SensorDashboard/shared/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4fbc371ffa6db79d9c5640a7adc7020479e9bb54">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-44ecda391924ff189322d3b176096a553f8842bc.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/.gradle/caches/modules-2/files-2.1/com.squareup/otto/1.3.6/ee373b6d0d6ea36a0a9b0cbabaf16be7e7fc3e30/otto-1.3.6.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ee373b6d0d6ea36a0a9b0cbabaf16be7e7fc3e30">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/otto-1.3.6-f0c499a7903e10ce416ec2c7fe6fbe4dd8f5ac24.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-fa170f98278cc288dd35c0ef78f3ed2a8eb7c4d7.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-4052794e1326b63cd60f4f54d5b38196eaf1b99c.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/SensorDashboard/shared/unspecified/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4fbc371ffa6db79d9c5640a7adc7020479e9bb54">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/classes-cb99f120ba76ea2f329b0a7f934984ac095bce45.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/support-annotations-22.0.0-6529fcec04fd7f901e6923cbaf110f18357d4ea1.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-f9a9894d5d241786f314c00ba73fc4f26155a729.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/classes-451fbf43ae13317ac8983c01bf87ea1b411bee4e.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.android.support/design/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-cb53cff297c6f791e4a0aa8119b7232fde51fb0f.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/.gradle/caches/modules-2/files-2.1/io.realm/realm-android/0.80.3/7979d05ba7b919c53766bf98e31aaf0e9feb0590/realm-android-0.80.3.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="7979d05ba7b919c53766bf98e31aaf0e9feb0590">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/realm-android-0.80.3-1c08e87bf8cae32bef1e91b881425e775483c6c7.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/support-annotations-22.2.0-55296dd6ef7e0253fe6c18d40f9d7d14299a09d8.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/classes-8c010203c1a80eeed87c6891589361b0927c0465.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-37485ca70d01652ed77c62362b8c3608ea68b84e.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/libs/internal_impl-22.0.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/internal_impl-22.0.0-98ca7f2ac2296505503eb29c8935e16e1414114e.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/classes-17bf5643301a63e452cb3d35726f3a0f12a732c7.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/wear/build/intermediates/pre-dexed/debug/classes-47a9b394b2759c1e8e05e134a78cf98f59bcd941.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.5.0/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="e7b35244f50663b3f8d150714bca9ecd7a290da1">
+        <dex dex="/Users/neerajpaliwal/development/SensorDashboard/mobile/build/intermediates/pre-dexed/debug/classes-caf7df9f71cbd0c8c0b304bf818519d4a2079cef.jar" />
+    </item>
+
+</items>

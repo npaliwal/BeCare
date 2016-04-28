@@ -1,8 +1,6 @@
 package com.github.pocmo.sensordashboard;
 
-import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -19,20 +17,14 @@ import android.view.SubMenu;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.data.Sensor;
-import com.github.pocmo.sensordashboard.data.SensorDataPoint;
-import com.github.pocmo.sensordashboard.data.UploadData;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
-import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
-import com.github.pocmo.sensordashboard.network.PostClass;
 import com.github.pocmo.sensordashboard.ui.ExportActivity;
-import com.github.pocmo.sensordashboard.ui.SummaryFragment;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
@@ -48,9 +40,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private ViewPager pager;
 
-    private SummaryFragment mSummaryFragment;
-
-
     private NavigationView mNavigationView;
     private Menu mNavigationViewMenu;
     private List<Node> mNodes;
@@ -63,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         setContentView(R.layout.activity_main);
 
         mToolbar = (Toolbar) findViewById(R.id.my_awesome_toolbar);
-        mSummaryFragment = new SummaryFragment();
-        mSummaryFragment.setMainActivity(MainActivity.this);
 
         mNavigationView = (NavigationView) findViewById(R.id.navView);
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -124,11 +111,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             mToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    switch (item.getItemId()) {
-
-                        case R.id.action_export:
-                            startActivity(new Intent(MainActivity.this, ExportActivity.class));
-                            return true;
+                    //switch (item.getItemId()) {
+                    //    case R.id.action_export:
+                    //        startActivity(new Intent(MainActivity.this, ExportActivity.class));
+                    //        return true;
+                    //}
+                    if(item.getItemId() == R.id.action_export){
+                        startActivity(new Intent(MainActivity.this, ExportActivity.class));
+                        return true;
                     }
 
                     return true;
@@ -232,16 +222,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
         private Sensor getItemObject(int position) {
-            if(position == 0)
-                return null;
-            return sensors.get(position-1);
+            return sensors.get(position);
         }
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            if(position == 0)
-                return mSummaryFragment;
-            return SensorFragment.newInstance(sensors.get(position-1).getId());
+            return SensorFragment.newInstance(sensors.get(position).getId());
         }
 
         @Override
@@ -259,39 +245,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void onNewSensorEvent(final NewSensorEvent event) {
         ((ScreenSlidePagerAdapter) pager.getAdapter()).addNewSensor(event.getSensor());
         pager.getAdapter().notifyDataSetChanged();
-        mSummaryFragment.setEmptyStateVisiblity(false);
-        if(event.getSensor().getId() == android.hardware.Sensor.TYPE_GYROSCOPE){
-            mSummaryFragment.setGyroVisible();
-
-        }
-
-        if(event.getSensor().getId() == android.hardware.Sensor.TYPE_ACCELEROMETER){
-            mSummaryFragment.setAccelerovisible();
-
-        }
-
         notifyUSerForNewSensor(event.getSensor());
-    }
-
-    public SensorDataPoint getAcceleroCurrData(){
-        return remoteSensorManager.getAcceleroCurrData();
-    }
-
-
-    public SensorDataPoint getGyroCurrData(){
-        return remoteSensorManager.getGyroCurrData();
-    }
-
-    @Subscribe
-    public void onSensorUpdatedEvent(SensorUpdatedEvent event){
-        if(event.getSensor().getId() == android.hardware.Sensor.TYPE_GYROSCOPE){
-            mSummaryFragment.setGyroVisible();
-            mSummaryFragment.updateGyroText();
-        }
-
-        if(event.getSensor().getId() == android.hardware.Sensor.TYPE_ACCELEROMETER){
-            mSummaryFragment.setAccelerovisible();
-            mSummaryFragment.updateAcceleroText();
-        }
     }
 }

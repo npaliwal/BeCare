@@ -8,7 +8,6 @@ import com.github.pocmo.sensordashboard.data.Sensor;
 import com.github.pocmo.sensordashboard.data.SensorDataPoint;
 import com.github.pocmo.sensordashboard.data.SensorNames;
 import com.github.pocmo.sensordashboard.data.TagData;
-import com.github.pocmo.sensordashboard.data.UploadData;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
@@ -48,7 +47,7 @@ public class RemoteSensorManager {
 
     private SensorDataPoint gyroCurrData = null;
     private SensorDataPoint acceleroCurrData = null;
-    private UploadData uploadData = null;
+    //private UploadData uploadData = null;
 
     private String userActivity = "NA";
 
@@ -71,7 +70,7 @@ public class RemoteSensorManager {
         this.sensorMapping = new SparseArray<Sensor>();
         this.sensors = new ArrayList<Sensor>();
         this.sensorNames = new SensorNames();
-        uploadData = new UploadData();
+        //uploadData = new UploadData();
 
         this.googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Wearable.API)
@@ -123,7 +122,7 @@ public class RemoteSensorManager {
         if(sensorType == android.hardware.Sensor.TYPE_ACCELEROMETER){
             acceleroCurrData = dataPoint;
         }
-        uploadData.update(gyroCurrData, acceleroCurrData, userActivity);
+        //uploadData.update(gyroCurrData, acceleroCurrData, userActivity);
         BusProvider.postOnMainThread(new SensorUpdatedEvent(sensor, dataPoint));
     }
 
@@ -209,9 +208,9 @@ public class RemoteSensorManager {
         return acceleroCurrData;
     }
 
-    public UploadData getUploadData() {
-        return uploadData;
-    }
+    //public UploadData getUploadData() {
+    //    return uploadData;
+    //}
 
     private void controlMeasurementInBackground(final String path) {
         if (validateConnection()) {
@@ -221,7 +220,7 @@ public class RemoteSensorManager {
 
             for (Node node : nodes) {
                 Log.i(TAG, "add node " + node.getDisplayName());
-                uploadData.setDeviceId(node.getDisplayName());
+                //uploadData.setDeviceId(node.getDisplayName());
                 Wearable.MessageApi.sendMessage(
                         googleApiClient, node.getId(), path, null
                 ).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {

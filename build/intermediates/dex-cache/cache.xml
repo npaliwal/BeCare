@@ -2,151 +2,123 @@
 <items version="2" >
 
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/classes-bff1e371f5c23d25098c91b7ae7bc10ec41be9a5.jar" />
+        jar="/Users/neerajpaliwal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.3.0/support-annotations-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="db7791d75a07fef9844d06236c1c59ba7bf6997c">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/support-annotations-23.3.0_0cb8e311323c8b1f421bfc6a0fcaffdb06c6e073.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="a78183f30e769a98ab4820794f597763088d3065">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-f6e6bb039c47501c199b73cdc525790a1d4efb48.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/com.google.android.support/wearable/1.1.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="27f19641b81b1078e653d2f0e5d1ed44d158a785">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/classes-c18e73e0ed0743c26102326e0ce43548d0245299.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/libs/internal_impl-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="57f2ab85c164ff1676ec64dee787981c046fab79">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/internal_impl-22.2.0-6b1dfe48cb8df3acc2d031ab65e999151851becf.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="1ee588ff2c4daf7b97c1cbf922a6c7f027285c2f">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-8a54e9e0580fb7f19a705f04d310d8fef699b958.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="a78183f30e769a98ab4820794f597763088d3065">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/classes-b88e90a0af9988c685b8ec48227daa770bcb8f8f.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4e86306289ace4aa0cfec44a05ed2b410d36989d">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/classes-f96953ad0a50f3848183df73810dc4f88f162d08.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-b1285f5bd074411b0ee00f9869894cf592d07519.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.google.android.gms/play-services-analytics/7.5.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
         sha1="e7b35244f50663b3f8d150714bca9ecd7a290da1">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-c5dca7249bb7e2365bf68a4070dc3ff0281281cf.jar" />
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-analytics-7.5.0_1b02bdaa966e0318c090935ae84c6f2711e17c38.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="73753982da6bde518f3a4c6b372749981d14d1a0">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-4895d25dedc85169aefa108acb3f492e36791474.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/BeCare/shared/unspecified/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="0a26c5612f2596458f7cfe8c17127bba1e224be8">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/BeCare-shared-unspecified_ee1fc903edc598bd4f2112408dc3ca9c8dc6ff33.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.0.0/support-annotations-22.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="685d0b2c590447e85284ed84712cb363ba04eff8">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/support-annotations-22.0.0-6529fcec04fd7f901e6923cbaf110f18357d4ea1.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/design/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="f0001e71cea6ae432a00021c6f727f5ef0f3d27e">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-design-23.3.0_c957b5b12c1c59b9bf1ad7b2460d7ad54413febb.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/BeCare/shared/unspecified/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="236e0ea0b1116f7a8519dfd80e9d012a73aae0c0">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/classes-5b81a9d83abe0abb2f71f6520cf36a12f083a0f7.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="23be6993826b8fd88bbc8d14928bb3b8960d3d4e">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-animated-vector-drawable-23.3.0_e6ac0ce04de10717603024b3d64c37ae1715f58b.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/cardview-v7/22.2.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="97f7e239e86ef994de894818fdd8a71d2e89d6aa">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-cardview-v7-22.2.0_f4ed9efc221e9b778d2bdcd49e635d8ffa8b99ef.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/7.5.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a78183f30e769a98ab4820794f597763088d3065">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-base-7.5.0_4dd14646324d8c9478280062ce96ad2feda794b1.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/BeCare/mobile/unspecified/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="864dc165efd1a1c7b45f358bff1f5543e795ea5d">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/BeCare-mobile-unspecified_49dcda6fb18e37a8ded65a89c7776ccab5172337.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="8a034dd16c0dfd75fe86c52c2cd581592acc684a">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-support-v4-23.3.0_379334c2ccba81f38e2c315bbc0ce9985c11bd1d.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.google.android.gms/play-services-wearable/7.5.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
         sha1="69dd177337ead693c408c8dddc9546bb6f1244fa">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-1d3c3be398159a91d380f6fcd63d4fc32b331a14.jar" />
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.google.android.gms-play-services-wearable-7.5.0_df5e989bf39b58d069ccfb0b99277553fa201955.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/BeCare/shared/unspecified/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="236e0ea0b1116f7a8519dfd80e9d012a73aae0c0">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-a4f64963c420384031ea1d6d51ee46341a009cc8.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/multidex/1.0.1/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="78ea232052df889856dcb7b7b542707c89bb3bfb">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-multidex-1.0.1_fda2cd4fe816a6e7cf2390ed9a191814cc5b4ee6.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/.gradle/caches/modules-2/files-2.1/com.squareup/otto/1.3.6/ee373b6d0d6ea36a0a9b0cbabaf16be7e7fc3e30/otto-1.3.6.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="ee373b6d0d6ea36a0a9b0cbabaf16be7e7fc3e30">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/otto-1.3.6-f0c499a7903e10ce416ec2c7fe6fbe4dd8f5ac24.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="debf30ce0a7560396b6235edef77e447006454c2">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-recyclerview-v7-23.3.0_dc2433a91281d5b62b94edfd83d0e5f8466cbc46.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/com.android.support/support-v4/22.0.0/jars/libs/internal_impl-22.0.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="b5b92f469d515a13d778900f6d50c03d12f35504">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/internal_impl-22.0.0-ee0b2a551352dad06746a67e278b6cabade44ac6.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="5b37cf49773f7f17aca9830efd3053b0cac56728">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-9a8ca68d3aaddf69bbedf483353c565b79ae7338.jar" />
-    </item>
-    <item
-        jar="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/21.0.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="efeda77c808750cb670ee9c48d8a1835d89dbcb2">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/wear/build/intermediates/pre-dexed/release/classes-c3c356c1887d8d4a43368e8ff17afb4b33efee52.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="a0b5d60246cd9d4f3f2443611b3b4c25265840b5">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-support-vector-drawable-23.3.0_d4d4d45711d0623fd6d2d2bdc1d3045aef9a923a.jar" />
     </item>
     <item
         jar="/Users/neerajpaliwal/.gradle/caches/modules-2/files-2.1/io.realm/realm-android/0.80.3/7979d05ba7b919c53766bf98e31aaf0e9feb0590/realm-android-0.80.3.jar"
-        jumboMode="false"
-        revision="22.0.1"
+        jumboMode="true"
+        revision="23.0.3"
         sha1="7979d05ba7b919c53766bf98e31aaf0e9feb0590">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/realm-android-0.80.3-1c08e87bf8cae32bef1e91b881425e775483c6c7.jar" />
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/realm-android-0.80.3_1c08e87bf8cae32bef1e91b881425e775483c6c7.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/exploded-aar/com.android.support/design/22.2.0/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="fc63b820d54c8a27a3a614bdd93920e0076581c2">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/classes-99853f4de94bf4542d50cb7bf4abbb1163ac9a34.jar" />
+        jar="/Users/neerajpaliwal/.gradle/caches/modules-2/files-2.1/com.squareup/otto/1.3.6/ee373b6d0d6ea36a0a9b0cbabaf16be7e7fc3e30/otto-1.3.6.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="ee373b6d0d6ea36a0a9b0cbabaf16be7e7fc3e30">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/otto-1.3.6_f0c499a7903e10ce416ec2c7fe6fbe4dd8f5ac24.jar" />
     </item>
     <item
-        jar="/Users/neerajpaliwal/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.0/support-annotations-22.2.0.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="66b42a1f3eb7676070b7ef7f14b603483aecbee1">
-        <dex dex="/Users/neerajpaliwal/development/BeCare/mobile/build/intermediates/pre-dexed/release/support-annotations-22.2.0-55296dd6ef7e0253fe6c18d40f9d7d14299a09d8.jar" />
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/jars/classes.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="1b8e03daaa43fb0a4cd57e378167c2fd70454c1e">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/com.android.support-appcompat-v7-23.3.0_363a86cf3c825e23c5b1f459f3fdac38874224b6.jar" />
+    </item>
+    <item
+        jar="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/exploded-aar/com.android.support/support-v4/23.3.0/jars/libs/internal_impl-23.3.0.jar"
+        jumboMode="true"
+        revision="23.0.3"
+        sha1="4da5a4d697d32497c6f85567a5112e62fdfd0676">
+        <dex dex="/Users/neerajpaliwal/development/BeCare/becare/build/intermediates/pre-dexed/debug/internal_impl-23.3.0_57a3c0267a1aed27f2b492fb5c8e3d82cd26cc97.jar" />
     </item>
 
 </items>

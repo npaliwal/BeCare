@@ -1,11 +1,11 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.github.pocmo.sensordashboard"
+//        applicationId "com.github.pocmo.sensordashboard"
         minSdkVersion 18
         targetSdkVersion 22
         versionCode 5
@@ -15,14 +15,6 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    signingConfigs {
-        release {
-            storeFile file("becare.keystore")
-            storePassword 'keystorebecare'
-            keyAlias "BeCare"
-            keyPassword 'keystorebecare'
         }
     }
 }

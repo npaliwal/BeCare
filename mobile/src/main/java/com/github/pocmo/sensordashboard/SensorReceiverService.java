@@ -1,16 +1,9 @@
 package com.github.pocmo.sensordashboard;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.hardware.Sensor;
 import android.net.Uri;
-import android.provider.Settings;
 import android.util.Log;
 
-import com.github.pocmo.sensordashboard.data.SensorDataPoint;
-import com.github.pocmo.sensordashboard.database.DataEntry;
-import com.github.pocmo.sensordashboard.network.DataUploadService;
 import com.github.pocmo.sensordashboard.shared.DataMapKeys;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -21,8 +14,6 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.Arrays;
-
-import io.realm.Realm;
 
 public class SensorReceiverService extends WearableListenerService {
     private static final String TAG = "SensorReceiverService";
@@ -89,9 +80,9 @@ public class SensorReceiverService extends WearableListenerService {
         if(System.currentTimeMillis() - lastUpdateTime > 60000){
             lastUpdateTime = System.currentTimeMillis();
             Log.d(TAG, "starting upload service");
-            Intent intent = new Intent(this, DataUploadService.class);
-            intent.putExtra(POST_BODY, sensorManager.getUploadData().getUploadData());
-            startService(intent);
+            //Intent intent = new Intent(this, DataUploadService.class);
+            //intent.putExtra(POST_BODY, sensorManager.getUploadData().getUploadData());
+            //startService(intent);
         }
     }
 }

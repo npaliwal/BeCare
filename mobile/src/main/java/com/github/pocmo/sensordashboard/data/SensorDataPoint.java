@@ -1,6 +1,6 @@
 package com.github.pocmo.sensordashboard.data;
 
-public class SensorDataPoint implements  Comparable{
+public class SensorDataPoint {
     private long timestamp;
     private float[] values;
     private int accuracy;
@@ -21,33 +21,5 @@ public class SensorDataPoint implements  Comparable{
 
     public int getAccuracy() {
         return accuracy;
-    }
-
-    public String getValueString(){
-        return values[0] + ", " + values[1] + ", " + values[2];
-    }
-
-    @Override
-    public int compareTo(Object another) {
-        SensorDataPoint p1 = this;
-        SensorDataPoint p2 = (SensorDataPoint)another;
-        if(p2 == null || p2.values == null){
-            return -1;
-        }
-        // if last names are the same compare first names
-        float p1Float =     p1.values[0]*p1.values[0] +
-                p1.values[1]*p1.values[1] +
-                p1.values[2]*p1.values[2];
-
-        float p2Float =     p2.values[0]*p2.values[0] +
-                p2.values[1]*p2.values[1] +
-                p2.values[2]*p2.values[2];
-        if(p1Float > p2Float){
-            return -1;
-        }else if(p1Float < p2Float){
-            return 1;
-        }else{
-            return 0;
-        }
     }
 }

@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".StartingActivity"
+            android:name=".activities.StartingActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -24,7 +24,7 @@
         </activity>
 
         <activity
-            android:name=".BallRectangleActivity"
+            android:name=".activities.BallRectangleActivity"
             android:label="@string/exercise_ring_rect">
         </activity>
 

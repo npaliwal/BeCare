@@ -1,4 +1,4 @@
-package me.smartwatches.becare;
+package me.smartwatches.becare.activities;
 
 import android.content.Context;
 import android.graphics.Canvas;

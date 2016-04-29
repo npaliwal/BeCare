@@ -1,4 +1,4 @@
-package me.smartwatches.becare;
+package me.smartwatches.becare.activities;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -11,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.pocmo.sensordashboard.RemoteSensorManager;
+
+import me.smartwatches.becare.PostClass;
+import me.smartwatches.becare.R;
+import me.smartwatches.becare.UploadData;
 
 /**
  * Created by neerajpaliwal on 06/04/16.

@@ -14,6 +14,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import me.smartwatches.becare.data.UploadData;
+
 /**
  * Created by neerajpaliwal on 06/04/16.
  */

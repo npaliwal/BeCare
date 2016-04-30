@@ -1,5 +1,6 @@
 package me.smartwatches.becare.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -85,6 +86,7 @@ public class StartingActivity extends AppCompatActivity
         if (id == R.id.nav_camera) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
+            startActivity(new Intent(this, BallRectangleActivity.class));
 
         } else if (id == R.id.nav_slideshow) {
 

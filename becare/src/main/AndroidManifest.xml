@@ -25,6 +25,7 @@
 
         <activity
             android:name=".activities.BallRectangleActivity"
+            android:screenOrientation="portrait"
             android:label="@string/exercise_ring_rect">
         </activity>
 

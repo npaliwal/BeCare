@@ -1,6 +1,9 @@
 package me.smartwatches.becare.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,11 +16,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import me.smartwatches.becare.R;
 
 public class StartingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private SensorManager mSensorManager;
+    private ArrayAdapter<String> adapter;
+    private ListView mSensorsList;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +56,18 @@ public class StartingActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        mSensorsList = (ListView)findViewById(R.id.sensors_list);
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+        List<String> sensorsName = new ArrayList<>();
+        for(Sensor sensor : deviceSensors){
+            sensorsName.add(sensor.getName());
+        }
+        adapter = new ArrayAdapter<String>(this,
+                R.layout.item_sensor_name,
+                sensorsName);
+        mSensorsList.setAdapter(adapter);
     }
 
     @Override

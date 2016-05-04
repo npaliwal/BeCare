@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/sensor_name"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Accelerometer">
-</TextView>
+    android:layout_height="match_parent">
+    <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/sensor_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelerometer"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp">
+    </TextView>
+
+    <TextView
+        android:id="@+id/sensor_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="version:2"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/gray"/>
+
+    <TextView
+        android:id="@+id/sensor_vendor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="by Google Inc"
+        android:layout_below="@+id/sensor_name"
+        android:textColor="@color/gray"
+        android:layout_marginBottom="5dp"/>
+
+    <TextView
+        android:id="@+id/sensor_stream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="stream:2"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/sensor_name"
+        android:textColor="@color/gray"/>
+</RelativeLayout>

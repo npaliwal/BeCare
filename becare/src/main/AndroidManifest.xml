@@ -29,6 +29,12 @@
             android:label="@string/exercise_ring_rect">
         </activity>
 
+        <activity
+            android:name=".activities.SensorsListActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/sensors_list">
+        </activity>
+
         <service android:name=".DataUploadService" />
 
     </application>

@@ -23,13 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.smartwatches.becare.R;
+import me.smartwatches.becare.SensorAdapter;
 
 public class StartingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SensorManager mSensorManager;
-    private ArrayAdapter<String> adapter;
-    private ListView mSensorsList;
+
 
 
     @Override
@@ -57,17 +56,7 @@ public class StartingActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        mSensorsList = (ListView)findViewById(R.id.sensors_list);
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
-        List<String> sensorsName = new ArrayList<>();
-        for(Sensor sensor : deviceSensors){
-            sensorsName.add(sensor.getName());
-        }
-        adapter = new ArrayAdapter<String>(this,
-                R.layout.item_sensor_name,
-                sensorsName);
-        mSensorsList.setAdapter(adapter);
+
     }
 
     @Override
@@ -112,11 +101,10 @@ public class StartingActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
             startActivity(new Intent(this, BallRectangleActivity.class));
-
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
-
+            startActivity(new Intent(this, SensorsListActivity.class));
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_send) {

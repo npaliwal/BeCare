@@ -16,14 +16,6 @@
         android:id="@+id/tv_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Here is the list of sensors on your device:"
+        android:text="Checking your phone compatibility..."
         android:textColor="@color/colorPrimaryDark"/>
-
-    <ListView
-        android:id="@+id/sensors_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/tv_header">
-    </ListView>
 </RelativeLayout>

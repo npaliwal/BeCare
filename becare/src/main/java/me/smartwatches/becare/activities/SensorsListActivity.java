@@ -5,7 +5,6 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,14 +18,12 @@ import me.smartwatches.becare.SensorAdapter;
 public class SensorsListActivity extends ListActivity {
     private SensorManager mSensorManager;
     private SensorAdapter adapter;
-    //private ListView mSensorsList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sensors_list);
 
-        //mSensorsList = (ListView)findViewById(R.id.sensors_list);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         ArrayList<Sensor> deviceSensorsArr = new ArrayList<>(deviceSensors);

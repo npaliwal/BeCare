@@ -13,9 +13,26 @@
     tools:showIn="@layout/app_bar_main">
 
     <TextView
+        android:id="@+id/tv_compatiblity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Awesome!!!"
+        android:textColor="@color/green"
+        android:gravity="center"
+        android:textSize="24sp"
+        android:typeface="monospace"/>
+
+    <TextView
         android:id="@+id/tv_header"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Checking your phone compatibility..."
-        android:textColor="@color/colorPrimaryDark"/>
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/tv_compatiblity"
+        />
+
+
+
 </RelativeLayout>

@@ -7,6 +7,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +30,9 @@ import me.smartwatches.becare.SensorAdapter;
 public class StartingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-
-
+    private SensorManager mSensorManager;
+    private boolean allSensorsAvailable = true;
+    private TextView mSensorStatus, mCompatiblityStatus;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,40 @@ public class StartingActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        mSensorStatus = (TextView)findViewById(R.id.tv_header);
+        mCompatiblityStatus = (TextView)findViewById(R.id.tv_compatiblity);
+        checkSensorCompatiblity();
+    }
 
+    public void checkSensorCompatiblity(){
+        allSensorsAvailable = true;
+        String sensorStatus = "Sensors Status: ";
+
+        sensorStatus += "\n\tAccelerometer : ";
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) {
+            allSensorsAvailable = false;
+            sensorStatus += "Missing";
+        }else{
+            sensorStatus += "Available";
+        }
+
+        sensorStatus += "\n\tGyroscope : ";
+        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) == null) {
+            allSensorsAvailable = false;
+            sensorStatus += "Missing";
+        }else{
+            sensorStatus += "Available";
+        }
+
+        mSensorStatus.setText(sensorStatus);
+        if(allSensorsAvailable){
+            mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.green));
+            mCompatiblityStatus.setText("Awesome!!! All sensors available");
+        }else{
+            mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.red));
+            mCompatiblityStatus.setText("Oops!!! Please use another phone");
+        }
     }
 
     @Override

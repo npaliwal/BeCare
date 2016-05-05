@@ -88,10 +88,10 @@ public class StartingActivity extends AppCompatActivity
         mSensorStatus.setText(sensorStatus);
         if(allSensorsAvailable){
             mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.green));
-            mCompatiblityStatus.setText("Awesome!!! All sensors available");
+            mCompatiblityStatus.setText("Awesome!!!\nAll sensors available");
         }else{
             mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.red));
-            mCompatiblityStatus.setText("Oops!!! Please use another phone");
+            mCompatiblityStatus.setText("Oops!!!\nPlease use another phone");
         }
     }
 
@@ -133,18 +133,23 @@ public class StartingActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        if (id == R.id.nav_arm_elavation) {
+            // Handle the arm elevation test
+        } else if (id == R.id.nav_snooker) {
             startActivity(new Intent(this, BallRectangleActivity.class));
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_transcription) {
+            // Handle the transription test
+        } else if (id == R.id.nav_contranst) {
+            // Handle the transription test
 
-        } else if (id == R.id.nav_manage) {
-            startActivity(new Intent(this, SensorsListActivity.class));
+        } else if (id == R.id.nav_timed_walk) {
+            // Handle the transription test
+
         } else if (id == R.id.nav_share) {
+            // Handle the transription test
 
-        } else if (id == R.id.nav_send) {
-
+        } else if (id == R.id.nav_tools) {
+            startActivity(new Intent(this, SensorsListActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

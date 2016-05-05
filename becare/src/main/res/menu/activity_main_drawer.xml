@@ -3,21 +3,25 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Hands Movement" />
-        <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_arm_elavation"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Ball In Rectangle" />
+            android:title="Arm Elevation Test" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="6 Min Sprint" />
+            android:id="@+id/nav_snooker"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Snooker" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="@string/sensors_list" />
+            android:id="@+id/nav_transcription"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Transcription Test" />
+        <item
+            android:id="@+id/nav_contranst"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Contrast Sensitivity" />
+        <item
+            android:id="@+id/nav_timed_walk"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="Timed Walk" />
     </group>
 
     <item android:title="Communicate">
@@ -27,9 +31,9 @@
                 android:icon="@drawable/ic_menu_share"
                 android:title="Share" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+                android:id="@+id/nav_tools"
+                android:icon="@drawable/ic_menu_manage"
+                android:title="Tools" />
         </menu>
     </item>
 

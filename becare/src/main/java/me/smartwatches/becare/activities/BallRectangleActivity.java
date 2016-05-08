@@ -15,6 +15,8 @@ import android.view.View;
 import android.view.animation.PathInterpolator;
 import android.widget.TextView;
 
+import com.github.pocmo.sensordashboard.RemoteSensorManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,15 +31,23 @@ public class BallRectangleActivity extends AppCompatActivity {
     private static final String TAG = "BallRectangle";
 
     private TextView deviationText;
+    private RemoteSensorManager mRemoteSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ball_rect);
         deviationText = (TextView) findViewById(R.id.deviation);
+        mRemoteSensorManager = RemoteSensorManager.getInstance(BallRectangleActivity.this);
+
     }
 
     public void setDeviationText(int deviation){
         deviationText.setText("Deviation : " + deviation);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

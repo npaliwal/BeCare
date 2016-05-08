@@ -1,4 +1,4 @@
-package com.github.pocmo.sensordashboard;
+package me.smartwatches.becare;
 
 import android.content.Context;
 import android.util.Log;
@@ -32,11 +32,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class RemoteSensorManager {
+public class BecareRemoteSensorManager {
     private static final String TAG = "RemoteSensorMgr";
-    private static final int CLIENT_CONNECTION_TIMEOUT = 15000;
 
-    private static RemoteSensorManager instance;
+    private static BecareRemoteSensorManager instance;
 
     private Context context;
     private ExecutorService executorService;
@@ -47,15 +46,15 @@ public class RemoteSensorManager {
 
     private LinkedList<TagData> tags = new LinkedList<>();
 
-    public static synchronized RemoteSensorManager getInstance(Context context) {
+    public static synchronized BecareRemoteSensorManager getInstance(Context context) {
         if (instance == null) {
-            instance = new RemoteSensorManager(context.getApplicationContext());
+            instance = new BecareRemoteSensorManager(context.getApplicationContext());
         }
 
         return instance;
     }
 
-    private RemoteSensorManager(Context context) {
+    private BecareRemoteSensorManager(Context context) {
         this.context = context;
         this.sensorMapping = new SparseArray<Sensor>();
         this.sensors = new ArrayList<Sensor>();
@@ -124,7 +123,7 @@ public class RemoteSensorManager {
             return true;
         }
 
-        ConnectionResult result = googleApiClient.blockingConnect(CLIENT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
+        ConnectionResult result = googleApiClient.blockingConnect(AppConfig.CLIENT_CONNECTION_TIMEOUT, TimeUnit.MILLISECONDS);
 
         return result.isSuccess();
     }

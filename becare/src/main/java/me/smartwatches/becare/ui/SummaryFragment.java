@@ -95,7 +95,7 @@ public class SummaryFragment extends Fragment {
                 setButtonUnPressed();
                 running.setSelected(true);
                 userActivity = RUNNING;
-                RemoteSensorManager.getInstance(getActivity()).setUserActivity(userActivity);
+//                RemoteSensorManager.getInstance(getActivity()).setUserActivity(userActivity);
                 startActivity(new Intent(getActivity(), BallRectangleActivity.class));
             }
         });
@@ -106,7 +106,7 @@ public class SummaryFragment extends Fragment {
                 setButtonUnPressed();
                 walking.setSelected(true);
                 userActivity = WALKING;
-                RemoteSensorManager.getInstance(getActivity()).setUserActivity(userActivity);
+//                RemoteSensorManager.getInstance(getActivity()).setUserActivity(userActivity);
             }
         });
 
@@ -116,7 +116,7 @@ public class SummaryFragment extends Fragment {
                 setButtonUnPressed();
                 sleeping.setSelected(true);
                 userActivity = SLEEPING;
-                RemoteSensorManager.getInstance(getActivity()).setUserActivity(userActivity);
+//                RemoteSensorManager.getInstance(getActivity()).setUserActivity(userActivity);
             }
         });
     }

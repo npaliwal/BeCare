@@ -1,6 +1,5 @@
-package com.github.pocmo.sensordashboard;
+package me.smartwatches.becare;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -15,17 +14,20 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.Arrays;
 
-public class SensorReceiverService extends WearableListenerService {
-    private static final String TAG = "SensorReceiverService";
+public class BecareSensorReceiverService extends WearableListenerService {
+    private static final String TAG = "BecareSenRcvrrService";
+
+    private long lastUpdateTime = 0;
 
 
-    private RemoteSensorManager sensorManager;
+
+    private BecareRemoteSensorManager sensorManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        sensorManager = RemoteSensorManager.getInstance(this);
+        sensorManager = BecareRemoteSensorManager.getInstance(this);
     }
 
     @Override
@@ -70,5 +72,13 @@ public class SensorReceiverService extends WearableListenerService {
         Log.d(TAG, "Received sensor data " + sensorType + " = " + Arrays.toString(values));
 
         sensorManager.addSensorData(sensorType, accuracy, timestamp, values);
+
+        if(System.currentTimeMillis() - lastUpdateTime > 60000){
+            lastUpdateTime = System.currentTimeMillis();
+            Log.d(TAG, "starting upload service");
+            //Intent intent = new Intent(this, DataUploadService.class);
+            //intent.putExtra(POST_BODY, sensorManager.getUploadData().getUploadData());
+            //startService(intent);
+        }
     }
 }

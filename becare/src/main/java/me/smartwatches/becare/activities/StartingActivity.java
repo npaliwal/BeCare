@@ -17,15 +17,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-import java.util.List;
 
+import java.util.Map;
+
+import me.smartwatches.becare.AppConfig;
 import me.smartwatches.becare.R;
-import me.smartwatches.becare.SensorAdapter;
 
 public class StartingActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +36,7 @@ public class StartingActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        AppConfig.init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -67,22 +66,16 @@ public class StartingActivity extends AppCompatActivity
 
     public void checkSensorCompatiblity(){
         allSensorsAvailable = true;
-        String sensorStatus = "Sensors Status: ";
+        String sensorStatus = "Sensors Status:\n";
 
-        sensorStatus += "\n\tAccelerometer : ";
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) == null) {
-            allSensorsAvailable = false;
-            sensorStatus += "Missing";
-        }else{
-            sensorStatus += "Available";
-        }
-
-        sensorStatus += "\n\tGyroscope : ";
-        if (mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE) == null) {
-            allSensorsAvailable = false;
-            sensorStatus += "Missing";
-        }else{
-            sensorStatus += "Available";
+        for(Map.Entry<Integer, String> entry: AppConfig.MANDATORY_SENSORS.entrySet()){
+            sensorStatus += "\n" + entry.getValue() + " : ";
+            if (mSensorManager.getDefaultSensor(entry.getKey()) == null) {
+                allSensorsAvailable = false;
+                sensorStatus += "Missing";
+            }else{
+                sensorStatus += "Available";
+            }
         }
 
         mSensorStatus.setText(sensorStatus);

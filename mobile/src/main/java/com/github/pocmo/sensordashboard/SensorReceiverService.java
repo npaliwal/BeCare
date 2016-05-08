@@ -17,9 +17,6 @@ import java.util.Arrays;
 
 public class SensorReceiverService extends WearableListenerService {
     private static final String TAG = "SensorReceiverService";
-    public static final String PREFS = "serverUpdatedPrefs";
-    public static final String PREFS_LAST_UPDATED_TIME = "last_updated";
-    public static final String POST_BODY = "post_body";
 
     private long lastUpdateTime = 0;
 

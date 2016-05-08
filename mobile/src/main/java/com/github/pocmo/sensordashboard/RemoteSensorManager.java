@@ -47,7 +47,6 @@ public class RemoteSensorManager {
 
     private SensorDataPoint gyroCurrData = null;
     private SensorDataPoint acceleroCurrData = null;
-    //private UploadData uploadData = null;
 
     private String userActivity = "NA";
 

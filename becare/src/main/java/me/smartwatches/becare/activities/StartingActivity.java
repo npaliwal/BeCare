@@ -91,7 +91,7 @@ public class StartingActivity extends AppCompatActivity
             mCompatiblityStatus.setText("Awesome!!!\nAll sensors available");
         }else{
             mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.red));
-            mCompatiblityStatus.setText("Oops!!!\nPlease use another phone");
+            mCompatiblityStatus.setText("Oops!!!\nSome exercises will not be available to you");
         }
     }
 

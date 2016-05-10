@@ -3,7 +3,7 @@ build/
 target
 out
 gen-external-apklibs
-*.iml
+*/*.iml
 .idea
 !.idea/codeStyleSettings.xml
 META-INF

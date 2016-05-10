@@ -4,9 +4,7 @@ local.properties
 target
 out
 gen-external-apklibs
-mobile/mobile.iml
-wear/wear.iml
-shared/shared.iml
+*/*.iml
 .idea
 !.idea/codeStyleSettings.xml
 META-INF

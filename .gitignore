@@ -1,0 +1,16 @@
+build/
+.gradle
+local.properties
+target
+out
+gen-external-apklibs
+*/*.iml
+.idea
+!.idea/codeStyleSettings.xml
+META-INF
+com_crashlytics_export_strings.xml
+crashlytics-build.properties
+.DS_Store
+*.apk
+*.alloc
+*.hprof

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="me.smartwatches.becare">
+    package="com.github.pocmo.sensordashboard">
 
     <uses-permission android:name="android.permission.BODY_SENSORS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -12,6 +12,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+
         <activity
             android:name=".activities.StartingActivity"
             android:label="@string/app_name"
@@ -24,18 +29,18 @@
         </activity>
 
         <activity
-            android:name=".activities.BallRectangleActivity"
+            android:name="com.github.pocmo.sensordashboard.activities.BallRectangleActivity"
             android:screenOrientation="portrait"
             android:label="@string/exercise_ring_rect">
         </activity>
 
         <activity
-            android:name=".activities.SensorsListActivity"
+            android:name="com.github.pocmo.sensordashboard.activities.SensorsListActivity"
             android:screenOrientation="portrait"
             android:label="@string/sensors_list">
         </activity>
 
-        <service android:name=".DataUploadService" />
+        <service android:name="com.github.pocmo.sensordashboard.DataUploadService" />
 
         <service android:name=".BecareSensorReceiverService">
             <intent-filter>

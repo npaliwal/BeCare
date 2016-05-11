@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.3"
 
     defaultConfig {
-        applicationId "me.smartwatches.becare"
+        applicationId "com.github.pocmo.sensordashboard"
         minSdkVersion 18
         targetSdkVersion 22
         versionCode 1
@@ -34,10 +34,23 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile project(':mobile')
+    //compile project(':mobile')
+    wearApp project(':wear')
+
+    compile project(':shared')
 
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:multidex:1.0.1'
+
+    compile 'com.google.android.gms:play-services-wearable:7.5.0'
+    compile 'com.google.android.gms:play-services-analytics:7.5.0'
+
+    compile 'com.android.support:recyclerview-v7:23.2.0'
+    compile 'com.android.support:cardview-v7:23.2.0'
+
+    compile 'com.squareup:otto:1.3.6'
+
+    compile 'io.realm:realm-android:0.80.3'
 
 }

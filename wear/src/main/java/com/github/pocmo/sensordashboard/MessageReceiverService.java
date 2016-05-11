@@ -1,7 +1,6 @@
 package com.github.pocmo.sensordashboard;
 
 import android.content.Intent;
-import android.hardware.Sensor;
 import android.net.Uri;
 import android.util.Log;
 

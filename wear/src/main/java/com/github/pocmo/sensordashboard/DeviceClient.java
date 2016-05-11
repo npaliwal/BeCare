@@ -2,7 +2,6 @@ package com.github.pocmo.sensordashboard;
 
 import android.content.Context;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.util.SparseLongArray;
 
 import com.github.pocmo.sensordashboard.shared.DataMapKeys;

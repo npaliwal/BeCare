@@ -7,7 +7,6 @@ gen-external-apklibs
 .idea
 !.idea/codeStyleSettings.xml
 META-INF
-local.properties
 com_crashlytics_export_strings.xml
 crashlytics-build.properties
 .DS_Store

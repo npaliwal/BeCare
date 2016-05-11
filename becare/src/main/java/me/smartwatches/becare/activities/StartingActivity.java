@@ -17,12 +17,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+
+import com.github.pocmo.sensordashboard.events.BusProvider;
+import com.github.pocmo.sensordashboard.events.NewSensorEvent;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.NodeApi;
+import com.squareup.otto.Subscribe;
 
 import java.util.Map;
 
 import me.smartwatches.becare.AppConfig;
+import me.smartwatches.becare.BecareRemoteSensorManager;
 import me.smartwatches.becare.R;
 
 public class StartingActivity extends AppCompatActivity
@@ -30,7 +39,9 @@ public class StartingActivity extends AppCompatActivity
 
     private SensorManager mSensorManager;
     private boolean allSensorsAvailable = true;
-    private TextView mSensorStatus, mCompatiblityStatus;
+    private TextView mMobileSensorStatus, mWearSensorStatus, mCompatiblityStatus;
+    private Button mGyroTrack, mAcceleroTracking;
+    private BecareRemoteSensorManager remoteSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,10 +69,36 @@ public class StartingActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensorStatus = (TextView)findViewById(R.id.tv_header);
+        mMobileSensorStatus = (TextView)findViewById(R.id.tv_mobile_Sensors);
+        mWearSensorStatus   = (TextView)findViewById(R.id.tv_wear_Sensors);
         mCompatiblityStatus = (TextView)findViewById(R.id.tv_compatiblity);
+        mGyroTrack          = (Button)findViewById(R.id.gyro_live_tracking);
+        mAcceleroTracking   = (Button)findViewById(R.id.accelero_live_tracking);
         checkSensorCompatiblity();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BusProvider.getInstance().register(this);
+        remoteSensorManager.startMeasurement();
+        remoteSensorManager.getNodes(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
+            @Override
+            public void onResult(NodeApi.GetConnectedNodesResult getConnectedNodesResult) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        BusProvider.getInstance().unregister(this);
+
+        remoteSensorManager.stopMeasurement();
     }
 
     public void checkSensorCompatiblity(){
@@ -78,7 +115,7 @@ public class StartingActivity extends AppCompatActivity
             }
         }
 
-        mSensorStatus.setText(sensorStatus);
+        mMobileSensorStatus.setText(sensorStatus);
         if(allSensorsAvailable){
             mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.green));
             mCompatiblityStatus.setText("Awesome!!!\nAll sensors available");
@@ -118,6 +155,19 @@ public class StartingActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Subscribe
+    public void onNewSensorEvent(final NewSensorEvent event) {
+        mMobileSensorStatus.setText("Connected Successfully with a watch !!");
+        if(event.getSensor().getId() == Sensor.TYPE_ACCELEROMETER){
+            mAcceleroTracking.setVisibility(View.VISIBLE);
+        }
+        if(event.getSensor().getId() == Sensor.TYPE_GYROSCOPE){
+            mGyroTrack.setVisibility(View.VISIBLE);
+        }
+        Toast.makeText(this, "New Sensor!\n" + event.getSensor().getName(), Toast.LENGTH_SHORT).show();
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

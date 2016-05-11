@@ -32,6 +32,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/*
+ * This class is equivalent to RemoteSensorMAnager of mobile module
+ */
 public class BecareRemoteSensorManager {
     private static final String TAG = "RemoteSensorMgr";
 

@@ -23,16 +23,50 @@
         android:typeface="monospace"/>
 
     <TextView
-        android:id="@+id/tv_header"
+        android:id="@+id/tv_mobile_Sensors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Checking your phone compatibility..."
+        android:text="Checking your phone sensors..."
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
         android:layout_marginTop="20dp"
         android:layout_below="@+id/tv_compatiblity"
         />
 
+    <TextView
+        android:id="@+id/tv_wear_Sensors"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Waiting for a wearable..."
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/tv_mobile_Sensors"
+        />
 
 
+    <Button
+        android:id="@+id/accelero_live_tracking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accelero live tracking"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:gravity="center|center_horizontal"
+        android:layout_below="@+id/tv_wear_Sensors"
+        android:visibility="gone"
+        />
+
+    <Button
+        android:id="@+id/gyro_live_tracking"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Gyroscope live tracking"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="20sp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/accelero_live_tracking"
+        android:visibility="gone"
+        />
 </RelativeLayout>

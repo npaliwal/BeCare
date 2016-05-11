@@ -1,5 +1,6 @@
 package me.smartwatches.becare;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -14,6 +15,9 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 import java.util.Arrays;
 
+/*
+ * This class is equivalent to SensorRecieverService of mobile module
+ */
 public class BecareSensorReceiverService extends WearableListenerService {
     private static final String TAG = "BecareSenRcvrrService";
 
@@ -77,7 +81,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
             lastUpdateTime = System.currentTimeMillis();
             Log.d(TAG, "starting upload service");
             //Intent intent = new Intent(this, DataUploadService.class);
-            //intent.putExtra(POST_BODY, sensorManager.getUploadData().getUploadData());
+            //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadData().getUploadData());
             //startService(intent);
         }
     }

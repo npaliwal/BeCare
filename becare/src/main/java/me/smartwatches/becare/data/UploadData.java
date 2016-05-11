@@ -166,14 +166,14 @@ public class UploadData {
         calculateNumZeroCrossing();
 
         String ret = "{" +
-                "\"apikey\" : \"keELl8zcUZ4d2pI9RMBqsYbCD\"," +
+                "\"apikey\" : \"oNm5GQT3HY47uL8JAFeiyZgpR\"," +
                 "\"comb\" : \"devicecmb\"," +
                 "\"pod\" : \"readings\"," +
                 "\"data\" : \"" + formatSensorStats() + "\"," +
                 "\"audience\" : \"Private\"," +
                 "\"isActive\" : \"true\"," +
                 "\"serviceBranchName\" : \"default\"," +
-                "\"podKeyName\" : \"Q4ELCS\"" +
+                "\"podKeyName\" : \"7ZTVQS\"" +
 
                 "}";
         return ret;

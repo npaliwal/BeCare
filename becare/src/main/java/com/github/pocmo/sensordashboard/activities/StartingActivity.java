@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,7 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
+import com.github.pocmo.sensordashboard.ui.SensorFragment;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
@@ -44,6 +46,7 @@ public class StartingActivity extends AppCompatActivity
     private TextView mMobileSensorStatus, mWearSensorStatus, mCompatiblityStatus;
     private Button mGyroTrack, mAcceleroTracking;
     private BecareRemoteSensorManager remoteSensorManager;
+    private LinearLayout mTrackingContainer;
     private List<Node> mNodes;
 
 
@@ -81,7 +84,24 @@ public class StartingActivity extends AppCompatActivity
         mCompatiblityStatus = (TextView)findViewById(R.id.tv_compatiblity);
         mGyroTrack          = (Button)findViewById(R.id.gyro_live_tracking);
         mAcceleroTracking   = (Button)findViewById(R.id.accelero_live_tracking);
+
+        mTrackingContainer = (LinearLayout)findViewById(R.id.live_tracking);
         checkSensorCompatiblity();
+
+        mGyroTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remoteSensorManager.filterBySensorId(Sensor.TYPE_GYROSCOPE);
+                getFragmentManager().beginTransaction().add(R.id.live_tracking, SensorFragment.newInstance(Sensor.TYPE_GYROSCOPE), "gy").commit();
+            }
+        });
+        mAcceleroTracking.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                remoteSensorManager.filterBySensorId(Sensor.TYPE_ACCELEROMETER);
+                getFragmentManager().beginTransaction().add(R.id.live_tracking, SensorFragment.newInstance(Sensor.TYPE_ACCELEROMETER), "ac").commit();
+            }
+        });
     }
 
     @Override
@@ -111,10 +131,10 @@ public class StartingActivity extends AppCompatActivity
 
     public void checkSensorCompatiblity(){
         allSensorsAvailable = true;
-        String sensorStatus = "Sensors Status:\n";
+        String sensorStatus = "Mobile Sensors Status:";
 
         for(Map.Entry<Integer, String> entry: AppConfig.MANDATORY_SENSORS.entrySet()){
-            sensorStatus += "\n" + entry.getValue() + " : ";
+            sensorStatus += "\n\t" + entry.getValue() + " : ";
             if (mSensorManager.getDefaultSensor(entry.getKey()) == null) {
                 allSensorsAvailable = false;
                 sensorStatus += "Missing";
@@ -126,10 +146,10 @@ public class StartingActivity extends AppCompatActivity
         mMobileSensorStatus.setText(sensorStatus);
         if(allSensorsAvailable){
             mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.green));
-            mCompatiblityStatus.setText("Awesome!!!\nAll sensors available");
+            mCompatiblityStatus.setText("Awesome!!! All sensors available");
         }else{
             mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.red));
-            mCompatiblityStatus.setText("Oops!!!\nSome exercises will not be available to you");
+            mCompatiblityStatus.setText("Oops!!! Some exercises will not be available to you");
         }
     }
 

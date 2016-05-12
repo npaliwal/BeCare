@@ -18,8 +18,7 @@
         android:layout_height="wrap_content"
         android:text="Awesome!!!"
         android:textColor="@color/green"
-        android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:typeface="monospace"/>
 
     <TextView
@@ -29,10 +28,17 @@
         android:text="Checking your phone sensors..."
         android:textColor="@color/colorPrimaryDark"
         android:textSize="20sp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/tv_compatiblity"
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2px"
+        android:background="@color/gray"
+        android:layout_below="@+id/tv_mobile_Sensors"
+        android:layout_marginTop="10dp">
+    </View>
     <TextView
         android:id="@+id/tv_wear_Sensors"
         android:layout_width="match_parent"
@@ -69,4 +75,12 @@
         android:layout_below="@+id/accelero_live_tracking"
         android:visibility="gone"
         />
+
+    <LinearLayout
+        android:id="@+id/live_tracking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/gyro_live_tracking">
+    </LinearLayout>
 </RelativeLayout>

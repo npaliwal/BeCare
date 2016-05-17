@@ -5,6 +5,6 @@ package com.github.pocmo.sensordashboard;
  */
 public interface AppConstant {
     String BECARE_FILE_NAME     = "becare_preferences";
-    String DEFAULT_SOCKET_IP    = "122.171.165.128";
-    int DEFAULT_SOCKET_PORT     = 3000;
+    String DEFAULT_SOCKET_IP    = "40.117.96.28";
+    int DEFAULT_SOCKET_PORT     = 8181;
 }

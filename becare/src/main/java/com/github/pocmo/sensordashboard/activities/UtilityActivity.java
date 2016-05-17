@@ -70,11 +70,12 @@ public class UtilityActivity extends ListActivity {
                 try{
                     port = Integer.valueOf(socketPort.getText().toString());
                 }catch (Exception e){}
-                if(port < 999 || port > 9999){
+                if(port < 999 || port > 999999){
                     Toast.makeText(UtilityActivity.this, "Socket Port should be 4 digit integer", Toast.LENGTH_LONG).show();
                 }else {
                     preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
                     Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
+                    new Thread(new ClientThread()).start();
                 }
             }
         });

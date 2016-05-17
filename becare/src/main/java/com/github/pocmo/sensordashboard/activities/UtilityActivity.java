@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.github.pocmo.sensordashboard.ClientSocketManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SensorAdapter;
@@ -40,8 +41,7 @@ public class UtilityActivity extends ListActivity {
     private Button   updateSocket;
     private Button   testSocket;
 
-    private Socket   socket;
-
+    private ClientSocketManager clientSocketManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,15 +75,14 @@ public class UtilityActivity extends ListActivity {
                 }else {
                     preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
                     Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
-                    new Thread(new ClientThread()).start();
+                    clientSocketManager.refresh(preferenceStorage);
                 }
             }
         });
         testSocket = (Button)findViewById(R.id.test_button);
         testSocket.setOnClickListener(testSocketCilck);
 
-        new Thread(new ClientThread()).start();
-
+        clientSocketManager = new ClientSocketManager(preferenceStorage);
     }
 
     private View.OnClickListener testSocketCilck = new View.OnClickListener() {
@@ -95,11 +94,7 @@ public class UtilityActivity extends ListActivity {
                 jsonObject.put("ip", socketIp.getText().toString());
                 jsonObject.put("port", socketPort.getText().toString());
 
-                String str = jsonObject.toString();
-                PrintWriter out = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(socket.getOutputStream())),
-                        true);
-                out.println(str);
+                clientSocketManager.pushData(jsonObject.toString());
             } catch (UnknownHostException e) {
                 success = false;
                 e.printStackTrace();
@@ -119,23 +114,5 @@ public class UtilityActivity extends ListActivity {
         }
     };
 
-    class ClientThread implements Runnable {
 
-        @Override
-        public void run() {
-
-            try {
-                InetAddress serverAddr = InetAddress.getByName(preferenceStorage.getSocketIp());
-
-                socket = new Socket(serverAddr, preferenceStorage.getSocketPort());
-
-            } catch (UnknownHostException e1) {
-                e1.printStackTrace();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-
-        }
-
-    }
 }

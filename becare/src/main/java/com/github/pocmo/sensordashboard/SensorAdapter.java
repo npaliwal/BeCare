@@ -15,14 +15,9 @@ import java.util.ArrayList;
  * Created by neerajpaliwal on 04/05/16.
  */
 public class SensorAdapter extends ArrayAdapter<Sensor> {
-    private ArrayList<Sensor> mSensorsList;
 
     public SensorAdapter(Context context, ArrayList<Sensor> allSensors) {
         super(context, 0, allSensors);
-    }
-
-    public void setSensorsList(ArrayList<Sensor> allSensors){
-        mSensorsList = allSensors;
     }
 
     @Override

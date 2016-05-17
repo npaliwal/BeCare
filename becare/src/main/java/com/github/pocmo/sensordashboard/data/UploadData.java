@@ -1,5 +1,7 @@
 package com.github.pocmo.sensordashboard.data;
 
+import android.hardware.*;
+import android.hardware.Sensor;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -44,18 +46,14 @@ public class UploadData {
         this.userActivity = activity;
     }
 
-    public void update(SensorData g, SensorData a){
-        Calendar cal = Calendar.getInstance();
-        this.date = dateFormat.format(cal.getTimeInMillis());
-        this.time = timeFormat.format(cal.getTimeInMillis());
-
-        if(g != null){
-            this.lastGyroData = g;
-            allGyroData.add(g);
+    public void addDataPoint(SensorData data, int type){
+        if(type == Sensor.TYPE_GYROSCOPE){
+            this.lastGyroData = data;
+            allGyroData.add(data);
         }
-        if(a != null) {
-            this.lastAccelData = a;
-            allAcceleroData.add(a);
+        if(type == Sensor.TYPE_ACCELEROMETER){
+            this.lastAccelData = data;
+            allAcceleroData.add(data);
         }
     }
 
@@ -180,6 +178,10 @@ public class UploadData {
     }
 
     public String formatSensorStats(){
+        Calendar cal = Calendar.getInstance();
+        this.date = dateFormat.format(cal.getTimeInMillis());
+        this.time = timeFormat.format(cal.getTimeInMillis());
+
         String gyro = lastGyroData == null ? "NA" : getGyroFormatData();
         String acelro = lastAccelData == null ? "NA" : getAcceleroFormatData();
         String ret = "{" +

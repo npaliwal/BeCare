@@ -86,7 +86,6 @@ public class StartingActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mMobileSensorStatus = (TextView)findViewById(R.id.tv_mobile_Sensors);
@@ -120,8 +119,9 @@ public class StartingActivity extends AppCompatActivity
         preferenceStorage = new PreferenceStorage();
         checkAndConfigureSocket();
 
+        remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
+
         BusProvider.getInstance().register(this);
-        List<com.github.pocmo.sensordashboard.data.Sensor> sensors = BecareRemoteSensorManager.getInstance(this).getSensors();
 
         remoteSensorManager.startMeasurement();
 

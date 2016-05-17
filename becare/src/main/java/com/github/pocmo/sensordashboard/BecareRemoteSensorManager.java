@@ -5,9 +5,11 @@ import android.util.Log;
 import android.util.SparseArray;
 
 import com.github.pocmo.sensordashboard.data.Sensor;
+import com.github.pocmo.sensordashboard.data.SensorData;
 import com.github.pocmo.sensordashboard.data.SensorDataPoint;
 import com.github.pocmo.sensordashboard.data.SensorNames;
 import com.github.pocmo.sensordashboard.data.TagData;
+import com.github.pocmo.sensordashboard.data.UploadData;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
@@ -45,7 +47,10 @@ public class BecareRemoteSensorManager {
     private SparseArray<Sensor> sensorMapping;
     private ArrayList<Sensor> sensors;
     private SensorNames sensorNames;
+    private UploadData uploadData;
     private GoogleApiClient googleApiClient;
+    private PreferenceStorage preferenceStorage;
+    private ClientSocketManager socketManager;
 
     private LinkedList<TagData> tags = new LinkedList<>();
 
@@ -62,12 +67,19 @@ public class BecareRemoteSensorManager {
         this.sensorMapping = new SparseArray<Sensor>();
         this.sensors = new ArrayList<Sensor>();
         this.sensorNames = new SensorNames();
+        this.uploadData = new UploadData();
+        this.preferenceStorage = new PreferenceStorage();
+        socketManager = new ClientSocketManager(preferenceStorage);
 
         this.googleApiClient = new GoogleApiClient.Builder(context)
                 .addApi(Wearable.API)
                 .build();
 
         this.executorService = Executors.newCachedThreadPool();
+    }
+
+    public UploadData getUploadData(){
+        return uploadData;
     }
 
     public List<Sensor> getSensors() {
@@ -104,6 +116,7 @@ public class BecareRemoteSensorManager {
 
         // TODO: We probably want to pull sensor data point objects from a pool here
         SensorDataPoint dataPoint = new SensorDataPoint(timestamp, accuracy, values);
+        uploadData.addDataPoint(new SensorData(values), sensorType);
 
         sensor.addDataPoint(dataPoint);
         BusProvider.postOnMainThread(new SensorUpdatedEvent(sensor, dataPoint));
@@ -191,7 +204,7 @@ public class BecareRemoteSensorManager {
 
             for (Node node : nodes) {
                 Log.i(TAG, "add node " + node.getDisplayName());
-                //uploadData.setDeviceId(node.getDisplayName());
+                uploadData.setDeviceId(node.getDisplayName());
                 Wearable.MessageApi.sendMessage(
                         googleApiClient, node.getId(), path, null
                 ).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
@@ -203,6 +216,22 @@ public class BecareRemoteSensorManager {
             }
         } else {
             Log.w(TAG, "No connection possible");
+        }
+    }
+
+    public void uploadSensorData() {
+        try {
+            socketManager.pushData(uploadData.getUploadData());
+        }catch (Exception e){
+
+        }
+    }
+
+    public void uploadActivityData(String data) {
+        try {
+            socketManager.pushData(data);
+        }catch (Exception e){
+
         }
     }
 }

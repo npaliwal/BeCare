@@ -77,12 +77,13 @@ public class BecareSensorReceiverService extends WearableListenerService {
 
         sensorManager.addSensorData(sensorType, accuracy, timestamp, values);
 
-        if(System.currentTimeMillis() - lastUpdateTime > 60000){
+        if(System.currentTimeMillis() - lastUpdateTime > 3000){
             lastUpdateTime = System.currentTimeMillis();
             Log.d(TAG, "starting upload service");
-            Intent intent = new Intent(this, DataUploadService.class);
+            sensorManager.uploadSensorData();
+            //Intent intent = new Intent(this, DataUploadService.class);
             //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadData().getUploadData());
-            startService(intent);
+            //startService(intent);
         }
     }
 }

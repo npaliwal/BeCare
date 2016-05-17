@@ -19,6 +19,11 @@ public class SensorData implements  Comparable{
         valueY = data.valueY;
         valueZ = data.valueZ;
     }
+    public SensorData(float values[]){
+        valueX = values[0];
+        valueY = values[1];
+        valueZ = values[2];
+    }
 
     public float getValueX() {
         return valueX;

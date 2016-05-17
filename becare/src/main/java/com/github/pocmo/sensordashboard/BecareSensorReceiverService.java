@@ -1,5 +1,6 @@
 package com.github.pocmo.sensordashboard;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
@@ -79,9 +80,9 @@ public class BecareSensorReceiverService extends WearableListenerService {
         if(System.currentTimeMillis() - lastUpdateTime > 60000){
             lastUpdateTime = System.currentTimeMillis();
             Log.d(TAG, "starting upload service");
-            //Intent intent = new Intent(this, DataUploadService.class);
+            Intent intent = new Intent(this, DataUploadService.class);
             //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadData().getUploadData());
-            //startService(intent);
+            startService(intent);
         }
     }
 }

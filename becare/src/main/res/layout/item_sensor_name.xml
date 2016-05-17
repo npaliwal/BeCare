@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray"
+    android:padding="5dp">
     <TextView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/sensor_name"
         android:layout_width="wrap_content"
@@ -17,7 +19,7 @@
         android:layout_height="wrap_content"
         android:text="version:2"
         android:layout_alignParentRight="true"
-        android:textColor="@color/gray"/>
+        android:textColor="@color/white"/>
 
     <TextView
         android:id="@+id/sensor_vendor"
@@ -26,7 +28,7 @@
         android:layout_marginTop="5dp"
         android:text="by Google Inc"
         android:layout_below="@+id/sensor_name"
-        android:textColor="@color/gray"
+        android:textColor="@color/white"
         android:layout_marginBottom="5dp"/>
 
     <TextView
@@ -36,5 +38,5 @@
         android:text="stream:2"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/sensor_name"
-        android:textColor="@color/gray"/>
+        android:textColor="@color/white"/>
 </RelativeLayout>

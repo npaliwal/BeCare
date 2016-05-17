@@ -5,6 +5,9 @@
 
     <uses-permission android:name="android.permission.BODY_SENSORS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
 
     <application tools:replace="android:icon"
         android:allowBackup="true"
@@ -35,9 +38,9 @@
         </activity>
 
         <activity
-            android:name="com.github.pocmo.sensordashboard.activities.SensorsListActivity"
+            android:name=".activities.UtilityActivity"
             android:screenOrientation="portrait"
-            android:label="@string/sensors_list">
+            android:label="@string/menu_tools">
         </activity>
 
         <service android:name="com.github.pocmo.sensordashboard.DataUploadService" />

@@ -24,7 +24,9 @@ import android.widget.Toast;
 
 
 import com.github.pocmo.sensordashboard.AppConfig;
+import com.github.pocmo.sensordashboard.AppConstant;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
+import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
@@ -49,6 +51,12 @@ public class StartingActivity extends AppCompatActivity
     private LinearLayout mTrackingContainer;
     private List<Node> mNodes;
 
+    private PreferenceStorage preferenceStorage;
+    private static StartingActivity instance;
+
+    public static synchronized StartingActivity getInstance(){
+        return instance;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +65,8 @@ public class StartingActivity extends AppCompatActivity
         AppConfig.init();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        instance = this;
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +117,9 @@ public class StartingActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        preferenceStorage = new PreferenceStorage();
+        checkAndConfigureSocket();
+
         BusProvider.getInstance().register(this);
         List<com.github.pocmo.sensordashboard.data.Sensor> sensors = BecareRemoteSensorManager.getInstance(this).getSensors();
 
@@ -127,6 +140,23 @@ public class StartingActivity extends AppCompatActivity
         BusProvider.getInstance().unregister(this);
 
         remoteSensorManager.stopMeasurement();
+    }
+
+    private void checkAndConfigureSocket(){
+        String defaultIp = preferenceStorage.getSocketIp();
+        int defaultPort = preferenceStorage.getSocketPort();
+
+        if(defaultIp == null){
+            defaultIp = AppConstant.DEFAULT_SOCKET_IP;
+        }
+
+        if(defaultPort == -1){
+            defaultPort = AppConstant.DEFAULT_SOCKET_PORT;
+        }
+
+        if(preferenceStorage.getSocketIp() == null){
+            preferenceStorage.setSocketInfo(defaultIp, defaultPort);
+        }
     }
 
     public void checkSensorCompatiblity(){
@@ -220,7 +250,7 @@ public class StartingActivity extends AppCompatActivity
             // Handle the transription test
 
         } else if (id == R.id.nav_tools) {
-            startActivity(new Intent(this, SensorsListActivity.class));
+            startActivity(new Intent(this, UtilityActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

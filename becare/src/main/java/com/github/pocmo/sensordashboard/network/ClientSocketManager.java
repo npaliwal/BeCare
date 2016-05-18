@@ -1,4 +1,9 @@
-package com.github.pocmo.sensordashboard;
+package com.github.pocmo.sensordashboard.network;
+
+import android.util.Log;
+import android.widget.Toast;
+
+import com.github.pocmo.sensordashboard.PreferenceStorage;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -27,9 +32,6 @@ public class ClientSocketManager {
     }
 
     public void pushData(String data) throws Exception{
-        if(socket == null)
-            return;
-
         String str = data;
         PrintWriter out = new PrintWriter(new BufferedWriter(
                 new OutputStreamWriter(socket.getOutputStream())),
@@ -40,17 +42,22 @@ public class ClientSocketManager {
     class ClientThread implements Runnable {
         @Override
         public void run() {
+            Log.d("socketmanager", "Socket initializing start !!");
 
             try {
                 InetAddress serverAddr = InetAddress.getByName(ip);
 
                 socket = new Socket(serverAddr, port);
-
+                Log.d("socketmanager", "Socket initialized successfully !!");
             } catch (UnknownHostException e1) {
+                Log.d("socketmanager", "Socket initialized FAILED unknown host !!");
                 e1.printStackTrace();
             } catch (IOException e1) {
+                Log.d("socketmanager", "Socket initialized FAILED ioexception !!");
                 e1.printStackTrace();
             }
+            Log.d("socketmanager", "Socket initializing end !!");
+
 
         }
 

@@ -1,4 +1,4 @@
-package com.github.pocmo.sensordashboard;
+package com.github.pocmo.sensordashboard.network;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -43,7 +43,7 @@ public class PostClass extends AsyncTask<String, Void, Void> {
         protected Void doInBackground(String... params) {
             try {
 
-                URL url = new URL("http://hivedemo.qtxsystems.net/Api/DataApi.svc/Insert");
+                URL url = new URL(HiveHelper.INSERT_URL);
 
                 HttpURLConnection connection = (HttpURLConnection)url.openConnection();
                 connection.setRequestMethod("POST");

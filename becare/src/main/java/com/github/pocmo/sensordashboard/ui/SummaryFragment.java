@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.pocmo.sensordashboard.PostClass;
+import com.github.pocmo.sensordashboard.network.PostClass;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.activities.BallRectangleActivity;
 import com.github.pocmo.sensordashboard.activities.StartingActivity;

@@ -43,7 +43,7 @@
             android:label="@string/menu_tools">
         </activity>
 
-        <service android:name="com.github.pocmo.sensordashboard.DataUploadService" />
+        <service android:name=".network.DataUploadService" />
 
         <service android:name=".BecareSensorReceiverService">
             <intent-filter>

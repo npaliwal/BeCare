@@ -4,6 +4,8 @@ import android.hardware.*;
 import android.hardware.Sensor;
 import android.util.Log;
 
+import com.github.pocmo.sensordashboard.network.HiveHelper;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -23,14 +25,10 @@ public class UploadData {
 
     //Stats to be uploaded
     private String deviceId;
-    private String date;
-    private String time;
-    private String userActivity;
+    private String userActivity="NA";
     private int numGyroZeroCrossing=0;
     private int numAcceleroZeroCrossing=0;
 
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
 
     public UploadData(){
         this.deviceId = "unknown";
@@ -42,8 +40,16 @@ public class UploadData {
         this.deviceId = deviceId.trim().replaceAll(" ", "");
     }
 
+    public String getDeviceId(){
+        return this.deviceId;
+    }
+
     public void setUserActivity(String activity){
         this.userActivity = activity;
+    }
+
+    public String getUserActivity(){
+        return this.userActivity;
     }
 
     public void addDataPoint(SensorData data, int type){
@@ -145,14 +151,14 @@ public class UploadData {
 
     }
 
-    private String getGyroFormatData(){
+    public String getGyroFormatData(){
         return  "{high:" + highGyroData.toString() + ", " +
                 "low:" + lowGyroData.toString() + ", " +
                 "mean:" + meanGyroData.toString() + ", " +
                 "zcCount :" + numGyroZeroCrossing+"}";
     }
 
-    private String getAcceleroFormatData(){
+    public String getAcceleroFormatData(){
         return "{high:" + highAccelData.toString() + ", " +
                 "low:" + lowAccelData.toString() + ", " +
                 "mean:" + meanAccelData.toString() + ", " +
@@ -163,39 +169,12 @@ public class UploadData {
         calculateMeanHighLow();
         calculateNumZeroCrossing();
 
-        String ret = "{" +
-                "\"apikey\" : \"oNm5GQT3HY47uL8JAFeiyZgpR\"," +
-                "\"comb\" : \"devicecmb\"," +
-                "\"pod\" : \"readings\"," +
-                "\"data\" : \"" + formatSensorStats() + "\"," +
-                "\"audience\" : \"Private\"," +
-                "\"isActive\" : \"true\"," +
-                "\"serviceBranchName\" : \"default\"," +
-                "\"podKeyName\" : \"7ZTVQS\"" +
+        String ret = new HiveHelper().formatUploadData(this);
 
-                "}";
-        return ret;
-    }
-
-    public String formatSensorStats(){
-        Calendar cal = Calendar.getInstance();
-        this.date = dateFormat.format(cal.getTimeInMillis());
-        this.time = timeFormat.format(cal.getTimeInMillis());
-
-        String gyro = lastGyroData == null ? "NA" : getGyroFormatData();
-        String acelro = lastAccelData == null ? "NA" : getAcceleroFormatData();
-        String ret = "{" +
-                "\\\"deviceId\\\":\\\"" + deviceId + "\\\"," +
-                "\\\"activityType\\\":\\\"" + userActivity + "\\\"," +
-                "\\\"readDate\\\":\\\"" + date + "\\\"," +
-                "\\\"readTime\\\":\\\"" + time + "\\\"," +
-                "\\\"gyroMeter\\\":\\\"" + gyro + "\\\"," +
-                "\\\"accelMeter\\\":\\\"" +  acelro + "\\\"}";
-
-        Log.d("UploadData", ret);
         numAcceleroZeroCrossing = numGyroZeroCrossing = 0;
         allAcceleroData.clear();
         allGyroData.clear();
         return ret;
     }
+
 }

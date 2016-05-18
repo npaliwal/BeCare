@@ -3,6 +3,7 @@ package com.github.pocmo.sensordashboard;
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
+import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.data.Sensor;
 import com.github.pocmo.sensordashboard.data.SensorData;
@@ -14,6 +15,7 @@ import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
 import com.github.pocmo.sensordashboard.events.TagAddedEvent;
+import com.github.pocmo.sensordashboard.network.ClientSocketManager;
 import com.github.pocmo.sensordashboard.shared.ClientPaths;
 import com.github.pocmo.sensordashboard.shared.DataMapKeys;
 import com.google.android.gms.common.ConnectionResult;
@@ -76,6 +78,10 @@ public class BecareRemoteSensorManager {
                 .build();
 
         this.executorService = Executors.newCachedThreadPool();
+    }
+
+    public ClientSocketManager getSocketManager(){
+        return socketManager;
     }
 
     public UploadData getUploadData(){
@@ -230,8 +236,9 @@ public class BecareRemoteSensorManager {
     public void uploadActivityData(String data) {
         try {
             socketManager.pushData(data);
+            //Toast.makeText(context, "Activity data streamed successfully!", Toast.LENGTH_LONG).show();
         }catch (Exception e){
-
+            Toast.makeText(context, "Activity data streamed FAILED!", Toast.LENGTH_LONG).show();
         }
     }
 }

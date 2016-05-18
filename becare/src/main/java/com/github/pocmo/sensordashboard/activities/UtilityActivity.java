@@ -10,19 +10,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.github.pocmo.sensordashboard.ClientSocketManager;
+import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
+import com.github.pocmo.sensordashboard.network.ClientSocketManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SensorAdapter;
 
 import org.json.JSONObject;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetAddress;
-import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +37,7 @@ public class UtilityActivity extends ListActivity {
     private Button   updateSocket;
     private Button   testSocket;
 
-    private ClientSocketManager clientSocketManager;
+    private BecareRemoteSensorManager remoteSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,14 +71,14 @@ public class UtilityActivity extends ListActivity {
                 }else {
                     preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
                     Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
-                    clientSocketManager.refresh(preferenceStorage);
+                    remoteSensorManager.getSocketManager().refresh(preferenceStorage);
                 }
             }
         });
         testSocket = (Button)findViewById(R.id.test_button);
         testSocket.setOnClickListener(testSocketCilck);
 
-        clientSocketManager = new ClientSocketManager(preferenceStorage);
+        remoteSensorManager = BecareRemoteSensorManager.getInstance(UtilityActivity.this);
     }
 
     private View.OnClickListener testSocketCilck = new View.OnClickListener() {
@@ -94,7 +90,7 @@ public class UtilityActivity extends ListActivity {
                 jsonObject.put("ip", socketIp.getText().toString());
                 jsonObject.put("port", socketPort.getText().toString());
 
-                clientSocketManager.pushData(jsonObject.toString());
+                remoteSensorManager.getSocketManager().pushData(jsonObject.toString());
             } catch (UnknownHostException e) {
                 success = false;
                 e.printStackTrace();

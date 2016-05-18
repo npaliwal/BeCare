@@ -86,6 +86,9 @@ public class StartingActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        preferenceStorage = new PreferenceStorage();
+        checkAndConfigureSocket();
+        remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mMobileSensorStatus = (TextView)findViewById(R.id.tv_mobile_Sensors);
@@ -111,15 +114,13 @@ public class StartingActivity extends AppCompatActivity
                 getFragmentManager().beginTransaction().add(R.id.live_tracking, SensorFragment.newInstance(Sensor.TYPE_ACCELEROMETER), "ac").commit();
             }
         });
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        preferenceStorage = new PreferenceStorage();
-        checkAndConfigureSocket();
-
-        remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
         BusProvider.getInstance().register(this);
 

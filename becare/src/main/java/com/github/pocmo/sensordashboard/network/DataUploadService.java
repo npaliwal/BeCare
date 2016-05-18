@@ -1,4 +1,4 @@
-package com.github.pocmo.sensordashboard;
+package com.github.pocmo.sensordashboard.network;
 
 import android.app.IntentService;
 import android.content.Intent;

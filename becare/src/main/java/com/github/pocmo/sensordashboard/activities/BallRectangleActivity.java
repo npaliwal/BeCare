@@ -29,7 +29,7 @@ public class BallRectangleActivity extends AppCompatActivity {
     }
 
     public void setDeviationText(int y, int deviation){
-        deviationText.setText("Deviation : " + deviation);
+        deviationText.setText("yTouch: "+y + ", Deviation: " + deviation);
         String data = "{\"yTouch\":"+ y +", \"xDeviation\":" + deviation + "}";
         mRemoteSensorManager.uploadActivityData(data);
     }
@@ -45,6 +45,7 @@ public class BallRectangleActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        mRemoteSensorManager.getUploadData().setUserActivity("NA");
         mRemoteSensorManager.stopMeasurement();
     }
 }

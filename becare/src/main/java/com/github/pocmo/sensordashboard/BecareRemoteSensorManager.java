@@ -231,14 +231,14 @@ public class BecareRemoteSensorManager {
         }catch (Exception e){
 
         }
-    }
+        }
 
     public void uploadActivityData(String data) {
         try {
             socketManager.pushData(data);
             //Toast.makeText(context, "Activity data streamed successfully!", Toast.LENGTH_LONG).show();
         }catch (Exception e){
-            Toast.makeText(context, "Activity data streamed FAILED!", Toast.LENGTH_LONG).show();
+            //Toast.makeText(context, "Activity data streamed FAILED!", Toast.LENGTH_LONG).show();
         }
     }
 }

@@ -107,7 +107,7 @@ public class RingRectArenaView extends RelativeLayout {
                     mRing.setCenterY(yTouch);
                     for(PathSegment path : mPaths){
                         if(path.contains(yTouch)){
-                            mActivity.setDeviationText(yTouch, xTouch - (int)path.getX(yTouch));
+                            mActivity.setDeviationText(yTouch, xTouch, (int)path.getX(yTouch));
                             //Log.d(TAG, "xTouch - xPath = " + (xTouch - (int)path.getX(yTouch)));
                         }
                     }

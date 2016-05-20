@@ -28,9 +28,10 @@ public class BallRectangleActivity extends AppCompatActivity {
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(BallRectangleActivity.this);
     }
 
-    public void setDeviationText(int y, int deviation){
-        deviationText.setText("yTouch: "+y + ", Deviation: " + deviation);
-        String data = "{\"yTouch\":"+ y +", \"xDeviation\":" + deviation + "}";
+    public void setDeviationText(int yTouch, int xTouch, int xPath){
+        String dataShow = "yTouch: "+yTouch + ", xTouch: " + xTouch + ", xPath: " + xPath;
+        deviationText.setText(dataShow);
+        String data = "{\"yTouch\":"+ yTouch +", \"xTouch\":" + xTouch + ", \"xPath\":" + xPath + "}";
         mRemoteSensorManager.uploadActivityData(data);
     }
 

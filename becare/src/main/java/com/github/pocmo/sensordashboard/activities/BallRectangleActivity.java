@@ -6,8 +6,8 @@ import android.widget.TextView;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
-
-import org.json.JSONObject;
+import com.github.pocmo.sensordashboard.model.ActivityData;
+import com.github.pocmo.sensordashboard.model.SnookerData;
 
 
 /**
@@ -17,6 +17,7 @@ public class BallRectangleActivity extends AppCompatActivity {
     private static final String TAG = "BallRectangle";
 
     private TextView deviationText;
+    private SnookerData data = new SnookerData();
 
     private BecareRemoteSensorManager mRemoteSensorManager;
 
@@ -31,14 +32,13 @@ public class BallRectangleActivity extends AppCompatActivity {
     public void setDeviationText(int yTouch, int xTouch, int xPath){
         String dataShow = "yTouch: "+yTouch + ", xTouch: " + xTouch + ", xPath: " + xPath;
         deviationText.setText(dataShow);
-        String data = "{\"yTouch\":"+ yTouch +", \"xTouch\":" + xTouch + ", \"xPath\":" + xPath + "}";
-        mRemoteSensorManager.uploadActivityData(data);
+        data.setValues(xTouch, yTouch, xPath);
+        mRemoteSensorManager.getUploadDataHelper().setUserActivity(data);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mRemoteSensorManager.getUploadData().setUserActivity("Snooker");
         mRemoteSensorManager.startMeasurement();
     }
 
@@ -46,7 +46,7 @@ public class BallRectangleActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        mRemoteSensorManager.getUploadData().setUserActivity("NA");
+        mRemoteSensorManager.getUploadDataHelper().setUserActivity(null);
         mRemoteSensorManager.stopMeasurement();
     }
 }

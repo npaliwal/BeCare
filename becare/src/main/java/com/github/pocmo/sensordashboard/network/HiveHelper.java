@@ -3,7 +3,7 @@ package com.github.pocmo.sensordashboard.network;
 import android.util.Log;
 
 import com.github.pocmo.sensordashboard.AppConstant;
-import com.github.pocmo.sensordashboard.data.UploadData;
+import com.github.pocmo.sensordashboard.model.UploadData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -38,12 +38,12 @@ public class HiveHelper {
         String date = dateFormat.format(cal.getTimeInMillis());
         String time = timeFormat.format(cal.getTimeInMillis());
 
-        String gyro = uploadData.getGyroFormatData();
-        String acelro = uploadData.getAcceleroFormatData();
+        String gyro = uploadData.getGyroMeter().toString();
+        String acelro = uploadData.getAccelMeter().toString();
 
         String ret = "{" +
                 "\\\"deviceId\\\":\\\"" + uploadData.getDeviceId() + "\\\"," +
-                "\\\"activityType\\\":\\\"" + uploadData.getUserActivity() + "\\\"," +
+                "\\\"activityType\\\":\\\"" + uploadData.getActivityData().toString() + "\\\"," +
                 "\\\"readDate\\\":\\\"" + date + "\\\"," +
                 "\\\"readTime\\\":\\\"" + time + "\\\"," +
                 "\\\"gyroMeter\\\":\\\"" + gyro + "\\\"," +

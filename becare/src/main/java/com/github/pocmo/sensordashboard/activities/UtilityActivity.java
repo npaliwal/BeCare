@@ -44,7 +44,7 @@ public class UtilityActivity extends ListActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_utility);
 
-        preferenceStorage = new PreferenceStorage();
+        preferenceStorage = new PreferenceStorage(getApplicationContext());
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> deviceSensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         ArrayList<Sensor> deviceSensorsArr = new ArrayList<>(deviceSensors);

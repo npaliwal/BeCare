@@ -17,8 +17,8 @@ public class PreferenceStorage {
     private SharedPreferences.Editor editor;
 
     @SuppressLint("CommitPrefEdits")
-    public PreferenceStorage(){
-        sharedPreferences = StartingActivity.getInstance().getSharedPreferences(AppConstant.BECARE_FILE_NAME, Context.MODE_PRIVATE);
+    public PreferenceStorage(Context appContext){
+        sharedPreferences = appContext.getSharedPreferences(AppConstant.BECARE_FILE_NAME, Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
 

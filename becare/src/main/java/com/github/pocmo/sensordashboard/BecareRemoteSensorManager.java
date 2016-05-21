@@ -3,18 +3,17 @@ package com.github.pocmo.sensordashboard;
 import android.content.Context;
 import android.util.Log;
 import android.util.SparseArray;
-import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.data.Sensor;
-import com.github.pocmo.sensordashboard.data.SensorData;
 import com.github.pocmo.sensordashboard.data.SensorDataPoint;
 import com.github.pocmo.sensordashboard.data.SensorNames;
 import com.github.pocmo.sensordashboard.data.TagData;
-import com.github.pocmo.sensordashboard.data.UploadData;
+import com.github.pocmo.sensordashboard.data.UploadDataHelper;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
 import com.github.pocmo.sensordashboard.events.TagAddedEvent;
+import com.github.pocmo.sensordashboard.model.SensorDataValue;
 import com.github.pocmo.sensordashboard.network.ClientSocketManager;
 import com.github.pocmo.sensordashboard.shared.ClientPaths;
 import com.github.pocmo.sensordashboard.shared.DataMapKeys;
@@ -49,7 +48,7 @@ public class BecareRemoteSensorManager {
     private SparseArray<Sensor> sensorMapping;
     private ArrayList<Sensor> sensors;
     private SensorNames sensorNames;
-    private UploadData uploadData;
+    private UploadDataHelper uploadDataHelper;
     private GoogleApiClient googleApiClient;
     private PreferenceStorage preferenceStorage;
     private ClientSocketManager socketManager;
@@ -69,8 +68,8 @@ public class BecareRemoteSensorManager {
         this.sensorMapping = new SparseArray<Sensor>();
         this.sensors = new ArrayList<Sensor>();
         this.sensorNames = new SensorNames();
-        this.uploadData = new UploadData();
-        this.preferenceStorage = new PreferenceStorage();
+        this.uploadDataHelper = new UploadDataHelper();
+        this.preferenceStorage = new PreferenceStorage(context.getApplicationContext());
         socketManager = new ClientSocketManager(preferenceStorage);
 
         this.googleApiClient = new GoogleApiClient.Builder(context)
@@ -84,8 +83,8 @@ public class BecareRemoteSensorManager {
         return socketManager;
     }
 
-    public UploadData getUploadData(){
-        return uploadData;
+    public UploadDataHelper getUploadDataHelper(){
+        return uploadDataHelper;
     }
 
     public List<Sensor> getSensors() {
@@ -122,7 +121,7 @@ public class BecareRemoteSensorManager {
 
         // TODO: We probably want to pull sensor data point objects from a pool here
         SensorDataPoint dataPoint = new SensorDataPoint(timestamp, accuracy, values);
-        uploadData.addDataPoint(new SensorData(values), sensorType);
+        uploadDataHelper.addDataValue(new SensorDataValue(values), sensorType);
 
         sensor.addDataPoint(dataPoint);
         BusProvider.postOnMainThread(new SensorUpdatedEvent(sensor, dataPoint));
@@ -210,7 +209,7 @@ public class BecareRemoteSensorManager {
 
             for (Node node : nodes) {
                 Log.i(TAG, "add node " + node.getDisplayName());
-                uploadData.setDeviceId(node.getDisplayName());
+                uploadDataHelper.setDeviceId(node.getDisplayName());
                 Wearable.MessageApi.sendMessage(
                         googleApiClient, node.getId(), path, null
                 ).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
@@ -227,18 +226,13 @@ public class BecareRemoteSensorManager {
 
     public void uploadSensorData() {
         try {
-            socketManager.pushData(uploadData.getUploadData());
+            Log.d(TAG, "upload data tring upload");
+            if(uploadDataHelper.getUserActivityData() != null) {
+                Log.d(TAG, "upload data tring activity data not null");
+                socketManager.pushData(uploadDataHelper.getUploadDataStr());
+            }
         }catch (Exception e){
-
-        }
-        }
-
-    public void uploadActivityData(String data) {
-        try {
-            socketManager.pushData(data);
-            //Toast.makeText(context, "Activity data streamed successfully!", Toast.LENGTH_LONG).show();
-        }catch (Exception e){
-            //Toast.makeText(context, "Activity data streamed FAILED!", Toast.LENGTH_LONG).show();
+            Log.d(TAG, "upload data failed : " + e.getMessage());
         }
     }
 }

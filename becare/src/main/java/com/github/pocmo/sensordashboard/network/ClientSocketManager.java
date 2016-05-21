@@ -37,6 +37,7 @@ public class ClientSocketManager {
                 new OutputStreamWriter(socket.getOutputStream())),
                 true);
         out.println(str);
+        Log.d("socketmanager", "Data uploaded successfully !!");
     }
 
     class ClientThread implements Runnable {

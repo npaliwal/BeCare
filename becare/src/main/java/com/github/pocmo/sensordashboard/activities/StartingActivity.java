@@ -86,7 +86,7 @@ public class StartingActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        preferenceStorage = new PreferenceStorage();
+        preferenceStorage = new PreferenceStorage(getApplicationContext());
         checkAndConfigureSocket();
         remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 

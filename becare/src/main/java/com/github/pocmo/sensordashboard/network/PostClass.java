@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.TextView;
 
-import com.github.pocmo.sensordashboard.data.UploadData;
+import com.github.pocmo.sensordashboard.data.UploadDataHelper;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -23,14 +23,14 @@ import java.net.URL;
 public class PostClass extends AsyncTask<String, Void, Void> {
         private final Context context;
         private TextView statusText;
-        private UploadData uploadData;
+        private UploadDataHelper uploadDataHelper;
         private ProgressDialog progress;
         private boolean status = false;
 
-        public PostClass(Context c, TextView t, UploadData data){
+        public PostClass(Context c, TextView t, UploadDataHelper data){
             this.context = c;
             this.statusText = t;
-            this.uploadData = data;
+            this.uploadDataHelper = data;
         }
 
         protected void onPreExecute(){
@@ -54,7 +54,7 @@ public class PostClass extends AsyncTask<String, Void, Void> {
                 connection.setDoInput(true);
 
 
-                String str =  uploadData.getUploadData();
+                String str =  uploadDataHelper.getUploadDataStr();
                 byte[] outputInBytes = str.getBytes("UTF-8");
                 OutputStream os = connection.getOutputStream();
                 os.write(outputInBytes);

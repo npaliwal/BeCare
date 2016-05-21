@@ -82,7 +82,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
             Log.d(TAG, "starting upload service");
             sensorManager.uploadSensorData();
             //Intent intent = new Intent(this, DataUploadService.class);
-            //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadData().getUploadData());
+            //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadDataHelper().getUploadDataHelper());
             //startService(intent);
         }
     }

@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     dexOptions {
         incremental true
         javaMaxHeapSize "2048M"
@@ -39,6 +40,7 @@ dependencies {
 
     compile project(':shared')
 
+    compile 'com.google.code.gson:gson:2.4'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.android.support:multidex:1.0.1'

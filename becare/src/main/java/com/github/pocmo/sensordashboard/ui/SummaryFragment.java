@@ -14,7 +14,7 @@ import com.github.pocmo.sensordashboard.network.PostClass;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.activities.BallRectangleActivity;
 import com.github.pocmo.sensordashboard.activities.StartingActivity;
-import com.github.pocmo.sensordashboard.data.UploadData;
+import com.github.pocmo.sensordashboard.data.UploadDataHelper;
 
 
 /**
@@ -29,7 +29,7 @@ public class SummaryFragment extends Fragment {
     private Button uploadData;
     private TextView uploadDataStatus;
 
-    private UploadData mUploadData = null;
+    private UploadDataHelper mUploadDataHelper = null;
     private StartingActivity mainActivity;
 
     private Button running, walking, sleeping;
@@ -124,9 +124,9 @@ public class SummaryFragment extends Fragment {
         @Override
         public void onClick(View v) {
             uploadDataStatus.setText("Uploading...");
-            //mUploadData = RemoteSensorManager.getInstance(getActivity()).getUploadData();
-            //mUploadData.update(mainActivity.getGyroCurrData(), mainActivity.getAcceleroCurrData(), userActivity);
-            new PostClass(mainActivity, uploadDataStatus, mUploadData).execute();
+            //mUploadDataHelper = RemoteSensorManager.getInstance(getActivity()).getUploadDataHelper();
+            //mUploadDataHelper.update(mainActivity.getGyroCurrData(), mainActivity.getAcceleroCurrData(), userActivity);
+            new PostClass(mainActivity, uploadDataStatus, mUploadDataHelper).execute();
         }
     };
 

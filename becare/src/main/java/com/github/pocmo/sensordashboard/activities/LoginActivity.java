@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,6 +21,9 @@ import com.github.pocmo.sensordashboard.model.UserQueryResponse;
 import com.github.pocmo.sensordashboard.network.BecareHiveApi;
 import com.github.pocmo.sensordashboard.network.HiveHelper;
 import com.google.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -32,9 +38,13 @@ public class LoginActivity extends Activity {
     public static int LOGIN_RESULT_FAIL = 0;
     public static int LOGIN_RESULT_SUCCESS = 1;
 
+    ViewGroup registerContnr, loginContnr;
     EditText userName, userPassword;
     TextView register, forgotPassword;
     Button submitBtn;
+
+    TextView alreadyResgistered;
+    Spinner registerAs;
 
     @Inject
     PreferenceStorage preferenceStorage;
@@ -51,20 +61,66 @@ public class LoginActivity extends Activity {
 
         preferenceStorage = new PreferenceStorage(LoginActivity.this);
 
-        userName        = (EditText)findViewById(R.id.et_username);
-        userPassword    = (EditText)findViewById(R.id.et_userpswd);
-        register        = (TextView)findViewById(R.id.tv_register);
-        forgotPassword  = (TextView)findViewById(R.id.tv_forgot_pswd);
-        submitBtn       = (Button)findViewById(R.id.btn_submit);
+        registerContnr = (ViewGroup)findViewById(R.id.register_contnr);
+        loginContnr = (ViewGroup)findViewById(R.id.login_cntnr);
+
+        userName        = (EditText)loginContnr.findViewById(R.id.et_username);
+        userPassword    = (EditText)loginContnr.findViewById(R.id.et_userpswd);
+        register        = (TextView)loginContnr.findViewById(R.id.tv_register);
+        forgotPassword  = (TextView)loginContnr.findViewById(R.id.tv_forgot_pswd);
+        submitBtn       = (Button)loginContnr.findViewById(R.id.btn_submit);
+
+        alreadyResgistered = (TextView)registerContnr.findViewById(R.id.tv_already_registered);
+        registerAs = (Spinner)registerContnr.findViewById(R.id.sp_register_as);
+
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("Register As");
+        categories.add("Doctor");
+        categories.add("Patient");
+
+
+        // Creating adapter for spinner
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, categories);
+
+        // Drop down layout style - list view with radio button
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        // attaching data adapter to spinner
+        registerAs.setAdapter(dataAdapter);
+
+        alreadyResgistered.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchView(false);
+            }
+        });
+
+        register.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                switchView(true);
+            }
+        });
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkUser();
+                attemptLogin();
             }
         });
     }
 
-    public void checkUser(){
+    private void switchView(boolean showRegister){
+        if(showRegister) {
+            loginContnr.setVisibility(View.GONE);
+            registerContnr.setVisibility(View.VISIBLE);
+        }else{
+            loginContnr.setVisibility(View.VISIBLE);
+            registerContnr.setVisibility(View.GONE);
+        }
+    }
+
+    public void attemptLogin(){
         String userNameInput = userName.getText().toString();
         String userPswdInput = userPassword.getText().toString();
         if(TextUtils.isEmpty(userNameInput) || TextUtils.isEmpty(userPswdInput)){

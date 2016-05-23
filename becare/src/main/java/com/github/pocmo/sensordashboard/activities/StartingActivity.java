@@ -87,6 +87,16 @@ public class StartingActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         preferenceStorage = new PreferenceStorage(getApplicationContext());
+
+        if(preferenceStorage.getUserId() != null ){
+            initialize();
+        }else{
+            Intent loginIntent = new Intent(StartingActivity.this, LoginActivity.class);
+            startActivityForResult(loginIntent, LoginActivity.REQUEST_LOGIN_CODE);
+        }
+    }
+
+    private void initialize(){
         checkAndConfigureSocket();
         remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
@@ -114,33 +124,35 @@ public class StartingActivity extends AppCompatActivity
                 getFragmentManager().beginTransaction().add(R.id.live_tracking, SensorFragment.newInstance(Sensor.TYPE_ACCELEROMETER), "ac").commit();
             }
         });
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        BusProvider.getInstance().register(this);
+        if(preferenceStorage.getUserId() != null) {
+            BusProvider.getInstance().register(this);
 
-        remoteSensorManager.startMeasurement();
+            remoteSensorManager.startMeasurement();
 
-        remoteSensorManager.getNodes(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
-            @Override
-            public void onResult(NodeApi.GetConnectedNodesResult pGetConnectedNodesResult) {
-                mNodes = pGetConnectedNodesResult.getNodes();
+            remoteSensorManager.getNodes(new ResultCallback<NodeApi.GetConnectedNodesResult>() {
+                @Override
+                public void onResult(NodeApi.GetConnectedNodesResult pGetConnectedNodesResult) {
+                    mNodes = pGetConnectedNodesResult.getNodes();
 
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        BusProvider.getInstance().unregister(this);
+        if(preferenceStorage.getUserId() != null) {
+            BusProvider.getInstance().unregister(this);
 
-        remoteSensorManager.stopMeasurement();
+            remoteSensorManager.stopMeasurement();
+        }
     }
 
     private void checkAndConfigureSocket(){
@@ -257,5 +269,16 @@ public class StartingActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == LoginActivity.REQUEST_LOGIN_CODE){
+            if(resultCode == LoginActivity.LOGIN_RESULT_SUCCESS){
+                initialize();
+            }else{
+                finish();
+            }
+        }
     }
 }

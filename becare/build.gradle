@@ -40,6 +40,9 @@ dependencies {
 
     compile project(':shared')
 
+    compile 'org.roboguice:roboguice:2.0'
+    compile 'com.squareup.retrofit:retrofit:1.9.0'
+
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'

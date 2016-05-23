@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollView1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#e8e8e7"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@color/colorPrimary"
+            android:orientation="horizontal"
+            android:layout_alignParentTop="true">
+
+
+            <TextView android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Login"
+                android:textColor="#ffffff"
+                android:layout_marginLeft="25dp"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center_horizontal|center_vertical"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="30dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+
+            <EditText android:layout_width="match_parent"
+                android:id="@+id/et_username"
+                android:layout_height="40dp"
+                android:hint="Username"
+                android:background="#f3f3f3"
+                android:textColor="@color/black"
+                android:paddingLeft="5dp"
+                android:layout_marginTop="30dp"
+                />
+
+            <EditText android:layout_width="fill_parent"
+                android:id="@+id/et_userpswd"
+                android:layout_height="40dp"
+                android:hint="password"
+                android:background="#f3f3f3"
+                android:paddingLeft="5dp"
+                android:inputType="textPassword"
+                android:layout_marginTop="25dp"
+                />
+
+
+            <LinearLayout
+                android:layout_marginTop="25dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/tv_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="#000000"
+                    android:text="Register Here"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:textColor="#000000"
+                    android:text="|"
+                    android:textStyle="bold"
+                    />
+                <TextView
+                    android:id="@+id/tv_forgot_pswd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="16dp"
+                    android:textColor="#000000"
+                    android:text="Forgot Password?"
+                    android:textStyle="bold"
+
+                    />
+
+            </LinearLayout>
+            <Button android:layout_width="190dp"
+                android:id="@+id/btn_submit"
+                android:layout_height="38dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="25dp"
+                android:text="submit"
+                android:textColor="#fff"
+                android:textSize="13dp"
+                android:background="@color/colorPrimary"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

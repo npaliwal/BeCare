@@ -6,6 +6,7 @@
 
     <string name="action_settings">Settings</string>
 
+    <string name="login">Login</string>
     <string name="exercise_ring_rect">Ring &amp; Rectangle</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>

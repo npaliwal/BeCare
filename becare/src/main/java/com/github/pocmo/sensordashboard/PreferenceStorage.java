@@ -12,6 +12,7 @@ import com.github.pocmo.sensordashboard.activities.StartingActivity;
 public class PreferenceStorage {
     private static final String SOCKET_IP = "custom_socket_ip";
     private static final String SOCKET_PORT = "custom_socket_port";
+    private static final String USER_ID = "becare_user_id";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -33,5 +34,13 @@ public class PreferenceStorage {
 
     public int getSocketPort(){
         return sharedPreferences.getInt(PreferenceStorage.SOCKET_PORT, -1);
+    }
+
+    public String getUserId() {
+        return sharedPreferences.getString(PreferenceStorage.USER_ID, null);
+    }
+
+    public void setUserId(String userId) {
+        editor.putString(PreferenceStorage.USER_ID, userId).commit();
     }
 }

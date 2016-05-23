@@ -8,13 +8,19 @@ import com.github.pocmo.sensordashboard.model.SensorDataValue;
 import com.github.pocmo.sensordashboard.model.UploadData;
 import com.google.gson.Gson;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by neerajpaliwal on 06/04/16.
  */
 public class UploadDataHelper {
+    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
+
     private UploadData uploadData;
 
     //Helper data
@@ -123,6 +129,14 @@ public class UploadDataHelper {
     }
 
     public String getUploadDataStr(){
+        Calendar cal = Calendar.getInstance();
+        String date = dateFormat.format(cal.getTimeInMillis());
+        String time = timeFormat.format(cal.getTimeInMillis());
+
+        uploadData.setReadTime(time);
+        uploadData.setReadDate(date);
+
+
         calculateMeanHighLow();
         calculateNumZeroCrossing();
 

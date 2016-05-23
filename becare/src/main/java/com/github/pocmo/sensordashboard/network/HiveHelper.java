@@ -13,11 +13,11 @@ import java.util.Locale;
  * Created by neerajpaliwal on 18/05/16.
  */
 public class HiveHelper {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
+
 
     public static String INSERT_URL = "http://hivedemo.qtxsystems.net/Api/DataApi.svc/Insert";
     public static String QUERY_URL = "http://hivedemo.qtxsystems.net/Api/DataApi.svc/ExecuteHiveql";
+    public static String HIVE_ROOT = "http://hivedemo.qtxsystems.net";
 
     public String formatUploadData(UploadData uploadData){
         String ret = "{" +
@@ -34,18 +34,14 @@ public class HiveHelper {
     }
 
     public String formatSensorStats(UploadData uploadData){
-        Calendar cal = Calendar.getInstance();
-        String date = dateFormat.format(cal.getTimeInMillis());
-        String time = timeFormat.format(cal.getTimeInMillis());
-
-        String gyro = uploadData.getGyroMeter().toString();
+          String gyro = uploadData.getGyroMeter().toString();
         String acelro = uploadData.getAccelMeter().toString();
 
         String ret = "{" +
                 "\\\"deviceId\\\":\\\"" + uploadData.getDeviceId() + "\\\"," +
                 "\\\"activityType\\\":\\\"" + uploadData.getActivityData().toString() + "\\\"," +
-                "\\\"readDate\\\":\\\"" + date + "\\\"," +
-                "\\\"readTime\\\":\\\"" + time + "\\\"," +
+                "\\\"readDate\\\":\\\"" + uploadData.getReadDate() + "\\\"," +
+                "\\\"readTime\\\":\\\"" + uploadData.getReadTime() + "\\\"," +
                 "\\\"gyroMeter\\\":\\\"" + gyro + "\\\"," +
                 "\\\"accelMeter\\\":\\\"" +  acelro + "\\\"}";
 

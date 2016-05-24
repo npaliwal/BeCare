@@ -46,6 +46,8 @@ public class LoginActivity extends Activity {
     TextView alreadyResgistered;
     Spinner registerAs;
 
+    TextView skipToApp;
+
     @Inject
     PreferenceStorage preferenceStorage;
 
@@ -73,6 +75,8 @@ public class LoginActivity extends Activity {
         alreadyResgistered = (TextView)registerContnr.findViewById(R.id.tv_already_registered);
         registerAs = (Spinner)registerContnr.findViewById(R.id.sp_register_as);
 
+        skipToApp = (TextView)findViewById(R.id.tv_skip_registration);
+
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
         categories.add("Register As");
@@ -96,6 +100,13 @@ public class LoginActivity extends Activity {
             }
         });
 
+        skipToApp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setResult(LOGIN_RESULT_SUCCESS);
+                finish();
+            }
+        });
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

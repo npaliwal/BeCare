@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scrollView1"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <LinearLayout
         android:id="@+id/header"
@@ -80,7 +82,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:textColor="#000000"
-                    android:text="Register Here"
+                    android:text="@string/login_register"
                     android:textStyle="bold"
                     />
                 <TextView
@@ -99,7 +101,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="16dp"
                     android:textColor="#000000"
-                    android:text="Forgot Password?"
+                    android:text="@string/login_forget"
                     android:textStyle="bold"
 
                     />
@@ -128,7 +130,7 @@
         android:layout_marginBottom="30dp"
         android:orientation="vertical"
         android:layout_below="@+id/header"
-        android:visibility="invisible"
+        android:visibility="gone"
         >
 
         <TextView
@@ -138,7 +140,7 @@
             android:textSize="16dp"
             android:textColor="#000000"
             android:layout_gravity="center"
-            android:text="Already a registered user? Sign In"
+            android:text="@string/login_already_registered"
             android:textStyle="bold"
             />
 
@@ -183,4 +185,16 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_skip_registration"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textColor="#000000"
+        android:layout_alignParentBottom="true"
+        android:gravity="center|center_horizontal"
+        android:text="@string/login_skip"
+        android:padding="10dp"
+        android:textStyle="bold"
+        />
 </RelativeLayout>

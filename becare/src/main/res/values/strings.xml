@@ -10,4 +10,12 @@
     <string name="exercise_ring_rect">Ring &amp; Rectangle</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
+
+
+    <string name="login_register"> <u>Register Here</u></string>
+    <string name="login_forget"> <u>Forgot Password?</u></string>
+    <string name="login_skip"> <u>Skip to Becare App</u></string>
+    <string name="login_already_registered"> <u>Already a registered user? Sign In</u></string>
+
+
 </resources>

@@ -13,6 +13,7 @@ public class PreferenceStorage {
     private static final String SOCKET_IP = "custom_socket_ip";
     private static final String SOCKET_PORT = "custom_socket_port";
     private static final String USER_ID = "becare_user_id";
+    private static final String SKIP_REG = "becare_skip_registration";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -42,5 +43,20 @@ public class PreferenceStorage {
 
     public void setUserId(String userId) {
         editor.putString(PreferenceStorage.USER_ID, userId).commit();
+    }
+
+    public boolean getSkipReg() {
+        return sharedPreferences.getBoolean(PreferenceStorage.SKIP_REG, false);
+    }
+
+    public void setSkipReg(boolean skipReg) {
+        editor.putBoolean(PreferenceStorage.SKIP_REG, skipReg).commit();
+    }
+
+    public boolean isLoggedIn(){
+        if(getUserId() != null){
+            return true;
+        }
+        return getSkipReg();
     }
 }

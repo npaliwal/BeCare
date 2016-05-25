@@ -37,6 +37,7 @@ public class LoginActivity extends Activity {
     public static int REQUEST_LOGIN_CODE = 1;
     public static int LOGIN_RESULT_FAIL = 0;
     public static int LOGIN_RESULT_SUCCESS = 1;
+    public static int LOGIN_RESULT_SKIPPED = 2;
 
     ViewGroup registerContnr, loginContnr;
     EditText userName, userPassword;
@@ -103,7 +104,8 @@ public class LoginActivity extends Activity {
         skipToApp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setResult(LOGIN_RESULT_SUCCESS);
+                preferenceStorage.setSkipReg(true);
+                setResult(LOGIN_RESULT_SKIPPED);
                 finish();
             }
         });

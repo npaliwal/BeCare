@@ -30,6 +30,7 @@ import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
+import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
 import com.github.pocmo.sensordashboard.ui.SensorFragment;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
@@ -50,6 +51,7 @@ public class StartingActivity extends AppCompatActivity
     private BecareRemoteSensorManager remoteSensorManager;
     private LinearLayout mTrackingContainer;
     private List<Node> mNodes;
+    private boolean debugGyroDisplayed = false, debugAcceleroDisplayed = false;
 
     private PreferenceStorage preferenceStorage;
     private static StartingActivity instance;
@@ -88,7 +90,7 @@ public class StartingActivity extends AppCompatActivity
 
         preferenceStorage = new PreferenceStorage(getApplicationContext());
 
-        if(preferenceStorage.getUserId() != null ){
+        if(preferenceStorage.isLoggedIn()){
             initialize();
         }else{
             Intent loginIntent = new Intent(StartingActivity.this, LoginActivity.class);
@@ -130,7 +132,7 @@ public class StartingActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        if(preferenceStorage.getUserId() != null) {
+        if(preferenceStorage.isLoggedIn()) {
             BusProvider.getInstance().register(this);
 
             remoteSensorManager.startMeasurement();
@@ -148,7 +150,9 @@ public class StartingActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        if(preferenceStorage.getUserId() != null) {
+        debugGyroDisplayed = false;
+        debugAcceleroDisplayed = false;
+        if(preferenceStorage.isLoggedIn()) {
             BusProvider.getInstance().unregister(this);
 
             remoteSensorManager.stopMeasurement();
@@ -228,20 +232,32 @@ public class StartingActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Subscribe
-    public void onNewSensorEvent(final NewSensorEvent event) {
+    private void setWatchSensorDisplayble(com.github.pocmo.sensordashboard.data.Sensor sensor){
         mWearSensorStatus.setText("Connected Successfully with a watch !!");
-        if(event.getSensor().getId() == Sensor.TYPE_ACCELEROMETER){
+        if(sensor.getId() == Sensor.TYPE_ACCELEROMETER){
             mAcceleroTracking.setVisibility(View.VISIBLE);
+            debugAcceleroDisplayed = true;
         }
-        if(event.getSensor().getId() == Sensor.TYPE_GYROSCOPE){
+        if(sensor.getId() == Sensor.TYPE_GYROSCOPE){
             mGyroTrack.setVisibility(View.VISIBLE);
+            debugGyroDisplayed = true;
         }
-        Toast.makeText(this, "New Sensor!\n" + event.getSensor().getName(), Toast.LENGTH_SHORT).show();
-
+        Toast.makeText(this, "New Sensor!\n" + sensor.getName(), Toast.LENGTH_SHORT).show();
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    @Subscribe
+    public void onNewSensorEvent(final NewSensorEvent event) {
+        setWatchSensorDisplayble(event.getSensor());
+    }
+
+    @Subscribe
+    public void onSensorUpdatedEvent(SensorUpdatedEvent event) {
+        if (debugGyroDisplayed == false || debugAcceleroDisplayed == false) {
+            setWatchSensorDisplayble(event.getSensor());
+        }
+    }
+
+            @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -274,7 +290,7 @@ public class StartingActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == LoginActivity.REQUEST_LOGIN_CODE){
-            if(resultCode == LoginActivity.LOGIN_RESULT_SUCCESS){
+            if(resultCode == LoginActivity.LOGIN_RESULT_SUCCESS || resultCode == LoginActivity.LOGIN_RESULT_SKIPPED){
                 initialize();
             }else{
                 finish();

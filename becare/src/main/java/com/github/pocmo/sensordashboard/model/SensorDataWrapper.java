@@ -78,5 +78,8 @@ public class SensorDataWrapper {
         this.zcCount = zcCount;
     }
 
+    public int getZcCount(){
+        return zcCount;
+    }
 
 }

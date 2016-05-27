@@ -54,7 +54,7 @@ public class PostClass extends AsyncTask<String, Void, Void> {
                 connection.setDoInput(true);
 
 
-                String str =  uploadDataHelper.getUploadDataStr();
+                String str =  uploadDataHelper.getUploadDataStr(System.currentTimeMillis());
                 byte[] outputInBytes = str.getBytes("UTF-8");
                 OutputStream os = connection.getOutputStream();
                 os.write(outputInBytes);

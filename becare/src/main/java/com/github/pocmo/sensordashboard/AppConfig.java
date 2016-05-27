@@ -20,4 +20,8 @@ public class AppConfig {
 
     public static final int CLIENT_CONNECTION_TIMEOUT = 15000;
 
+    public static final int X_CORD = 1;
+    public static final int Y_CORD = 2;
+    public static final int Z_CORD = 3;
+
 }

@@ -40,6 +40,24 @@ public class ClientSocketManager {
         Log.d("socketmanager", "Data uploaded successfully !!");
     }
 
+    public void pushDataAsyncronously(final String data) throws Exception{
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                PrintWriter out = null;
+                try {
+                    out = new PrintWriter(new BufferedWriter(
+                            new OutputStreamWriter(socket.getOutputStream())),
+                            true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                out.println(data);
+                Log.d("socketmanager", "Data uploaded successfully !!");
+            }
+        }).start();
+    }
+
     class ClientThread implements Runnable {
         @Override
         public void run() {

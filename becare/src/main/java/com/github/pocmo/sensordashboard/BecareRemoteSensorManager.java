@@ -13,6 +13,7 @@ import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
 import com.github.pocmo.sensordashboard.events.TagAddedEvent;
+import com.github.pocmo.sensordashboard.model.ActivityUploadData;
 import com.github.pocmo.sensordashboard.model.SensorDataValue;
 import com.github.pocmo.sensordashboard.network.ClientSocketManager;
 import com.github.pocmo.sensordashboard.shared.ClientPaths;
@@ -224,15 +225,42 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void uploadSensorData() {
+    public void uploadAllSensorData(int sensorType) {
         try {
             Log.d(TAG, "upload data tring upload");
-            if(uploadDataHelper.getUserActivityData() != null) {
+            if(uploadDataHelper.getUserActivityName() != null) {
                 Log.d(TAG, "upload data tring activity data not null");
-                socketManager.pushData(uploadDataHelper.getUploadDataStr());
+                String data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.X_CORD);
+                socketManager.pushDataAsyncronously(data);
+
+                data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Y_CORD);
+                socketManager.pushDataAsyncronously(data);
+
+                data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Z_CORD);
+                socketManager.pushDataAsyncronously(data);
             }
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());
         }
+    }
+
+    public void uploadActivityData() {
+        try {
+            Log.d(TAG, "upload data string upload");
+            if(uploadDataHelper.getUserActivityName() != null) {
+                Log.d(TAG, "upload data string activity data not null");
+                socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData());
+            }
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
+    public void calculateStats(long currTime){
+        uploadDataHelper.calculateStats(currTime);
+    }
+
+    public void resetStats(){
+        uploadDataHelper.resetStats();
     }
 }

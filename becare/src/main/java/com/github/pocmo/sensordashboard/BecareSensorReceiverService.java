@@ -1,6 +1,7 @@
 package com.github.pocmo.sensordashboard;
 
 import android.content.Intent;
+import android.hardware.Sensor;
 import android.net.Uri;
 import android.util.Log;
 
@@ -37,7 +38,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
     @Override
     public void onPeerConnected(Node peer) {
         super.onPeerConnected(peer);
-
+        lastUpdateTime = System.currentTimeMillis();
         Log.i(TAG, "Connected: " + peer.getDisplayName() + " (" + peer.getId() + ")");
     }
 
@@ -77,10 +78,16 @@ public class BecareSensorReceiverService extends WearableListenerService {
 
         sensorManager.addSensorData(sensorType, accuracy, timestamp, values);
 
-        if(System.currentTimeMillis() - lastUpdateTime >= 1000){
-            lastUpdateTime = System.currentTimeMillis();
+        long currTime = System.currentTimeMillis();
+        if(currTime - lastUpdateTime >= 10000){
+            lastUpdateTime = currTime;
             Log.d(TAG, "starting upload service");
-            sensorManager.uploadSensorData();
+
+            sensorManager.calculateStats(currTime);
+            sensorManager.uploadAllSensorData(Sensor.TYPE_ACCELEROMETER);
+            sensorManager.uploadAllSensorData(Sensor.TYPE_GYROSCOPE);
+            sensorManager.uploadActivityData();
+            sensorManager.resetStats();
             //Intent intent = new Intent(this, DataUploadService.class);
             //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadDataHelper().getUploadDataHelper());
             //startService(intent);

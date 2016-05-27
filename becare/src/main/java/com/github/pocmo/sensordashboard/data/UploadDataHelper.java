@@ -3,9 +3,13 @@ package com.github.pocmo.sensordashboard.data;
 import android.hardware.Sensor;
 import android.util.Log;
 
+import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.model.ActivityData;
+import com.github.pocmo.sensordashboard.model.ActivityUploadData;
 import com.github.pocmo.sensordashboard.model.SensorDataValue;
-import com.github.pocmo.sensordashboard.model.UploadData;
+import com.github.pocmo.sensordashboard.model.SensorDataWrapper;
+import com.github.pocmo.sensordashboard.model.SensorUploadData;
+import com.github.pocmo.sensordashboard.model.UploadData_Old;
 import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
@@ -18,29 +22,43 @@ import java.util.Locale;
  * Created by neerajpaliwal on 06/04/16.
  */
 public class UploadDataHelper {
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
-    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.US);
+    private static final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
-    private UploadData uploadData;
+    String deviceId;
+
+    String source;
+
+    Gson gson = new Gson();
+
+    String readTime;
+
+    String activityName;
+    String activityValue;
+
+    SensorDataWrapper gyroMeter;
+
+    SensorDataWrapper accelMeter;
 
     //Helper data
     private List<SensorDataValue> allGyroData = new ArrayList<>();
     private List<SensorDataValue> allAcceleroData = new ArrayList<>();
 
     public UploadDataHelper(){
-        this.uploadData = new UploadData();
+        gyroMeter = new SensorDataWrapper();
+        accelMeter = new SensorDataWrapper();
     }
 
     public void setDeviceId(String deviceId){
-        this.uploadData.setDeviceId(deviceId.trim().replaceAll(" ", ""));
+        this.deviceId = deviceId.trim().replaceAll(" ", "");
     }
 
-    public void setUserActivity(ActivityData activityData){
-        this.uploadData.setActivityData(activityData);
+    public void setUserActivity(String activityName, String activityValue){
+        this.activityName = activityName;
+        this.activityValue = activityValue;
     }
 
-    public ActivityData getUserActivityData(){
-        return uploadData.getActivityData();
+    public String getUserActivityName(){
+        return activityName;
     }
 
     public void addDataValue(SensorDataValue data, int type){
@@ -59,33 +77,33 @@ public class UploadDataHelper {
         Mean: Add all Xs and divide by num values in an interval
     */
     private void calculateMeanHighLow(){
-        uploadData.getGyroMeter().resetMean();
-        uploadData.getAccelMeter().resetMean();
+        gyroMeter.resetMean();
+        accelMeter.resetMean();
 
         if(allGyroData.size() > 0){
-            uploadData.getGyroMeter().setHigh(allGyroData.get(0));
-            uploadData.getGyroMeter().setLow(allGyroData.get(0));
+            gyroMeter.setHigh(allGyroData.get(0));
+            gyroMeter.setLow(allGyroData.get(0));
         }
         for(SensorDataValue data : allGyroData){
-            uploadData.getGyroMeter().addToMean(data);
-            uploadData.getGyroMeter().setHigh(data);
-            uploadData.getGyroMeter().setLow(data);
+            gyroMeter.addToMean(data);
+            gyroMeter.setHigh(data);
+            gyroMeter.setLow(data);
         }
 
         if(allAcceleroData.size() > 0){
-            uploadData.getAccelMeter().setHigh(allAcceleroData.get(0));
-            uploadData.getAccelMeter().setLow(allAcceleroData.get(0));
+            accelMeter.setHigh(allAcceleroData.get(0));
+            accelMeter.setLow(allAcceleroData.get(0));
         }
         for(SensorDataValue data : allAcceleroData){
-            uploadData.getAccelMeter().addToMean(data);
-            uploadData.getAccelMeter().setHigh(data);
-            uploadData.getAccelMeter().setLow(data);
+            accelMeter.addToMean(data);
+            accelMeter.setHigh(data);
+            accelMeter.setLow(data);
         }
         if(allGyroData.size() > 0)
-            uploadData.getGyroMeter().normalizeMean(allGyroData.size());
+            gyroMeter.normalizeMean(allGyroData.size());
 
         if(allAcceleroData.size() > 0)
-            uploadData.getAccelMeter().normalizeMean(allAcceleroData.size());
+            accelMeter.normalizeMean(allAcceleroData.size());
     }
 
     /*
@@ -96,11 +114,11 @@ public class UploadDataHelper {
        similarly next data = (-1f, -1f, 1f) => zero crossing as Y has crossed meanY value
    */
     private void calculateNumZeroCrossing(){
-        uploadData.getGyroMeter().setZcCount(0);
-        uploadData.getAccelMeter().setZcCount(0);
+        gyroMeter.setZcCount(0);
+        accelMeter.setZcCount(0);
 
         SensorDataValue n1=null, nPlus1=null;
-        SensorDataValue meanGyroData = uploadData.getGyroMeter().getMean();
+        SensorDataValue meanGyroData = gyroMeter.getMean();
         for(SensorDataValue data : allGyroData){
             n1 = nPlus1;
             nPlus1 = data;
@@ -108,12 +126,12 @@ public class UploadDataHelper {
                 if((meanGyroData.getValueX() - n1.getValueX()) * (meanGyroData.getValueX() - nPlus1.getValueX()) < 0 ||
                         (meanGyroData.getValueY() - n1.getValueY()) * (meanGyroData.getValueY() - nPlus1.getValueY()) < 0 ||
                         (meanGyroData.getValueZ() - n1.getValueZ()) * (meanGyroData.getValueZ() - nPlus1.getValueZ()) < 0){
-                    uploadData.getGyroMeter().increaseZeroCrossingCount();
+                    gyroMeter.increaseZeroCrossingCount();
                 }
             }
         }
 
-        SensorDataValue meanAccelData = uploadData.getAccelMeter().getMean();
+        SensorDataValue meanAccelData = accelMeter.getMean();
         for(SensorDataValue data : allAcceleroData){
             n1 = nPlus1;
             nPlus1 = data;
@@ -121,35 +139,55 @@ public class UploadDataHelper {
                 if((meanAccelData.getValueX() - n1.getValueX()) * (meanAccelData.getValueX() - nPlus1.getValueX()) < 0 ||
                         (meanAccelData.getValueY() - n1.getValueY()) * (meanAccelData.getValueY() - nPlus1.getValueY()) < 0 ||
                         (meanAccelData.getValueZ() - n1.getValueZ()) * (meanAccelData.getValueZ() - nPlus1.getValueZ()) < 0){
-                    uploadData.getAccelMeter().increaseZeroCrossingCount();
+                    accelMeter.increaseZeroCrossingCount();
                 }
             }
         }
 
     }
 
-    public String getUploadDataStr(){
-        Calendar cal = Calendar.getInstance();
-        String date = dateFormat.format(cal.getTimeInMillis());
-        String time = timeFormat.format(cal.getTimeInMillis());
+    public String getSensorUploadData(int sensorType, int cord){
+        SensorDataWrapper wrapper = sensorType == Sensor.TYPE_ACCELEROMETER ? accelMeter : gyroMeter;
+        int numSample = sensorType == Sensor.TYPE_ACCELEROMETER ? allAcceleroData.size() : allGyroData.size();
+        String sensorName = sensorType == Sensor.TYPE_ACCELEROMETER ? "accelerometer" : "gyroscope";
 
-        uploadData.setReadTime(time);
-        uploadData.setReadDate(date);
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId);
 
-
-        calculateMeanHighLow();
-        calculateNumZeroCrossing();
-
-        //String ret = new HiveHelper().formatUploadData(this);
-        //String ret = uploadData.toString();
-        Gson gson = new Gson();
-        String ret = gson.toJson(uploadData, UploadData.class);
-
-
-        allAcceleroData.clear();
-        allGyroData.clear();
-        Log.d("upload data", ret);
-        return ret;
+        return gson.toJson(data, SensorUploadData.class);
     }
 
+
+    public void calculateStats(long timeStamp){
+        readTime = timeFormat.format(timeStamp);
+        calculateMeanHighLow();
+        calculateNumZeroCrossing();
+    }
+
+    public void resetStats(){
+        allAcceleroData.clear();
+        allGyroData.clear();
+    }
+
+    public String getUploadDataStr(long timeStamp){
+//        readTime = timeFormat.format(timeStamp);
+//
+//        calculateMeanHighLow();
+//        calculateNumZeroCrossing();
+//
+//        //String ret = new HiveHelper().formatUploadData(this);
+//        //String ret = uploadData.toString();
+//        String ret = gson.toJson(uploadData, UploadData_Old.class);
+//
+//        allAcceleroData.clear();
+//        allGyroData.clear();
+//        Log.d("upload data", ret);
+//        return ret;
+        return "this function is deprecated";
+    }
+
+    public String getUserActivityData() {
+        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityValue);
+
+        return gson.toJson(data, ActivityUploadData.class);
+    }
 }

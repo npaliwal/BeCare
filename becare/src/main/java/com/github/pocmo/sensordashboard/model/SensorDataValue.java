@@ -1,6 +1,8 @@
 package com.github.pocmo.sensordashboard.model;
 
 
+import java.math.BigDecimal;
+
 /**
  * Created by neerajpaliwal on 21/05/16.
  */
@@ -58,5 +60,23 @@ public class SensorDataValue {
         x = x;
         y = y;
         z = z;
+    }
+
+    public float round(float d, int decimalPlace) {
+        BigDecimal bd = new BigDecimal(Float.toString(d));
+        bd = bd.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
+    }
+
+    public float getRoundX(){
+        return round(x, 3);
+    }
+
+    public float getRoundY(){
+        return round(y, 3);
+    }
+
+    public float getRoundZ(){
+        return round(z, 3);
     }
 }

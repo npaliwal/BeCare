@@ -3,11 +3,7 @@ package com.github.pocmo.sensordashboard.network;
 import android.util.Log;
 
 import com.github.pocmo.sensordashboard.AppConstant;
-import com.github.pocmo.sensordashboard.model.UploadData;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Locale;
+import com.github.pocmo.sensordashboard.model.UploadData_Old;
 
 /**
  * Created by neerajpaliwal on 18/05/16.
@@ -19,7 +15,7 @@ public class HiveHelper {
     public static String QUERY_URL = "http://hivedemo.qtxsystems.net/Api/DataApi.svc/ExecuteHiveql";
     public static String HIVE_ROOT = "http://hivedemo.qtxsystems.net";
 
-    public String formatUploadData(UploadData uploadData){
+    public String formatUploadData(UploadData_Old uploadData){
         String ret = "{" +
                 "\"apikey\" : \""+ AppConstant.HIVE_API_KEY + "\"," +
                 "\"comb\" : \""+ AppConstant.COMB_DEVICE + "\"," +
@@ -33,7 +29,7 @@ public class HiveHelper {
         return ret;
     }
 
-    public String formatSensorStats(UploadData uploadData){
+    public String formatSensorStats(UploadData_Old uploadData){
           String gyro = uploadData.getGyroMeter().toString();
         String acelro = uploadData.getAccelMeter().toString();
 

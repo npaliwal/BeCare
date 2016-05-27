@@ -230,13 +230,14 @@ public class BecareRemoteSensorManager {
             Log.d(TAG, "upload data tring upload");
             if(uploadDataHelper.getUserActivityName() != null) {
                 Log.d(TAG, "upload data tring activity data not null");
-                String data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.X_CORD);
-                socketManager.pushDataAsyncronously(data);
+                String dataX = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.X_CORD);
+           //     socketManager.pushDataAsyncronously(data);
 
-                data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Y_CORD);
-                socketManager.pushDataAsyncronously(data);
+                String dataY = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Y_CORD);
+           //     socketManager.pushDataAsyncronously(data);
 
-                data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Z_CORD);
+                String dataZ = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Z_CORD);
+                String data =dataX +"\n" + dataY + "\n" + dataZ;
                 socketManager.pushDataAsyncronously(data);
             }
         }catch (Exception e){

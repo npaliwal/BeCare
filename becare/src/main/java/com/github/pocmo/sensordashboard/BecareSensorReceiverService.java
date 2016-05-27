@@ -79,7 +79,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
         sensorManager.addSensorData(sensorType, accuracy, timestamp, values);
 
         long currTime = System.currentTimeMillis();
-        if(currTime - lastUpdateTime >= 10000){
+        if(currTime - lastUpdateTime >= 1000){
             lastUpdateTime = currTime;
             Log.d(TAG, "starting upload service");
 

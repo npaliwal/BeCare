@@ -15,7 +15,13 @@ public class SensorDataWrapper {
 
     public SensorDataWrapper(){
         high = new SensorDataValue();
+        high.setValueX(-0xffffff);
+        high.setValueY(-0xffffff);
+        high.setValueZ(-0xffffff);
         low = new SensorDataValue();
+        low.setValueX(0xffffff);
+        low.setValueY(0xffffff);
+        low.setValueZ(0xffffff);
         mean = new SensorDataValue();
         zcCount = 0;
     }
@@ -64,6 +70,11 @@ public class SensorDataWrapper {
         this.mean.setValueZ(mean.getValueZ() + currData.getValueZ());
     }
 
+    public void setMean(float x, float y, float z){
+        this.mean.setValueX(x);
+        this.mean.setValueY(y);
+        this.mean.setValueZ(z);
+    }
     public void normalizeMean(int numPoints){
         this.mean.setValueX(mean.getValueX() / numPoints);
         this.mean.setValueY(mean.getValueY() / numPoints);
@@ -80,6 +91,17 @@ public class SensorDataWrapper {
 
     public int getZcCount(){
         return zcCount;
+    }
+
+    public void reset()
+    {
+        high.setValueX(-0xffffff);
+        high.setValueY(-0xffffff);
+        high.setValueZ(-0xffffff);
+        low.setValueX(0xffffff);
+        low.setValueY(0xffffff);
+        low.setValueZ(0xffffff);
+        zcCount = 0;
     }
 
 }

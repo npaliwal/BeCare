@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -84,26 +85,50 @@ public class UploadDataHelper {
             gyroMeter.setHigh(allGyroData.get(0));
             gyroMeter.setLow(allGyroData.get(0));
         }
+        float totalX = 0;
+        float totalY = 0;
+        float totalZ = 0;
         for(SensorDataValue data : allGyroData){
             gyroMeter.addToMean(data);
             gyroMeter.setHigh(data);
             gyroMeter.setLow(data);
+            totalX += data.getValueX();
+            totalY += data.getValueY();
+            totalZ += data.getValueZ();
         }
-
+        if(allGyroData.size() > 0) {
+            float gavgX = totalX / allGyroData.size();
+            float gavgY = totalY / allGyroData.size();
+            float gavgZ = totalZ / allGyroData.size();
+            gyroMeter.setMean(gavgX, gavgY, gavgZ);
+        }
         if(allAcceleroData.size() > 0){
             accelMeter.setHigh(allAcceleroData.get(0));
             accelMeter.setLow(allAcceleroData.get(0));
         }
+
+        totalX = 0;
+        totalY = 0;
+        totalZ = 0;
         for(SensorDataValue data : allAcceleroData){
             accelMeter.addToMean(data);
             accelMeter.setHigh(data);
             accelMeter.setLow(data);
+            totalX += data.getValueX();
+            totalY += data.getValueY();
+            totalZ += data.getValueZ();
         }
-        if(allGyroData.size() > 0)
+        if(allAcceleroData.size() > 0) {
+            float aavgX = totalX / allAcceleroData.size();
+            float aavgY = totalY / allAcceleroData.size();
+            float aavgZ = totalZ / allAcceleroData.size();
+            accelMeter.setMean(aavgX, aavgY, aavgZ);
+        }
+      /*  if(allGyroData.size() > 0)
             gyroMeter.normalizeMean(allGyroData.size());
 
         if(allAcceleroData.size() > 0)
-            accelMeter.normalizeMean(allAcceleroData.size());
+            accelMeter.normalizeMean(allAcceleroData.size());*/
     }
 
     /*
@@ -151,7 +176,34 @@ public class UploadDataHelper {
         int numSample = sensorType == Sensor.TYPE_ACCELEROMETER ? allAcceleroData.size() : allGyroData.size();
         String sensorName = sensorType == Sensor.TYPE_ACCELEROMETER ? "accelerometer" : "gyroscope";
 
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId);
+        float[] gX =null;
+        float[] gY =null;
+        float[] gZ =null;
+        float[] vector = null;
+        if (sensorType == Sensor.TYPE_GYROSCOPE) {
+            int len = allGyroData.size();
+            if (len > 0) {
+                gX = new float[len];
+                gY = new float[len];
+                gZ = new float[len];
+                int i = 0;
+                for (SensorDataValue data : allGyroData) {
+                    gX[i] = data.getRoundX();
+                    gY[i] = data.getRoundY();
+                    gZ[i] = data.getRoundZ();
+                    i++;
+                }
+
+                if (cord == AppConfig.X_CORD)
+                    vector = gX;
+                if (cord == AppConfig.Y_CORD)
+                    vector = gY;
+                if (cord == AppConfig.Z_CORD)
+                    vector = gZ;
+            }
+        }
+
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector);
 
         return gson.toJson(data, SensorUploadData.class);
     }
@@ -166,6 +218,8 @@ public class UploadDataHelper {
     public void resetStats(){
         allAcceleroData.clear();
         allGyroData.clear();
+        gyroMeter.reset();
+        accelMeter.reset();
     }
 
     public String getUploadDataStr(long timeStamp){

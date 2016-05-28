@@ -41,33 +41,47 @@ public class SensorUploadData {
     @SerializedName("vola")
     float volatility; //: volatility (standard deviation)
 
-    public SensorUploadData(String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device) {
+    @SerializedName("vector")
+    float[] vector;
+
+
+    public SensorUploadData(String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device, float[] all) {
 
         switch (cord){
             case AppConfig.X_CORD:{
                 corrdtype = "x";
-                high = wrapper.getHigh().getRoundX();
-                low = wrapper.getLow().getRoundX();
-                avg = wrapper.getMean().getRoundX();
+                if (numSample > 0) {
+                    high = wrapper.getHigh().getRoundX();
+                    low = wrapper.getLow().getRoundX();
+                    avg = wrapper.getMean().getRoundX();
+                }
+
                 break;
             }
 
             case AppConfig.Y_CORD:{
                 corrdtype = "y";
-                high = wrapper.getHigh().getRoundY();
-                low = wrapper.getLow().getRoundY();
-                avg = wrapper.getMean().getRoundY();
+                if (numSample > 0) {
+                    high = wrapper.getHigh().getRoundY();
+                    low = wrapper.getLow().getRoundY();
+                    avg = wrapper.getMean().getRoundY();
+                }
+
                 break;
             }
 
             case AppConfig.Z_CORD:{
                 corrdtype = "z";
-                high = wrapper.getHigh().getRoundZ();
-                low = wrapper.getLow().getRoundZ();
-                avg = wrapper.getMean().getRoundZ();
+                if (numSample > 0) {
+                    high = wrapper.getHigh().getRoundZ();
+                    low = wrapper.getLow().getRoundZ();
+                    avg = wrapper.getMean().getRoundZ();
+                }
                 break;
             }
         }
+
+
         this.zeroCrossing = wrapper.getZcCount();
         this.volatility = 0f;
 
@@ -76,5 +90,7 @@ public class SensorUploadData {
         this.time = readTime;
         this.deviceId = device;
         this.numSample = numSample;
+        this.vector = all;
+
     }
 }

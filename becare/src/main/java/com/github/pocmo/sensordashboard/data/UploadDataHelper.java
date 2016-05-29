@@ -203,7 +203,7 @@ public class UploadDataHelper {
             }
         }
 
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector);
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, null);
 
         return gson.toJson(data, SensorUploadData.class);
     }

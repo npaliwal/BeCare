@@ -18,6 +18,7 @@
 
 
         <TextView android:layout_width="wrap_content"
+            android:id="@+id/header_text"
             android:layout_height="wrap_content"
             android:text="Login"
             android:textColor="#ffffff"
@@ -31,7 +32,7 @@
     <LinearLayout
         android:id="@+id/login_cntnr"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#e8e8e7"
         android:orientation="vertical"
         android:layout_below="@+id/header"
@@ -107,29 +108,19 @@
                     />
 
             </LinearLayout>
-            <Button android:layout_width="190dp"
-                android:id="@+id/btn_submit"
-                android:layout_height="38dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="25dp"
-                android:text="submit"
-                android:textColor="#fff"
-                android:textSize="13dp"
-                android:background="@color/colorPrimary"/>
+
         </LinearLayout>
     </LinearLayout>
 
-
-
     <LinearLayout android:layout_width="fill_parent"
         android:id="@+id/register_contnr"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginBottom="30dp"
         android:orientation="vertical"
-        android:layout_below="@+id/header"
+        android:layout_below="@+id/login_cntnr"
         android:visibility="gone"
         >
 
@@ -145,7 +136,7 @@
             />
 
         <EditText
-            android:id="@+id/tv_name"
+            android:id="@+id/et_reg_name"
             android:layout_width="fill_parent"
             android:layout_height="40dp"
             android:hint="Username"
@@ -173,17 +164,48 @@
             android:layout_height="40dp"
             android:background="#f3f3f3"
             android:paddingLeft="5dp"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="15dp"
+            android:visibility="gone"/>
 
-        <Button android:layout_width="190dp"
-            android:layout_height="38dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="submit"
-            android:textColor="@color/white"
-            android:background="@color/colorPrimary"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:text="Register as:"
+            android:layout_marginTop="30dp"
+            />
 
+        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <RadioButton android:id="@+id/radio_patient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/patient"
+                android:onClick="onRadioButtonClicked"/>
+
+            <RadioButton android:id="@+id/radio_doctor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/doctor"
+                android:layout_marginLeft="70dp"
+                android:onClick="onRadioButtonClicked"/>
+        </RadioGroup>
     </LinearLayout>
+
+    <Button android:layout_width="match_parent"
+        android:id="@+id/btn_submit"
+        android:layout_height="38dp"
+        android:gravity="center|center_horizontal|center_vertical"
+        android:layout_below="@+id/register_contnr"
+        android:text="submit"
+        android:textColor="#fff"
+        android:textSize="13dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:background="@color/colorPrimary"/>
 
     <TextView
         android:id="@+id/tv_skip_registration"

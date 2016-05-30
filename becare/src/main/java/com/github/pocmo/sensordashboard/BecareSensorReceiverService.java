@@ -84,8 +84,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
             Log.d(TAG, "starting upload service");
 
             sensorManager.calculateStats(currTime);
-            sensorManager.uploadAllSensorData(Sensor.TYPE_ACCELEROMETER);
-          //  sensorManager.uploadAllSensorData(Sensor.TYPE_GYROSCOPE);
+            sensorManager.uploadAllSensorData();
             sensorManager.uploadActivityData();
             sensorManager.resetStats();
             //Intent intent = new Intent(this, DataUploadService.class);

@@ -230,13 +230,24 @@ public class BecareRemoteSensorManager {
             Log.d(TAG, "upload data tring upload");
             if(uploadDataHelper.getUserActivityName() != null) {
                 Log.d(TAG, "upload data tring activity data not null");
-                String data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.X_CORD);
-                socketManager.pushDataAsyncronously(data);
+                String dataX = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.X_CORD);
+           //     socketManager.pushDataAsyncronously(data);
 
-                data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Y_CORD);
-                socketManager.pushDataAsyncronously(data);
+                String dataY = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Y_CORD);
+           //     socketManager.pushDataAsyncronously(data);
 
-                data = uploadDataHelper.getSensorUploadData(sensorType, AppConfig.Z_CORD);
+                String dataZ = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Z_CORD);
+                String data =dataX +"\n" + dataY + "\n" + dataZ + "\n";
+
+                dataX = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.X_CORD);
+                //     socketManager.pushDataAsyncronously(data);
+
+                dataY = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.Y_CORD);
+                //     socketManager.pushDataAsyncronously(data);
+
+                dataZ = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.Z_CORD);
+                data =data + dataX +"\n" + dataY + "\n" + dataZ;
+
                 socketManager.pushDataAsyncronously(data);
             }
         }catch (Exception e){

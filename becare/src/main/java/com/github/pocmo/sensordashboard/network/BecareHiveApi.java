@@ -1,5 +1,6 @@
 package com.github.pocmo.sensordashboard.network;
 
+import com.github.pocmo.sensordashboard.model.NewUserPostData;
 import com.github.pocmo.sensordashboard.model.QueryPostData;
 import com.github.pocmo.sensordashboard.model.UserQueryResponse;
 
@@ -15,4 +16,7 @@ public interface BecareHiveApi {
 
     @POST("/Api/DataApi.svc/ExecuteHiveql")
     public void getUsers(@Body QueryPostData queryData, Callback<UserQueryResponse> response);
+
+    @POST("/Api/DataApi.svc/Insert")
+    public void createUser(@Body NewUserPostData queryData, Callback<UserQueryResponse> response);
 }

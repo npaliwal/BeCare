@@ -175,6 +175,8 @@ public class UploadDataHelper {
         SensorDataWrapper wrapper = sensorType == Sensor.TYPE_ACCELEROMETER ? accelMeter : gyroMeter;
         int numSample = sensorType == Sensor.TYPE_ACCELEROMETER ? allAcceleroData.size() : allGyroData.size();
         String sensorName = sensorType == Sensor.TYPE_ACCELEROMETER ? "accelerometer" : "gyroscope";
+        if (numSample <=0)
+            return "";
 
         float[] gX =null;
         float[] gY =null;
@@ -203,7 +205,30 @@ public class UploadDataHelper {
             }
         }
 
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, null);
+        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            int len = allAcceleroData.size();
+            if (len > 0) {
+                gX = new float[len];
+                gY = new float[len];
+                gZ = new float[len];
+                int i = 0;
+                for (SensorDataValue data : allAcceleroData) {
+                    gX[i] = data.getRoundX();
+                    gY[i] = data.getRoundY();
+                    gZ[i] = data.getRoundZ();
+                    i++;
+                }
+
+                if (cord == AppConfig.X_CORD)
+                    vector = gX;
+                if (cord == AppConfig.Y_CORD)
+                    vector = gY;
+                if (cord == AppConfig.Z_CORD)
+                    vector = gZ;
+            }
+        }
+
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector);
 
         return gson.toJson(data, SensorUploadData.class);
     }

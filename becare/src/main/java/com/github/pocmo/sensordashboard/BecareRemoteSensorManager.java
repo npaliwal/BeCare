@@ -233,14 +233,20 @@ public class BecareRemoteSensorManager {
                 String dataX = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.X_CORD);
                 String dataY = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Y_CORD);
                 String dataZ = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Z_CORD);
-                String data =dataX +"\n" + dataY + "\n" + dataZ + "\n";
+                String data = "";
+
+                if (dataX != "")
+                    data = dataX + "\n" +dataY +  "\n" + dataZ;
 
                 dataX = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.X_CORD);
                 dataY = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.Y_CORD);
                 dataZ = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.Z_CORD);
-                data =data + dataX +"\n" + dataY + "\n" + dataZ;
 
-                socketManager.pushDataAsyncronously(data);
+                if (dataX != "")
+                    data = data + "\n" + dataX + "\n" +dataY +  "\n" + dataZ;
+
+              //  socketManager.pushDataAsyncronously(data);
+                socketManager.pushData(data);
             }
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());
@@ -265,5 +271,10 @@ public class BecareRemoteSensorManager {
 
     public void resetStats(){
         uploadDataHelper.resetStats();
+    }
+
+    public GoogleApiClient getGoogleApiClient()
+    {
+        return googleApiClient;
     }
 }

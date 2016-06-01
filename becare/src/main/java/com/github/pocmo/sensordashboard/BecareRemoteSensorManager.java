@@ -245,8 +245,7 @@ public class BecareRemoteSensorManager {
                 if (dataX != "")
                     data = data + "\n" + dataX + "\n" +dataY +  "\n" + dataZ;
 
-              //  socketManager.pushDataAsyncronously(data);
-                socketManager.pushData(data);
+                socketManager.pushDataAsyncronously(data);
             }
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());

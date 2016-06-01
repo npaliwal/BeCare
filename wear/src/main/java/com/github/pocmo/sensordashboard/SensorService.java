@@ -54,7 +54,7 @@ public class SensorService extends Service implements SensorEventListener {
         client = DeviceClient.getInstance(this);
 
         Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("FitnessPlus");
+        builder.setContentTitle("BeCare");
         builder.setContentText("Collecting sensor data..");
         builder.setSmallIcon(R.drawable.ic_launcher);
 

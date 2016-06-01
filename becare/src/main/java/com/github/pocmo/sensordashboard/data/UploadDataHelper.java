@@ -222,6 +222,7 @@ public class UploadDataHelper {
         accelMeter.reset();
     }
 
+    @Deprecated
     public String getUploadDataStr(long timeStamp){
 //        readTime = timeFormat.format(timeStamp);
 //

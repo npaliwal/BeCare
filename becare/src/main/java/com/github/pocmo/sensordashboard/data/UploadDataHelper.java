@@ -205,30 +205,7 @@ public class UploadDataHelper {
             }
         }
 
-        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-            int len = allAcceleroData.size();
-            if (len > 0) {
-                gX = new float[len];
-                gY = new float[len];
-                gZ = new float[len];
-                int i = 0;
-                for (SensorDataValue data : allAcceleroData) {
-                    gX[i] = data.getRoundX();
-                    gY[i] = data.getRoundY();
-                    gZ[i] = data.getRoundZ();
-                    i++;
-                }
-
-                if (cord == AppConfig.X_CORD)
-                    vector = gX;
-                if (cord == AppConfig.Y_CORD)
-                    vector = gY;
-                if (cord == AppConfig.Z_CORD)
-                    vector = gZ;
-            }
-        }
-
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector);
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, null);
 
         return gson.toJson(data, SensorUploadData.class);
     }

@@ -175,6 +175,8 @@ public class UploadDataHelper {
         SensorDataWrapper wrapper = sensorType == Sensor.TYPE_ACCELEROMETER ? accelMeter : gyroMeter;
         int numSample = sensorType == Sensor.TYPE_ACCELEROMETER ? allAcceleroData.size() : allGyroData.size();
         String sensorName = sensorType == Sensor.TYPE_ACCELEROMETER ? "accelerometer" : "gyroscope";
+        if (numSample <=0)
+            return "";
 
         float[] gX =null;
         float[] gY =null;

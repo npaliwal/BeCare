@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.github.pocmo.sensordashboard.shared.DataMapKeys;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
@@ -49,6 +50,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
         Log.i(TAG, "Disconnected: " + peer.getDisplayName() + " (" + peer.getId() + ")");
     }
 
+
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
         Log.d(TAG, "onDataChanged()");
@@ -67,6 +69,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
                 }
             }
         }
+
     }
 
     private void unpackSensorData(int sensorType, DataMap dataMap) {
@@ -79,13 +82,12 @@ public class BecareSensorReceiverService extends WearableListenerService {
         sensorManager.addSensorData(sensorType, accuracy, timestamp, values);
 
         long currTime = System.currentTimeMillis();
-        if(currTime - lastUpdateTime >= 1000){
+        if((currTime - lastUpdateTime) >= 3000){
             lastUpdateTime = currTime;
             Log.d(TAG, "starting upload service");
 
             sensorManager.calculateStats(currTime);
-            sensorManager.uploadAllSensorData(Sensor.TYPE_ACCELEROMETER);
-          //  sensorManager.uploadAllSensorData(Sensor.TYPE_GYROSCOPE);
+            sensorManager.uploadAllSensorData();
             sensorManager.uploadActivityData();
             sensorManager.resetStats();
             //Intent intent = new Intent(this, DataUploadService.class);

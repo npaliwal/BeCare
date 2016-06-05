@@ -60,7 +60,7 @@ public class DeviceClient {
         long lastTimestamp = lastSensorData.get(sensorType);
         long timeAgo = t - lastTimestamp;
 
-        if (lastTimestamp != 0) {
+   /*     if (lastTimestamp != 0) {
             if (filterId == sensorType && timeAgo < 100) {
                 return;
             }
@@ -68,7 +68,7 @@ public class DeviceClient {
             if (filterId != sensorType && timeAgo < 3000) {
                 return;
             }
-        }
+        }*/
 
         lastSensorData.put(sensorType, t);
 

@@ -69,14 +69,14 @@ public class SensorDataValue {
     }
 
     public float getRoundX(){
-        return round(x, 3);
+        return round(x*1000, 3);
     }
 
     public float getRoundY(){
-        return round(y, 3);
+        return round(y*1000, 3);
     }
 
     public float getRoundZ(){
-        return round(z, 3);
+        return round(z*1000, 3);
     }
 }

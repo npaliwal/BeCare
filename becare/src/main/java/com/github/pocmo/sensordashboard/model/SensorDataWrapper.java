@@ -11,19 +11,29 @@ public class SensorDataWrapper {
 
     private SensorDataValue mean;
 
-    private int zcCount;
+    private SensorDataValue volatility;
+
+    private int zcX;
+    private int zcY;
+    private int zcZ;
 
     public SensorDataWrapper(){
         high = new SensorDataValue();
         high.setValueX(-0xffffff);
         high.setValueY(-0xffffff);
         high.setValueZ(-0xffffff);
+
         low = new SensorDataValue();
         low.setValueX(0xffffff);
         low.setValueY(0xffffff);
         low.setValueZ(0xffffff);
+
         mean = new SensorDataValue();
-        zcCount = 0;
+        volatility = new SensorDataValue();
+
+        zcX = 0;
+        zcY = 0;
+        zcZ = 0;
     }
 
     public SensorDataValue getHigh() {
@@ -75,23 +85,34 @@ public class SensorDataWrapper {
         this.mean.setValueY(y);
         this.mean.setValueZ(z);
     }
+
+    public void setStd(float x, float y, float z){
+        this.volatility.setValueX(x);
+        this.volatility.setValueY(y);
+        this.volatility.setValueZ(z);
+    }
+
+    public SensorDataValue getVolatility(){return volatility;}
+
     public void normalizeMean(int numPoints){
         this.mean.setValueX(mean.getValueX() / numPoints);
         this.mean.setValueY(mean.getValueY() / numPoints);
         this.mean.setValueZ(mean.getValueZ() / numPoints);
     }
 
-    public int increaseZeroCrossingCount() {
-        return zcCount += 1;
+    public void setZcCount(int x, int y, int z) {
+        zcX = x;
+        zcY = y;
+        zcZ = z;
     }
 
-    public void setZcCount(int zcCount) {
-        this.zcCount = zcCount;
+    public int getZcX(){
+        return zcX;
     }
-
-    public int getZcCount(){
-        return zcCount;
+    public int getZcY(){
+        return zcY;
     }
+    public int getZcZ(){ return zcZ;}
 
     public void reset()
     {
@@ -101,7 +122,10 @@ public class SensorDataWrapper {
         low.setValueX(0xffffff);
         low.setValueY(0xffffff);
         low.setValueZ(0xffffff);
-        zcCount = 0;
+
+        zcX = 0;
+        zcY = 0;
+        zcZ = 0;
     }
 
 }

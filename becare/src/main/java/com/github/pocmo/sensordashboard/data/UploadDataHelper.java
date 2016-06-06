@@ -124,11 +124,40 @@ public class UploadDataHelper {
             float aavgZ = totalZ / allAcceleroData.size();
             accelMeter.setMean(aavgX, aavgY, aavgZ);
         }
-      /*  if(allGyroData.size() > 0)
-            gyroMeter.normalizeMean(allGyroData.size());
+    }
 
-        if(allAcceleroData.size() > 0)
-            accelMeter.normalizeMean(allAcceleroData.size());*/
+    private void calculateStd(){
+        float avgX = gyroMeter.getMean().getValueX();
+        float avgY = gyroMeter.getMean().getValueY();
+        float avgZ = gyroMeter.getMean().getValueZ();
+        float stdX = 0;
+        float stdY = 0;
+        float stdZ = 0;
+        for(SensorDataValue data : allGyroData){
+            stdX += Math.pow((data.getValueX() - avgX), 2);
+            stdY += Math.pow((data.getValueY() - avgY), 2);
+            stdZ += Math.pow((data.getValueZ() - avgZ), 2);
+        }
+        double volaX = (allGyroData.size() > 0)? Math.sqrt(stdX/allGyroData.size()): 0;
+        double volaY =(allGyroData.size() > 0)? Math.sqrt(stdY/allGyroData.size()) : 0;
+        double volaZ = (allGyroData.size() > 0)? Math.sqrt(stdZ/allGyroData.size()): 0;
+        gyroMeter.setStd((float)volaX, (float)volaY, (float)volaZ);
+
+        avgX = accelMeter.getMean().getValueX();
+        avgY = accelMeter.getMean().getValueY();
+        avgZ = accelMeter.getMean().getValueZ();
+        stdX = 0;
+        stdY = 0;
+        stdZ = 0;
+        for(SensorDataValue data : allAcceleroData){
+            stdX += Math.pow((data.getValueX() - avgX), 2);
+            stdY += Math.pow((data.getValueY() - avgY), 2);
+            stdZ += Math.pow((data.getValueZ() - avgZ), 2);
+        }
+        volaX = (allAcceleroData.size() > 0)? Math.sqrt(stdX/allAcceleroData.size()):0;
+        volaY = (allAcceleroData.size() > 0)? Math.sqrt(stdY/allAcceleroData.size()): 0;
+        volaZ = (allAcceleroData.size() > 0)? Math.sqrt(stdZ/allAcceleroData.size()): 0;
+        accelMeter.setStd((float)volaX, (float)volaY, (float)volaZ);
     }
 
     /*
@@ -139,36 +168,73 @@ public class UploadDataHelper {
        similarly next data = (-1f, -1f, 1f) => zero crossing as Y has crossed meanY value
    */
     private void calculateNumZeroCrossing(){
-        gyroMeter.setZcCount(0);
-        accelMeter.setZcCount(0);
+        if (allGyroData.size() <2)
+            gyroMeter.setZcCount(0, 0, 0);
+        else {
+            float preX = allGyroData.get(0).getValueX();
+            float preY = allGyroData.get(0).getValueY();
+            float preZ = allGyroData.get(0).getValueZ();
+            int zctX = 0;
+            int zctY = 0;
+            int zctZ = 0;
+            float avgY = gyroMeter.getMean().getValueY();
+            for (int i = 1; i < allGyroData.size(); i++) {
+                SensorDataValue data = allGyroData.get(i);
+                float currX = data.getValueX();
+                float currY = data.getValueY();
+                float currZ = data.getValueZ();
+                if (currX > gyroMeter.getMean().getValueX() && preX < gyroMeter.getMean().getValueX())
+                    zctX++;
+                else if (currX < gyroMeter.getMean().getValueX() && preX > gyroMeter.getMean().getValueX())
+                    zctX++;
 
-        SensorDataValue n1=null, nPlus1=null;
-        SensorDataValue meanGyroData = gyroMeter.getMean();
-        for(SensorDataValue data : allGyroData){
-            n1 = nPlus1;
-            nPlus1 = data;
-            if(n1 != null && nPlus1 != null){
-                if((meanGyroData.getValueX() - n1.getValueX()) * (meanGyroData.getValueX() - nPlus1.getValueX()) < 0 ||
-                        (meanGyroData.getValueY() - n1.getValueY()) * (meanGyroData.getValueY() - nPlus1.getValueY()) < 0 ||
-                        (meanGyroData.getValueZ() - n1.getValueZ()) * (meanGyroData.getValueZ() - nPlus1.getValueZ()) < 0){
-                    gyroMeter.increaseZeroCrossingCount();
-                }
+                if (currY > avgY && preY < avgY)
+                    zctY++;
+                else if (currY < avgY && preY  > avgY)
+                    zctY++;
+                if (currZ > gyroMeter.getMean().getValueZ() && preZ < gyroMeter.getMean().getValueZ())
+                    zctZ++;
+                else if (currZ < gyroMeter.getMean().getValueZ() && preZ > gyroMeter.getMean().getValueZ())
+                    zctZ++;
+                preX = currX;
+                preY = currY;
+                preZ = currZ;
             }
+            gyroMeter.setZcCount(zctX, zctY, zctZ);
         }
 
-        SensorDataValue meanAccelData = accelMeter.getMean();
-        for(SensorDataValue data : allAcceleroData){
-            n1 = nPlus1;
-            nPlus1 = data;
-            if(n1 != null && nPlus1 != null){
-                if((meanAccelData.getValueX() - n1.getValueX()) * (meanAccelData.getValueX() - nPlus1.getValueX()) < 0 ||
-                        (meanAccelData.getValueY() - n1.getValueY()) * (meanAccelData.getValueY() - nPlus1.getValueY()) < 0 ||
-                        (meanAccelData.getValueZ() - n1.getValueZ()) * (meanAccelData.getValueZ() - nPlus1.getValueZ()) < 0){
-                    accelMeter.increaseZeroCrossingCount();
-                }
+        if (allAcceleroData.size() <2)
+            accelMeter.setZcCount(0, 0, 0);
+        else {
+            float preX = allAcceleroData.get(0).getValueX();
+            float preY = allAcceleroData.get(0).getValueY();
+            float preZ = allAcceleroData.get(0).getValueZ();
+            int zctX = 0;
+            int zctY = 0;
+            int zctZ = 0;
+            for (int i = 1; i < allAcceleroData.size(); i++) {
+                SensorDataValue data = allAcceleroData.get(i);
+                float currX = data.getValueX();
+                float currY = data.getValueY();
+                float currZ = data.getValueZ();
+                if (currX > accelMeter.getMean().getValueX() && preX < accelMeter.getMean().getValueX())
+                    zctX++;
+                else if (currX < accelMeter.getMean().getValueX() && preX > accelMeter.getMean().getValueX())
+                    zctX++;
+                if (currY > accelMeter.getMean().getValueY() && preY < accelMeter.getMean().getValueY())
+                    zctY++;
+                else if (currY < accelMeter.getMean().getValueY() && preY > accelMeter.getMean().getValueY())
+                    zctY++;
+                if (currZ > accelMeter.getMean().getValueZ() && preZ < accelMeter.getMean().getValueZ())
+                    zctZ++;
+                else if (currZ < gyroMeter.getMean().getValueZ() && preZ > gyroMeter.getMean().getValueZ())
+                    zctZ++;
+               preX = currX;
+                preY = currY;
+                preZ = currZ;
             }
+            accelMeter.setZcCount(zctX, zctY, zctZ);
         }
-
     }
 
     public String getSensorUploadData(int sensorType, int cord){
@@ -204,8 +270,29 @@ public class UploadDataHelper {
                     vector = gZ;
             }
         }
+        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            int len = allAcceleroData.size();
+            if (len > 0) {
+                gX = new float[len];
+                gY = new float[len];
+                gZ = new float[len];
+                int i = 0;
+                for (SensorDataValue data : allAcceleroData) {
+                    gX[i] = data.getRoundX();
+                    gY[i] = data.getRoundY();
+                    gZ[i] = data.getRoundZ();
+                    i++;
+                }
 
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, null);
+                if (cord == AppConfig.X_CORD)
+                    vector = gX;
+                if (cord == AppConfig.Y_CORD)
+                    vector = gY;
+                if (cord == AppConfig.Z_CORD)
+                    vector = gZ;
+            }
+        }
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector);
 
         return gson.toJson(data, SensorUploadData.class);
     }
@@ -214,6 +301,7 @@ public class UploadDataHelper {
     public void calculateStats(long timeStamp){
         readTime = timeFormat.format(timeStamp);
         calculateMeanHighLow();
+        calculateStd();
         calculateNumZeroCrossing();
     }
 

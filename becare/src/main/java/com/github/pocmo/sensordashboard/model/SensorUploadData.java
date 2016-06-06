@@ -54,8 +54,10 @@ public class SensorUploadData {
                     high = wrapper.getHigh().getRoundX();
                     low = wrapper.getLow().getRoundX();
                     avg = wrapper.getMean().getRoundX();
-                }
 
+                    this.zeroCrossing = wrapper.getZcX();
+                    this.volatility = wrapper.getVolatility().getRoundX();
+                }
                 break;
             }
 
@@ -65,8 +67,10 @@ public class SensorUploadData {
                     high = wrapper.getHigh().getRoundY();
                     low = wrapper.getLow().getRoundY();
                     avg = wrapper.getMean().getRoundY();
-                }
 
+                    this.zeroCrossing = wrapper.getZcY();
+                    this.volatility = wrapper.getVolatility().getRoundY();
+                }
                 break;
             }
 
@@ -76,14 +80,14 @@ public class SensorUploadData {
                     high = wrapper.getHigh().getRoundZ();
                     low = wrapper.getLow().getRoundZ();
                     avg = wrapper.getMean().getRoundZ();
+
+                    this.zeroCrossing = wrapper.getZcZ();
+                    this.volatility = wrapper.getVolatility().getRoundZ();
                 }
                 break;
             }
         }
 
-
-        this.zeroCrossing = wrapper.getZcCount();
-        this.volatility = 0f;
 
         this.sensorName = sensorName;
         this.sensorMsg = sensorName + "." + readTime + "." + corrdtype;

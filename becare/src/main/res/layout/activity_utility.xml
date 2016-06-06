@@ -12,6 +12,114 @@
     tools:context=".activities.UtilityActivity"
     >
     <TextView
+        android:id="@+id/debug_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Debug Settings"
+        android:textSize="18sp"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:background="@color/graph_color_1"/>
+
+    <LinearLayout
+        android:id="@+id/debug_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/debug_header"
+        android:orientation="vertical"
+        android:background="@color/gray">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="18sp"
+            android:text="Accelerometer : "/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/radio_accel_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"/>
+            <RadioButton
+                android:id="@+id/radio_accel_x"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="X Only"/>
+            <RadioButton
+                android:id="@+id/radio_accel_y"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Y Only"/>
+            <RadioButton
+                android:id="@+id/radio_accel_z"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Z Only"/>
+            <RadioButton
+                android:id="@+id/radio_accel_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="None"/>
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:textSize="18sp"
+            android:layout_marginTop="5dp"
+            android:text="Gyroscope : "/>
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+            <RadioButton
+                android:id="@+id/radio_gyro_all"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="All"/>
+            <RadioButton
+                android:id="@+id/radio_gyro_x"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="X Only"/>
+            <RadioButton
+                android:id="@+id/radio_gyro_y"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Y Only"/>
+            <RadioButton
+                android:id="@+id/radio_gyro_z"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Z Only"/>
+            <RadioButton
+                android:id="@+id/radio_gyro_none"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="None"/>
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <TextView
         android:id="@+id/socket_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,6 +127,8 @@
         android:textSize="18sp"
         android:textColor="@color/white"
         android:padding="5dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/debug_panel"
         android:background="@color/graph_color_1"/>
 
     <LinearLayout

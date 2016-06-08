@@ -26,7 +26,7 @@ public class SensorUploadData {
     @SerializedName("cnt")
     int numSample;//: samples taken every second
 
-    @SerializedName("high")
+  /*  @SerializedName("high")
     float high;
 
     @SerializedName("low")
@@ -40,7 +40,7 @@ public class SensorUploadData {
 
     @SerializedName("vola")
     float volatility; //: volatility (standard deviation)
-
+*/
     @SerializedName("vector")
     float[] vector;
 
@@ -50,40 +50,40 @@ public class SensorUploadData {
         switch (cord){
             case AppConfig.X_CORD:{
                 corrdtype = "x";
-                if (numSample > 0) {
+             /*   if (numSample > 0) {
                     high = wrapper.getHigh().getRoundX();
                     low = wrapper.getLow().getRoundX();
                     avg = wrapper.getMean().getRoundX();
 
                     this.zeroCrossing = wrapper.getZcX();
                     this.volatility = wrapper.getVolatility().getRoundX();
-                }
+                }*/
                 break;
             }
 
             case AppConfig.Y_CORD:{
                 corrdtype = "y";
-                if (numSample > 0) {
+            /*    if (numSample > 0) {
                     high = wrapper.getHigh().getRoundY();
                     low = wrapper.getLow().getRoundY();
                     avg = wrapper.getMean().getRoundY();
 
                     this.zeroCrossing = wrapper.getZcY();
                     this.volatility = wrapper.getVolatility().getRoundY();
-                }
+                }*/
                 break;
             }
 
             case AppConfig.Z_CORD:{
                 corrdtype = "z";
-                if (numSample > 0) {
+            /*    if (numSample > 0) {
                     high = wrapper.getHigh().getRoundZ();
                     low = wrapper.getLow().getRoundZ();
                     avg = wrapper.getMean().getRoundZ();
 
                     this.zeroCrossing = wrapper.getZcZ();
                     this.volatility = wrapper.getVolatility().getRoundZ();
-                }
+                }*/
                 break;
             }
         }

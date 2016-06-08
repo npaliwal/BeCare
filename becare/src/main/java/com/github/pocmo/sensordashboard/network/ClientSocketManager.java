@@ -26,6 +26,7 @@ public class ClientSocketManager {
     }
 
     public void refresh(PreferenceStorage preferenceStorage){
+        this.socket = null;
         this.ip = preferenceStorage.getSocketIp();
         this.port = preferenceStorage.getSocketPort();
         new Thread(new ClientThread()).start();

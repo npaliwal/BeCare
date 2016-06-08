@@ -69,14 +69,12 @@ public class UtilityActivity extends ListActivity {
                 int port = -1;
                 try{
                     port = Integer.valueOf(socketPort.getText().toString());
-                }catch (Exception e){}
-                if(port < 999 || port > 999999){
-                    Toast.makeText(UtilityActivity.this, "Socket Port should be 4 digit integer", Toast.LENGTH_LONG).show();
-                }else {
-                    preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
-                    Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
-                    remoteSensorManager.getSocketManager().refresh(preferenceStorage);
+                }catch (Exception e){
                 }
+                preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
+                Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
+                remoteSensorManager.getSocketManager().refresh(preferenceStorage);
+
             }
         });
         testSocket = (Button)findViewById(R.id.test_button);

@@ -17,7 +17,7 @@
         <item
             android:id="@+id/nav_contranst"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Contrast Sensitivity" />
+            android:title="@string/exercise_contrast" />
         <item
             android:id="@+id/nav_timed_walk"
             android:icon="@drawable/ic_menu_gallery"

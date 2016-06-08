@@ -17,6 +17,8 @@ public class SensorDataWrapper {
     private int zcY;
     private int zcZ;
 
+    private int debugIndex = -1; //-1=None: 1=x, 2=y, 3=z, 4=All
+
     public SensorDataWrapper(){
         high = new SensorDataValue();
         high.setValueX(-0xffffff);

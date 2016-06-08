@@ -7,11 +7,13 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
-import com.github.pocmo.sensordashboard.network.ClientSocketManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SensorAdapter;
@@ -36,6 +38,8 @@ public class UtilityActivity extends ListActivity {
     private EditText socketPort;
     private Button   updateSocket;
     private Button   testSocket;
+    private CheckBox radioAccel;
+    private RadioGroup radioGyro;
 
     private BecareRemoteSensorManager remoteSensorManager;
 
@@ -110,5 +114,59 @@ public class UtilityActivity extends ListActivity {
         }
     };
 
+    private int debugAcceleroMode = -1;
+    private int debugGyrooMode = -1;
+
+    public void onDebugRadioClicked(View view) {
+        // Is the button now checked?
+        boolean checked = ((RadioButton) view).isChecked();
+        switch(view.getId()) {
+            case R.id.radio_accel_all:
+                if (checked)
+                    debugAcceleroMode = 4;
+                break;
+            case R.id.radio_accel_x:
+                if (checked)
+                    debugAcceleroMode = 1;
+                break;
+
+            case R.id.radio_accel_y:
+                if (checked)
+                    debugAcceleroMode = 2;
+                break;
+
+            case R.id.radio_accel_z:
+                if (checked)
+                    debugAcceleroMode = 3;
+                break;
+            case R.id.radio_accel_none:
+                if (checked)
+                    debugAcceleroMode = -1;
+                break;
+
+            case R.id.radio_gyro_all:
+                if (checked)
+                    debugGyrooMode = 4;
+                break;
+            case R.id.radio_gyro_x:
+                if (checked)
+                    debugGyrooMode = 1;
+                break;
+
+            case R.id.radio_gyro_y:
+                if (checked)
+                    debugGyrooMode = 2;
+                break;
+
+            case R.id.radio_gyro_z:
+                if (checked)
+                    debugGyrooMode = 3;
+                break;
+            case R.id.radio_gyro_none:
+                if (checked)
+                    debugGyrooMode = -1;
+                break;
+        }
+    }
 
 }

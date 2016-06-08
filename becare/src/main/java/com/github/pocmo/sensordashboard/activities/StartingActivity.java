@@ -270,7 +270,7 @@ public class StartingActivity extends AppCompatActivity
         } else if (id == R.id.nav_transcription) {
             // Handle the transription test
         } else if (id == R.id.nav_contranst) {
-            // Handle the transription test
+            startActivity(new Intent(this, ContrastSensitivityActivity.class));
 
         } else if (id == R.id.nav_timed_walk) {
             // Handle the transription test

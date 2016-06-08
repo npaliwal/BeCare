@@ -8,6 +8,7 @@
 
     <string name="login">Login</string>
     <string name="exercise_ring_rect">Ring &amp; Rectangle</string>
+    <string name="exercise_contrast">Contrast Sensitivity</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
 
@@ -19,6 +20,13 @@
     <string name="login_forget"> <u>Forgot Password?</u></string>
     <string name="login_skip"> <u>Skip to Becare App</u></string>
     <string name="login_already_registered"> <u>Already a registered user? Sign In</u></string>
+
+    <string name="contrast_match">Match</string>
+    <string name="contrast_mismatch">Mismatch</string>
+    <string name="contrast_skip"><u>Skip</u></string>
+    <string name="contrast_done"><u>Done</u></string>
+    <string name="contrast_performance">Performance: %1$d correct out of %2$d</string>
+
 
 
 </resources>

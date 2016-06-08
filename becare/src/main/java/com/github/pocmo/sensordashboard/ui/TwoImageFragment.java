@@ -20,6 +20,7 @@ import com.github.pocmo.sensordashboard.utils.ImageUtils;
  */
 public class TwoImageFragment extends Fragment {
     ImageView leftPatch, rightPatch;
+    TextView header;
 
     private static String EXTRA_EXERCISE_ID     = "exercise_id";
 
@@ -47,9 +48,11 @@ public class TwoImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_two_image, container, false);
         leftPatch = (ImageView)view.findViewById(R.id.image_left);
         rightPatch = (ImageView)view.findViewById(R.id.image_right);
+        header = (TextView)view.findViewById(R.id.test_header);
 
         if(exercise != null){
             if(exercise.getImageResId() > -1){
+                header.setText(R.string.contrast_test_contrast);
                 leftPatch.setScaleType(ImageView.ScaleType.FIT_XY);
                 leftPatch.setImageBitmap(ImageUtils.getBitmapFromResource(exercise.getImageResId(), getActivity()));
 
@@ -62,6 +65,7 @@ public class TwoImageFragment extends Fragment {
                 );
 
             }else{
+                header.setText(R.string.contrast_test_color);
                 leftPatch.setBackgroundColor(Color.parseColor(exercise.getLefColor()));
                 rightPatch.setBackgroundColor(Color.parseColor(exercise.getRightColor()));
             }

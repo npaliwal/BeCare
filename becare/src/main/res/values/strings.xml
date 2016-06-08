@@ -22,6 +22,8 @@
     <string name="login_already_registered"> <u>Already a registered user? Sign In</u></string>
 
     <string name="contrast_match">Match</string>
+    <string name="contrast_test_color">Color Test</string>
+    <string name="contrast_test_contrast">Contrast Test</string>
     <string name="contrast_mismatch">Mismatch</string>
     <string name="contrast_skip"><u>Skip</u></string>
     <string name="contrast_done"><u>Done</u></string>

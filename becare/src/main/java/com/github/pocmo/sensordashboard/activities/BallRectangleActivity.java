@@ -31,7 +31,7 @@ public class BallRectangleActivity extends AppCompatActivity {
         String dataShow = "yTouch: "+yTouch + ", xTouch: " + xTouch + ", xPath: " + xPath;
         deviationText.setText(dataShow);
         value = "("+xPath + "," + yTouch + ") (" + xTouch + "," + yTouch +")";
-        mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+        mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_ring_rect), value);
     }
 
     @Override

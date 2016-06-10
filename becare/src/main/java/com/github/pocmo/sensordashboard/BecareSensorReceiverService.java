@@ -1,12 +1,9 @@
 package com.github.pocmo.sensordashboard;
 
-import android.content.Intent;
-import android.hardware.Sensor;
 import android.net.Uri;
 import android.util.Log;
 
 import com.github.pocmo.sensordashboard.shared.DataMapKeys;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataItem;
@@ -79,17 +76,17 @@ public class BecareSensorReceiverService extends WearableListenerService {
 
         Log.d(TAG, "Received sensor data " + sensorType + " = " + Arrays.toString(values));
 
-        sensorManager.addSensorData(sensorType, accuracy, timestamp, values);
+        sensorManager.addWearSensorData(sensorType, accuracy, timestamp, values);
 
         long currTime = System.currentTimeMillis();
         if((currTime - lastUpdateTime) >= 3000){
             lastUpdateTime = currTime;
             Log.d(TAG, "starting upload service");
 
-            sensorManager.calculateStats(currTime);
-            sensorManager.uploadAllSensorData();
+            sensorManager.calculateWearStats(currTime);
+            sensorManager.uploadAllWearSensorData();
             sensorManager.uploadActivityData();
-            sensorManager.resetStats();
+            sensorManager.resetWearStats();
             //Intent intent = new Intent(this, DataUploadService.class);
             //intent.putExtra(DataUploadService.EXTRA_POST_BOSY, sensorManager.getUploadDataHelper().getUploadDataHelper());
             //startService(intent);

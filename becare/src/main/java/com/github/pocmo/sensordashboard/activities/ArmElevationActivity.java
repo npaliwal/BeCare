@@ -7,7 +7,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.style.IconMarginSpan;
+import android.util.Log;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
@@ -27,9 +30,13 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
     ImageView watchArm, phoneArm;
     TextView startButton, timer;
 
-    private BecareRemoteSensorManager mRemoteSensorManager;
     private SensorManager mSensorManager;
+    private boolean mStartReading = false;
+
+    private BecareRemoteSensorManager mRemoteSensorManager;
     private Sensor mAccelero, mGyro, mGravity;
+
+    private long lastUpdateTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,14 +47,14 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
         startButton = (TextView) findViewById(R.id.button_start);
         timer = (TextView) findViewById(R.id.timer);
 
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(ArmElevationActivity.this);
 
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelero = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
-        Animation mAnimation = new RotateAnimation(-80f, 80f, -15f, 50f);
+        final Animation mAnimation = new RotateAnimation(-80f, 80f, -15f, 50f);
         mAnimation.setDuration(5000);
         mAnimation.setRepeatCount(-1);
         mAnimation.setRepeatMode(Animation.REVERSE);
@@ -55,7 +62,7 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
         watchArm.setAnimation(mAnimation);
 
 
-        Animation mRevAnimation = new RotateAnimation(80f, -80f, -15f, 50f);
+        final Animation mRevAnimation = new RotateAnimation(80f, -80f, -15f, 50f);
         mRevAnimation.setDuration(5000);
         mRevAnimation.setRepeatCount(-1);
         mRevAnimation.setRepeatMode(Animation.REVERSE);
@@ -63,6 +70,43 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
         phoneArm.startAnimation(mRevAnimation);
 
 
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mStartReading = true;
+                phoneArm.clearAnimation();
+                watchArm.clearAnimation();
+                lastUpdateTime = System.currentTimeMillis();
+                mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_arm_elevation), null);
+                startButton.setClickable(false);
+                startButton.setText("Reading Sensors ...");
+                new CountDownTimer(34000, 1000) {
+                    int timeSec  = 0;
+                    public void onTick(long millisUntilFinished) {
+                        timeSec = (int) (millisUntilFinished/1000);
+                        if(timeSec > 32){
+                            timer.setText("GET");
+                        }else if(timeSec > 31){
+                            timer.setText("GET SET");
+                        }else if(timeSec > 30){
+                            timer.setText("GET SET GO !!");
+                        } else{
+                            timer.setText("Time : " + timeSec);
+                        }
+
+                    }
+
+                    public void onFinish() {
+                        mStartReading = false;
+                        phoneArm.startAnimation(mRevAnimation);
+                        watchArm.startAnimation(mAnimation);
+                        timer.setText("WELL DONE !!");
+                        startButton.setText("RESTART");
+                        startButton.setClickable(true);
+                    }
+                }.start();
+            }
+        });
         //Animation armTurn = AnimationUtils.loadAnimation(this, R.anim.arm_elevate);
         //Animation armRevTurn = AnimationUtils.loadAnimation(this, R.anim.arm_rev_elevate);
         //watchArm.startAnimation(armTurn);
@@ -72,6 +116,8 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
     @Override
     protected void onResume() {
         super.onResume();
+        mRemoteSensorManager.startMeasurement();
+
         if(mAccelero != null)
             mSensorManager.registerListener(this, mAccelero, SensorManager.SENSOR_DELAY_NORMAL);
         if(mGyro != null)
@@ -91,7 +137,19 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if(!mStartReading){
+            return;
+        }
+        mRemoteSensorManager.addMobileSensorData(event.sensor.getType(), event.accuracy, event.timestamp, event.values);
+        long currTime = System.currentTimeMillis();
+        if((currTime - lastUpdateTime) >= 3000) {
+            lastUpdateTime = currTime;
 
+            mRemoteSensorManager.calculateMobileStats(currTime);
+            mRemoteSensorManager.uploadAllMobileSensorData();
+//            mRemoteSensorManager.uploadActivityData();//Already uploaded from wear
+            mRemoteSensorManager.resetMobileStats();
+        }
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.github.pocmo.sensordashboard;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -44,12 +45,12 @@ public class BecareRemoteSensorManager {
 
     private static BecareRemoteSensorManager instance;
 
-    private Context context;
     private ExecutorService executorService;
     private SparseArray<Sensor> sensorMapping;
     private ArrayList<Sensor> sensors;
     private SensorNames sensorNames;
     private UploadDataHelper uploadDataHelper;
+    private UploadDataHelper uploadMobileDataHelper;
     private GoogleApiClient googleApiClient;
     private PreferenceStorage preferenceStorage;
     private ClientSocketManager socketManager;
@@ -65,11 +66,11 @@ public class BecareRemoteSensorManager {
     }
 
     private BecareRemoteSensorManager(Context context) {
-        this.context = context;
         this.sensorMapping = new SparseArray<Sensor>();
         this.sensors = new ArrayList<Sensor>();
         this.sensorNames = new SensorNames();
-        this.uploadDataHelper = new UploadDataHelper();
+        this.uploadDataHelper       = new UploadDataHelper();
+        this.uploadMobileDataHelper = new UploadDataHelper();
         this.preferenceStorage = new PreferenceStorage(context.getApplicationContext());
         socketManager = new ClientSocketManager(preferenceStorage);
 
@@ -117,7 +118,18 @@ public class BecareRemoteSensorManager {
         return sensor;
     }
 
-    public synchronized void addSensorData(int sensorType, int accuracy, long timestamp, float[] values) {
+    public synchronized void addMobileSensorData(int sensorType, int accuracy, long timestamp, float[] values) {
+        Sensor sensor = getOrCreateSensor(sensorType);
+
+        // TODO: We probably want to pull sensor data point objects from a pool here
+        SensorDataPoint dataPoint = new SensorDataPoint(timestamp, accuracy, values);
+        uploadMobileDataHelper.addDataValue(new SensorDataValue(values), sensorType);
+
+        sensor.addDataPoint(dataPoint);
+        BusProvider.postOnMainThread(new SensorUpdatedEvent(sensor, dataPoint));
+    }
+
+    public synchronized void addWearSensorData(int sensorType, int accuracy, long timestamp, float[] values) {
         Sensor sensor = getOrCreateSensor(sensorType);
 
         // TODO: We probably want to pull sensor data point objects from a pool here
@@ -126,14 +138,6 @@ public class BecareRemoteSensorManager {
 
         sensor.addDataPoint(dataPoint);
         BusProvider.postOnMainThread(new SensorUpdatedEvent(sensor, dataPoint));
-    }
-
-    public synchronized void addTag(String pTagName) {
-        TagData tag = new TagData(pTagName, System.currentTimeMillis());
-        this.tags.add(tag);
-
-
-        BusProvider.postOnMainThread(new TagAddedEvent(tag));
     }
 
     public LinkedList<TagData> getTags() {
@@ -225,7 +229,8 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void uploadAllSensorData() {
+
+    public void uploadAllWearSensorData() {
         try {
             Log.d(TAG, "upload data tring upload");
             if(uploadDataHelper.getUserActivityName() != null) {
@@ -252,10 +257,37 @@ public class BecareRemoteSensorManager {
         }
     }
 
+    public void uploadAllMobileSensorData() {
+        try {
+            Log.d(TAG, "upload data tring upload");
+            if(uploadMobileDataHelper.getUserActivityName() != null) {
+                Log.d(TAG, "upload data tring activity data not null");
+                String dataX = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.X_CORD);
+                String dataY = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Y_CORD);
+                String dataZ = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Z_CORD);
+                String data = "";
+
+                if (dataX != "")
+                    data = dataX + "\n" +dataY +  "\n" + dataZ;
+
+                dataX = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.X_CORD);
+                dataY = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.Y_CORD);
+                dataZ = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_GYROSCOPE, AppConfig.Z_CORD);
+
+                if (dataX != "")
+                    data = data + "\n" + dataX + "\n" +dataY +  "\n" + dataZ;
+
+                socketManager.pushDataAsyncronously(data);
+            }
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
     public void uploadActivityData() {
         try {
             Log.d(TAG, "upload data string upload");
-            if(uploadDataHelper.getUserActivityName() != null) {
+            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getUserActivityData() != null) {
                 Log.d(TAG, "upload data string activity data not null");
                 socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData());
             }
@@ -264,11 +296,19 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void calculateStats(long currTime){
-        uploadDataHelper.calculateStats(currTime);
+    public void calculateMobileStats(long currTime){
+        uploadMobileDataHelper.calculateStats(currTime);
     }
 
-    public void resetStats(){
+    public void resetMobileStats(){
+        uploadDataHelper.resetStats();
+    }
+
+    public void calculateWearStats(long currTime){
+        uploadMobileDataHelper.calculateStats(currTime);
+    }
+
+    public void resetWearStats(){
         uploadDataHelper.resetStats();
     }
 

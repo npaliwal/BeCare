@@ -26,7 +26,6 @@
         android:layout_height="wrap_content"
         android:textSize="32sp"
         android:textColor="@color/colorPrimary"
-        android:text="30sec"
         android:layout_alignParentRight="true"
         android:layout_above="@+id/button_start"
         android:layout_marginRight="20dp"/>

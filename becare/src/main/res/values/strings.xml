@@ -7,8 +7,9 @@
     <string name="action_settings">Settings</string>
 
     <string name="login">Login</string>
-    <string name="exercise_ring_rect">Ring &amp; Rectangle</string>
+    <string name="exercise_ring_rect">Snooker</string>
     <string name="exercise_contrast">Contrast Sensitivity</string>
+    <string name="exercise_arm_elevation">Arm Elevation</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
 

@@ -265,6 +265,8 @@ public class StartingActivity extends AppCompatActivity
 
         if (id == R.id.nav_arm_elavation) {
             // Handle the arm elevation test
+            startActivity(new Intent(this, ArmElevationActivity.class));
+
         } else if (id == R.id.nav_snooker) {
             startActivity(new Intent(this, BallRectangleActivity.class));
         } else if (id == R.id.nav_transcription) {

@@ -45,6 +45,12 @@
         </activity>
 
         <activity
+            android:name="com.github.pocmo.sensordashboard.activities.ArmElevationActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/exercise_arm_elevation">
+        </activity>
+
+        <activity
             android:name="com.github.pocmo.sensordashboard.activities.LoginActivity"
             android:screenOrientation="portrait"
             android:label="@string/login">

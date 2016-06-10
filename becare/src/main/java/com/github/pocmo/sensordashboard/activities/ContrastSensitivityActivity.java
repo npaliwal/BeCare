@@ -49,8 +49,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     public void setPerformance(int total){
         String dataShow = getString(R.string.contrast_performance, correctCount, total);
         performanceText.setText(dataShow);
-        value = "";
-        mRemoteSensorManager.getUploadDataHelper().setUserActivity("ContrastSensitivity", value);
+        value = "";//TODO: Info about image patch and user response
+        mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_contrast), value);
     }
 
     private void setupNextPage(int index){

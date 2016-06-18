@@ -11,208 +11,296 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:contentDescription=".activities.UtilityActivity"
     >
-    <TextView
-        android:id="@+id/socket_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Debug Settings"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:padding="5dp"
-        android:background="@color/graph_color_1"/>
-
-    <LinearLayout
-        android:id="@+id/socket_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_below="@+id/socket_header"
-        android:background="@color/gray">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="3">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:textSize="18sp"
-                android:text="IP : "/>
-            <EditText
-                android:id="@+id/ev_public_ip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="122.171.165.128"
-                >
-            </EditText>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="right"
-                android:textSize="18sp"
-                android:text="Port : "/>
-            <EditText
-                android:id="@+id/ev_public_port"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="3000"
-
-                >
-            </EditText>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp">
-            <Button
-                android:id="@+id/update_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Update" >
-            </Button>
-
-            <Button
-                android:id="@+id/test_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Test"
-                android:layout_marginLeft="20dp">
-            </Button>
-        </LinearLayout>
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/debug_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Socket Settings"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:padding="5dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/socket_container"
-        android:background="@color/graph_color_1"/>
-
-    <LinearLayout
+    <ScrollView
         android:id="@+id/debug_panel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/debug_header"
-        android:orientation="vertical"
-        android:background="@color/gray">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textSize="18sp"
-            android:text="Accelerometer : "/>
-
-        <RadioGroup
-            android:id="@+id/radio_grp_accel"
+        android:layout_height="wrap_content">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/radio_accel_all"
-                android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/connection_header"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="All"/>
-            <RadioButton
-                android:id="@+id/radio_accel_x"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="X Only"/>
-            <RadioButton
-                android:id="@+id/radio_accel_y"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="Y Only"/>
-            <RadioButton
-                android:id="@+id/radio_accel_z"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="Z Only"/>
-            <RadioButton
-                android:id="@+id/radio_accel_none"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="None"/>
-        </RadioGroup>
+                android:text="Upload Settings"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:background="@color/graph_color_1"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:textSize="18sp"
-            android:layout_marginTop="5dp"
-            android:text="Gyroscope : "/>
+            <LinearLayout
+                android:id="@+id/connection_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_below="@+id/socket_header"
+                android:background="@color/gray"
+                android:padding="10dp"
+                android:visibility="gone">
 
-        <RadioGroup
-            android:id="@+id/radio_grp_gyro"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-            <RadioButton
-                android:id="@+id/radio_gyro_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="All"/>
-            <RadioButton
-                android:id="@+id/radio_gyro_x"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="X Only"/>
-            <RadioButton
-                android:id="@+id/radio_gyro_y"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="Y Only"/>
-            <RadioButton
-                android:id="@+id/radio_gyro_z"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="Z Only"/>
-            <RadioButton
-                android:id="@+id/radio_gyro_none"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:onClick="onDebugRadioClicked"
-                android:text="None"/>
-        </RadioGroup>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="left">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:textSize="18sp"
+                        android:text="IP : "/>
+                    <EditText
+                        android:id="@+id/ev_public_ip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="122.171.165.128"
+                        >
+                    </EditText>
 
-    </LinearLayout>
+                    <View
+                        android:layout_width="0px"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"></View>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:textSize="18sp"
+                        android:text="Port : "/>
+                    <EditText
+                        android:id="@+id/ev_public_port"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="3000"
+                        >
+                    </EditText>
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textSize="18sp"
+                    android:text="Accelerometer : "/>
+
+                <RadioGroup
+                    android:id="@+id/radio_grp_accel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/radio_accel_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="All"/>
+                    <RadioButton
+                        android:id="@+id/radio_accel_x"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="X Only"/>
+                    <RadioButton
+                        android:id="@+id/radio_accel_y"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="Y Only"/>
+                    <RadioButton
+                        android:id="@+id/radio_accel_z"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="Z Only"/>
+                    <RadioButton
+                        android:id="@+id/radio_accel_none"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="None"/>
+                </RadioGroup>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:textSize="18sp"
+                    android:layout_marginTop="5dp"
+                    android:text="Gyroscope : "/>
+
+                <RadioGroup
+                    android:id="@+id/radio_grp_gyro"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+                    <RadioButton
+                        android:id="@+id/radio_gyro_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="All"/>
+                    <RadioButton
+                        android:id="@+id/radio_gyro_x"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="X Only"/>
+                    <RadioButton
+                        android:id="@+id/radio_gyro_y"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="Y Only"/>
+                    <RadioButton
+                        android:id="@+id/radio_gyro_z"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="Z Only"/>
+                    <RadioButton
+                        android:id="@+id/radio_gyro_none"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:onClick="onDebugRadioClicked"
+                        android:text="None"/>
+                </RadioGroup>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+                    <Button
+                        android:id="@+id/update_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Update" >
+                    </Button>
+
+                    <Button
+                        android:id="@+id/test_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Test"
+                        android:layout_marginLeft="20dp">
+                    </Button>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/arm_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/exercise_arm_elevation"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_below="@+id/socket_container"
+                android:background="@color/graph_color_1"/>
+
+            <LinearLayout
+                android:id="@+id/arm_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/debug_header"
+                android:orientation="horizontal"
+                android:background="@color/gray"
+                android:visibility="gone"
+                >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Duration of Task"
+                        android:textSize="18sp"
+                        android:padding="10dp"
+                        />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="▼"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    android:text="30"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="▼"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/snooker_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/exercise_ring_rect"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/graph_color_1"/>
+
+            <LinearLayout
+                android:id="@+id/snooker_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/debug_header"
+                android:orientation="horizontal"
+                android:background="@color/gray"
+                android:visibility="gone"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of curves"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="▼"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:textSize="18sp"
+                    android:text="2"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="▼"/>
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
 
     <TextView
         android:id="@+id/tv_list_sensors"
@@ -227,7 +315,7 @@
         android:layout_below="@id/debug_panel"/>
 
     <ListView
-        android:id="@android:id/list"
+        android:id="@+id/lv_sensors"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_list_sensors"

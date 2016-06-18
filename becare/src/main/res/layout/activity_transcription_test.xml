@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:padding="15dp"
+    >
+
+    <TextView
+        android:id="@+id/exercise_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Audio #1"
+        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:gravity="left"
+        />
+
+    <LinearLayout
+        android:id="@+id/speaker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/mike"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to play audio"
+            android:textSize="18sp"/>
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_user_input"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@drawable/shape"
+        android:padding="10dp"
+        android:gravity="top"
+        android:hint="Type above phrase"
+        />
+    <TextView
+        android:id="@+id/submit_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:padding="10dp"
+        android:layout_margin="20dp"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+</LinearLayout>

@@ -270,7 +270,7 @@ public class StartingActivity extends AppCompatActivity
         } else if (id == R.id.nav_snooker) {
             startActivity(new Intent(this, BallRectangleActivity.class));
         } else if (id == R.id.nav_transcription) {
-            // Handle the transription test
+            startActivity(new Intent(this, TranscriptionTestActivity.class));
         } else if (id == R.id.nav_contranst) {
             startActivity(new Intent(this, ContrastSensitivityActivity.class));
 

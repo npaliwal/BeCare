@@ -8,6 +8,7 @@
 
     <string name="login">Login</string>
     <string name="exercise_ring_rect">Snooker</string>
+    <string name="exercise_transcription">Transcription Test</string>
     <string name="exercise_contrast">Contrast Sensitivity</string>
     <string name="exercise_arm_elevation">Arm Elevation</string>
     <string name="sensors_list">List of Sensors</string>

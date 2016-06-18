@@ -8,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.AppCompatActivity;
 import android.text.style.IconMarginSpan;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.github.pocmo.sensordashboard.R;
 /**
  * Created by neerajpaliwal on 06/05/16.
  */
-public class ArmElevationActivity extends Activity implements SensorEventListener {
+public class ArmElevationActivity extends AppCompatActivity implements SensorEventListener {
 
     ImageView watchArm, phoneArm;
     TextView startButton, timer;
@@ -55,7 +56,7 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
         mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
 
         final Animation mAnimation = new RotateAnimation(-80f, 80f, -15f, 50f);
-        mAnimation.setDuration(5000);
+        mAnimation.setDuration(3000);
         mAnimation.setRepeatCount(-1);
         mAnimation.setRepeatMode(Animation.REVERSE);
         mAnimation.setInterpolator(new LinearInterpolator());
@@ -63,7 +64,7 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
 
 
         final Animation mRevAnimation = new RotateAnimation(80f, -80f, -15f, 50f);
-        mRevAnimation.setDuration(5000);
+        mRevAnimation.setDuration(3000);
         mRevAnimation.setRepeatCount(-1);
         mRevAnimation.setRepeatMode(Animation.REVERSE);
         mRevAnimation.setInterpolator(new LinearInterpolator());
@@ -107,10 +108,6 @@ public class ArmElevationActivity extends Activity implements SensorEventListene
                 }.start();
             }
         });
-        //Animation armTurn = AnimationUtils.loadAnimation(this, R.anim.arm_elevate);
-        //Animation armRevTurn = AnimationUtils.loadAnimation(this, R.anim.arm_rev_elevate);
-        //watchArm.startAnimation(armTurn);
-        //phoneArm.startAnimation(armRevTurn);
     }
 
     @Override

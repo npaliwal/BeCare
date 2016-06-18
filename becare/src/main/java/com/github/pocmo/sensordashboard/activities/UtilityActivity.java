@@ -5,10 +5,12 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -29,7 +31,7 @@ import java.util.List;
 /**
  * Created by neerajpaliwal on 04/05/16.
  */
-public class UtilityActivity extends ListActivity {
+public class UtilityActivity extends AppCompatActivity {
     private SensorManager mSensorManager;
     private SensorAdapter adapter;
     private PreferenceStorage preferenceStorage;
@@ -38,6 +40,8 @@ public class UtilityActivity extends ListActivity {
     private EditText socketPort;
     private Button   updateSocket;
     private Button   testSocket;
+
+    private ListView sensorsList;
     private CheckBox radioAccel;
     private RadioGroup radioGyro;
 
@@ -54,7 +58,8 @@ public class UtilityActivity extends ListActivity {
         ArrayList<Sensor> deviceSensorsArr = new ArrayList<>(deviceSensors);
 
         adapter = new SensorAdapter(getApplicationContext(), deviceSensorsArr);
-        getListView().setAdapter(adapter);
+        sensorsList = (ListView)findViewById(R.id.lv_sensors);
+        sensorsList.setAdapter(adapter);
 
         socketIp = (EditText)findViewById(R.id.ev_public_ip);
         socketIp.setText(preferenceStorage.getSocketIp());

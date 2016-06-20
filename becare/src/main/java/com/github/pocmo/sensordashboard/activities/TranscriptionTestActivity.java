@@ -43,7 +43,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transcription_test);
 
-        AppConfig.initTranscriptExercises();
+        AppConfig.initTranscriptExercises(TranscriptionTestActivity.this);
 
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(TranscriptionTestActivity.this);
         preferenceStorage = new PreferenceStorage(TranscriptionTestActivity.this);
@@ -129,7 +129,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         long timeTaken = System.currentTimeMillis() - startTimeForExercise;
         JSONObject obj = new JSONObject();
         try {
-            obj.put("exercise_id", getString(exercises.get(currExercise).getTextResId()));
+            obj.put("exercise_id", exercises.get(currExercise).getTextRes());
             obj.put("time_taken", timeTaken);
             obj.put("user_input", input.getText().toString());
         } catch (JSONException e) {

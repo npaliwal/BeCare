@@ -40,7 +40,9 @@ public class TwoImageInfo implements Parcelable {
     }
 
     public String getLefColor() {
-        return lefColor;
+        if(lefColor != null)
+            return lefColor;
+        return "image";
     }
 
     public void setLefColor(String lefColor) {
@@ -48,7 +50,9 @@ public class TwoImageInfo implements Parcelable {
     }
 
     public String getRightColor() {
-        return rightColor;
+        if(rightColor != null)
+            return rightColor;
+        return "image";
     }
 
     public void setRightColor(String rightColor) {

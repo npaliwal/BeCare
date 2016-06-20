@@ -1,5 +1,6 @@
 package com.github.pocmo.sensordashboard;
 
+import android.content.Context;
 import android.hardware.Sensor;
 
 
@@ -14,10 +15,17 @@ import java.util.Map;
  * Created by neerajpaliwal on 08/05/16.
  */
 public class AppConfig {
-    public static Map<Integer, String>    MANDATORY_SENSORS  = new HashMap<>();
-    public static ArrayList<TwoImageInfo> CONTRAST_EXERCISES = new ArrayList<>();
-    public static ArrayList<AudioData>    TRANSCRIPT_EXERCISES = new ArrayList<>();
+    public static final int CLIENT_CONNECTION_TIMEOUT = 15000;
 
+    public static final int X_CORD = 1;
+    public static final int Y_CORD = 2;
+    public static final int Z_CORD = 3;
+
+    public static int DEFAULT_NUM_CONTRAST = 3;
+    public static int DEFAULT_NUM_TRANSCRIPT = 3;
+
+
+    public static Map<Integer, String>    MANDATORY_SENSORS  = new HashMap<>();
     public static void initSensors(){
         if(MANDATORY_SENSORS != null && MANDATORY_SENSORS.size() > 0){
             return;
@@ -27,7 +35,7 @@ public class AppConfig {
         MANDATORY_SENSORS.put(Sensor.TYPE_STEP_COUNTER,     "Step Counter");
     };
 
-
+    public static ArrayList<TwoImageInfo> CONTRAST_EXERCISES = new ArrayList<>();
     public static void initContrastExercises(){
         if(CONTRAST_EXERCISES != null && CONTRAST_EXERCISES.size() > 0){
             return;
@@ -38,23 +46,18 @@ public class AppConfig {
         CONTRAST_EXERCISES.add(new TwoImageInfo(R.drawable.becare, 3));
     }
 
-    public static void initTranscriptExercises(){
+    //All wav files are created using http://www.text2speech.org/
+    public static ArrayList<AudioData>    TRANSCRIPT_EXERCISES = new ArrayList<>();
+    public static void initTranscriptExercises(Context context){
         if(TRANSCRIPT_EXERCISES != null && TRANSCRIPT_EXERCISES.size() > 0){
             return;
         }
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_1, R.string.transcript_1));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_1, R.string.transcript_1));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_1, R.string.transcript_1));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_1, R.string.transcript_1));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_address, context.getString(R.string.transcript_honesty)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_2, context.getString(R.string.transcript_walk)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_3, context.getString(R.string.transcript_address)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_4, context.getString(R.string.transcript_greet)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_5, context.getString(R.string.transcript_greet)));
 
     }
 
-    public static final int CLIENT_CONNECTION_TIMEOUT = 15000;
-
-    public static final int X_CORD = 1;
-    public static final int Y_CORD = 2;
-    public static final int Z_CORD = 3;
-
-    public static int DEFAULT_NUM_CONTRAST = 3;
-    public static int DEFAULT_NUM_TRANSCRIPT = 3;
 }

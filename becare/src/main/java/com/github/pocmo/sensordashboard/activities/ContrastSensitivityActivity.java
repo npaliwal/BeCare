@@ -17,6 +17,9 @@ import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -52,15 +55,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         initButtons();
     }
 
-    public void setPerformance(int total){
-        String dataShow = getString(R.string.contrast_performance, correctCount, total);
-        performanceText.setText(dataShow);
-        value = "";//TODO: Info about image patch and user response
-        mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_contrast), value);
-    }
-
-    private void setupNextPage(int index){
-        setPerformance(index + 1);
+    private void setupNextPage(boolean userMatch, int index){
         if(index >= exercises.size() - 1){
             responseContainer.setVisibility(View.GONE);
             pager.setVisibility(View.GONE);
@@ -68,6 +63,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         }else {
             pager.setCurrentItem(index + 1, true);
         }
+        String dataShow = getString(R.string.contrast_performance, correctCount, index+1);
+        performanceText.setText(dataShow);
+
+        value = getUserActivityStats(userMatch, index);
+        mRemoteSensorManager.uploadActivityDataInstantly(value);
     }
 
     private void initButtons(){
@@ -84,7 +84,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 if(exercise.isSimilar()){
                     correctCount++;
                 }
-                setupNextPage(index);
+                setupNextPage(true, index);
             }
         });
         mismatchButton.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +95,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 if(!exercise.isSimilar()){
                     correctCount++;
                 }
-                setupNextPage(index);
+                setupNextPage(false, index);
             }
         });
         done.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +138,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_contrast), null);
         mRemoteSensorManager.startMeasurement();
     }
 
@@ -147,6 +148,20 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
+    }
+
+    public String getUserActivityStats(boolean userMatch, int currExercise) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("exercise_id", currExercise);
+            obj.put("left_color", exercises.get(currExercise).getLefColor());
+            obj.put("right_color", exercises.get(currExercise).getRightColor());
+            obj.put("contrast", exercises.get(currExercise).getContrast());
+            obj.put("user_response", userMatch ? "match" : "mismatch");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return obj.toString();
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {

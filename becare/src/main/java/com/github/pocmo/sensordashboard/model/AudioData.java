@@ -5,19 +5,19 @@ package com.github.pocmo.sensordashboard.model;
  */
 public class AudioData {
     private int speechResId;
-    private int textResId;
+    private String textRes;
 
-    public AudioData(int sResId, int tResId) {
+    public AudioData(int sResId, String tRes) {
         this.speechResId = sResId;
-        this.textResId = tResId;
+        this.textRes = tRes;
     }
 
-    public int getTextResId() {
-        return textResId;
+    public String getTextRes() {
+        return textRes;
     }
 
-    public void setTextResId(int textResId) {
-        this.textResId = textResId;
+    public void setTextResId(String textRes) {
+        this.textRes = textRes;
     }
 
     public int getSpeechResId() {

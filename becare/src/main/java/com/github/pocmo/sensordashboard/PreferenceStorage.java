@@ -14,6 +14,8 @@ public class PreferenceStorage {
     private static final String SOCKET_PORT = "custom_socket_port";
     private static final String USER_ID = "becare_user_id";
     private static final String SKIP_REG = "becare_skip_registration";
+    private static final String NUM_CONTRAST_EXERCISE = "num_contrast_exercise";
+    private static final String NUM_TRASNCRIPT_EXERCISE = "num_transcript_exercise";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -58,5 +60,21 @@ public class PreferenceStorage {
             return true;
         }
         return getSkipReg();
+    }
+
+    public int getNumContrastExercise() {
+        return sharedPreferences.getInt(PreferenceStorage.NUM_CONTRAST_EXERCISE, AppConfig.DEFAULT_NUM_CONTRAST);
+    }
+
+    public void setNumContrastExercise(int numExercise) {
+        editor.putInt(PreferenceStorage.NUM_CONTRAST_EXERCISE, numExercise).commit();
+    }
+
+    public int getNumTranscriptExercise() {
+        return sharedPreferences.getInt(PreferenceStorage.NUM_TRASNCRIPT_EXERCISE, AppConfig.DEFAULT_NUM_TRANSCRIPT);
+    }
+
+    public void setNumTranscriptExercise(int numExercise) {
+        editor.putInt(PreferenceStorage.NUM_TRASNCRIPT_EXERCISE, numExercise).commit();
     }
 }

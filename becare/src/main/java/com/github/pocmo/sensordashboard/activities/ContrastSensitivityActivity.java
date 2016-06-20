@@ -1,7 +1,5 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,11 +10,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
+import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
+import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
@@ -31,19 +33,23 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     private String value = null;
 
+    private int numExercises = 0;
     private int correctCount = 0;
-    public static ArrayList<TwoImageInfo> exercises = new ArrayList<>();
+    public ArrayList<TwoImageInfo> exercises = new ArrayList<>();
     private BecareRemoteSensorManager mRemoteSensorManager;
+    private PreferenceStorage preferenceStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contrast_sensitivity);
         performanceText = (TextView) findViewById(R.id.tv_performance);
+        mRemoteSensorManager = BecareRemoteSensorManager.getInstance(ContrastSensitivityActivity.this);
+        preferenceStorage = new PreferenceStorage(ContrastSensitivityActivity.this);
+        AppConfig.initContrastExercises();
         initExercises();
         initViewPager();
         initButtons();
-        mRemoteSensorManager = BecareRemoteSensorManager.getInstance(ContrastSensitivityActivity.this);
     }
 
     public void setPerformance(int total){
@@ -85,7 +91,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 int index = pager.getCurrentItem();
-                TwoImageInfo exercise = exercises.get(index / exercises.size());
+                TwoImageInfo exercise = exercises.get(index);
                 if(!exercise.isSimilar()){
                     correctCount++;
                 }
@@ -100,6 +106,23 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         });
     }
 
+    private void initExercises(){
+        exercises.clear();
+        numExercises = preferenceStorage.getNumContrastExercise();
+
+        int temp = 0, currId;
+        TwoImageInfo currExercise = null;
+        Random random = new Random();
+        while(temp < numExercises){
+            currId = random.nextInt(AppConfig.CONTRAST_EXERCISES.size());
+            currExercise = AppConfig.CONTRAST_EXERCISES.get(currId);
+            if(!exercises.contains(currExercise)){
+                exercises.add(currExercise);
+                temp++;
+            }
+        }
+    }
+
     private void initViewPager(){
         pager = (ViewPager) findViewById(R.id.pager);
         pager.setOnTouchListener(new View.OnTouchListener() {
@@ -108,16 +131,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 return true;
             }
         });
-        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager());
+        adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), exercises);
         pager.setAdapter(adapterViewPager);
-    }
-
-    private void initExercises(){
-        exercises.clear();
-        exercises.add(new TwoImageInfo("#FFffc1", "#AA0000"));
-        exercises.add(new TwoImageInfo("#c2c2c2", "#d3d3d3"));
-        exercises.add(new TwoImageInfo("#e1e1e1", "#c2c2c2"));
-        exercises.add(new TwoImageInfo(R.drawable.becare, 1));
     }
 
     @Override
@@ -135,8 +150,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {
-        public MyPagerAdapter(FragmentManager fragmentManager) {
+        ArrayList<TwoImageInfo> exercises = null;
+
+        public MyPagerAdapter(FragmentManager fragmentManager, ArrayList<TwoImageInfo> exercises) {
             super(fragmentManager);
+            this.exercises = exercises;
         }
 
         // Returns total number of pages
@@ -148,7 +166,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         // Returns the fragment to display for that page
         @Override
         public Fragment getItem(int position) {
-            return TwoImageFragment.newInstance(position);
+            return TwoImageFragment.newInstance(exercises.get(position));
         }
 
         @Override
@@ -158,64 +176,4 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
 
     }
 
-    public static class TwoImageInfo{
-        int contrast         = 1;
-        int imageResId       = -1;
-        String lefColor      = null;
-        String rightColor    = null;
-
-        public TwoImageInfo(String left, String right) {
-            lefColor = left;
-            rightColor = right;
-        }
-
-        public TwoImageInfo(int imageResId, int contrast) {
-            this.contrast = contrast;
-            this.imageResId = imageResId;
-        }
-
-
-        public float getContrast() {
-            return contrast % 10;
-        }
-
-        public void setContrast(int contrast) {
-            this.contrast = contrast;
-        }
-
-        public int getImageResId() {
-            return imageResId;
-        }
-
-        public void setImageResId(int imageResId) {
-            this.imageResId = imageResId;
-        }
-
-        public String getLefColor() {
-            return lefColor;
-        }
-
-        public void setLefColor(String lefColor) {
-            this.lefColor = lefColor;
-        }
-
-        public String getRightColor() {
-            return rightColor;
-        }
-
-        public void setRightColor(String rightColor) {
-            this.rightColor = rightColor;
-        }
-
-        public boolean isSimilar(){
-            if(contrast != 1){
-                return false;
-            }
-            if(lefColor != null && rightColor != null && !lefColor.equals(rightColor)){
-                return false;
-            }
-            return true;
-        }
-
-    }
 }

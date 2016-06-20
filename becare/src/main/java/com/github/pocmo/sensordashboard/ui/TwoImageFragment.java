@@ -1,7 +1,6 @@
 package com.github.pocmo.sensordashboard.ui;
 
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.pocmo.sensordashboard.R;
-import com.github.pocmo.sensordashboard.activities.ContrastSensitivityActivity;
+import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.utils.ImageUtils;
 
 /**
@@ -22,23 +21,22 @@ public class TwoImageFragment extends Fragment {
     ImageView leftPatch, rightPatch;
     TextView header;
 
-    private static String EXTRA_EXERCISE_ID     = "exercise_id";
+    private static String EXTRA_EXERCISE_ID     = "exercise_data";
 
-    public static TwoImageFragment newInstance(int index) {
+    public static TwoImageFragment newInstance(TwoImageInfo exerciseData) {
         TwoImageFragment fragmentFirst = new TwoImageFragment();
         Bundle args = new Bundle();
-        args.putInt(EXTRA_EXERCISE_ID, index);
+        args.putParcelable(EXTRA_EXERCISE_ID, exerciseData);
         fragmentFirst.setArguments(args);
         return fragmentFirst;
     }
 
-    ContrastSensitivityActivity.TwoImageInfo exercise = null;
+    TwoImageInfo exercise = null;
     // Store instance variables based on arguments passed
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int index = getArguments().getInt(EXTRA_EXERCISE_ID, -1);
-        exercise = ContrastSensitivityActivity.exercises.get(index);
+        exercise = getArguments().getParcelable(EXTRA_EXERCISE_ID);
     }
 
     // Inflate the view for the fragment based on layout XML

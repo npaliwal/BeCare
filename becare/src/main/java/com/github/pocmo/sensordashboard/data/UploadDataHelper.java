@@ -141,7 +141,7 @@ public class UploadDataHelper {
         double volaX = (allGyroData.size() > 0)? Math.sqrt(stdX/allGyroData.size()): 0;
         double volaY =(allGyroData.size() > 0)? Math.sqrt(stdY/allGyroData.size()) : 0;
         double volaZ = (allGyroData.size() > 0)? Math.sqrt(stdZ/allGyroData.size()): 0;
-        gyroMeter.setStd((float)volaX, (float)volaY, (float)volaZ);
+        gyroMeter.setStd((float) volaX, (float) volaY, (float) volaZ);
 
         avgX = accelMeter.getMean().getValueX();
         avgY = accelMeter.getMean().getValueY();
@@ -332,6 +332,14 @@ public class UploadDataHelper {
 
     public String getUserActivityData() {
         ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityValue);
+
+        return gson.toJson(data, ActivityUploadData.class);
+    }
+
+    public String getUserActivityData(String activityVal) {
+        readTime = timeFormat.format(System.currentTimeMillis());
+
+        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityVal);
 
         return gson.toJson(data, ActivityUploadData.class);
     }

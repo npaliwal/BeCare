@@ -296,6 +296,16 @@ public class BecareRemoteSensorManager {
         }
     }
 
+    public void uploadActivityDataInstantly(String activityValue){
+        try {
+            Log.d(TAG, "upload data string upload");
+            socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData(activityValue));
+
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
     public void calculateMobileStats(long currTime){
         uploadMobileDataHelper.calculateStats(currTime);
     }

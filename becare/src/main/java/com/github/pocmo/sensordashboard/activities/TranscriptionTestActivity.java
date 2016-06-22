@@ -5,6 +5,9 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -33,10 +36,9 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     EditText input;
     SeekBar volumeSeekbar;
 
-
+    private int currKeyCount = 0;
     private int numExercises = 0;
     private int currExercise = 0;
-    private long startTimeForExercise = -1;
 
     private ArrayList<AudioData> exercises = new ArrayList<>();
 
@@ -77,6 +79,29 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
     private void initUIElements() {
         input = (EditText)findViewById(R.id.et_user_input);
+        input.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                CharSequence keys = s.subSequence(start + before, start + count);
+                int keysCount = keys.length();
+                while (keysCount > 0) {
+                    String value = getUserActivityStats(keys.subSequence(keysCount - 1, keysCount));
+                    mRemoteSensorManager.uploadActivityDataInstantly(value);
+                    keysCount--;
+                    currKeyCount++;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         speaker = findViewById(R.id.speaker);
         submit = (TextView) findViewById(R.id.submit_input);
@@ -94,8 +119,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (currExercise <= numExercises) {
-                    String value = getUserActivityStats();
-                    mRemoteSensorManager.uploadActivityDataInstantly(value);
                     currExercise++;
                     header.setText("Audio #" + (1 + currExercise));
                     if (currExercise == numExercises) {
@@ -108,8 +131,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 } else {
                     finish();
                 }
-                startTimeForExercise = System.currentTimeMillis();
                 input.setText(null);
+                currKeyCount = 0;
             }
         });
     }
@@ -153,7 +176,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     }
 
     private void initExercises(){
-        startTimeForExercise = System.currentTimeMillis();
 
         exercises.clear();
         numExercises = preferenceStorage.getNumTranscriptExercise();
@@ -171,13 +193,13 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         }
     }
 
-    public String getUserActivityStats() {
-        long timeTaken = System.currentTimeMillis() - startTimeForExercise;
+    public String getUserActivityStats(CharSequence currChar) {
         JSONObject obj = new JSONObject();
         try {
-            obj.put("exercise_id", exercises.get(currExercise).getTextRes());
-            obj.put("time_taken", timeTaken);
-            obj.put("user_input", input.getText().toString());
+            obj.put("exercise_id", currExercise);
+            obj.put("audio_id", exercises.get(currExercise).getTextRes());
+            obj.put("key", currChar);
+            obj.put("seq", currKeyCount);
         } catch (JSONException e) {
             e.printStackTrace();
         }

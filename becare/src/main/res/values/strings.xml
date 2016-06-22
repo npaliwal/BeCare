@@ -28,7 +28,7 @@
     <string name="contrast_test_contrast">Contrast Test</string>
     <string name="contrast_mismatch">Mismatch</string>
     <string name="contrast_skip"><u>Skip</u></string>
-    <string name="contrast_done"><u>Done</u></string>
+    <string name="contrast_done">Done</string>
     <string name="contrast_performance">Performance: %1$d correct out of %2$d</string>
 
     <string name="transcript_honesty">Honesty is the best policy</string>

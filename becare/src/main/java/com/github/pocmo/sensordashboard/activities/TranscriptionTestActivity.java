@@ -1,10 +1,13 @@
 package com.github.pocmo.sensordashboard.activities;
 
+import android.content.Context;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.github.pocmo.sensordashboard.AppConfig;
@@ -28,6 +31,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     View speaker;
     TextView submit, header;
     EditText input;
+    SeekBar volumeSeekbar;
+
 
     private int numExercises = 0;
     private int currExercise = 0;
@@ -35,12 +40,14 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
     private ArrayList<AudioData> exercises = new ArrayList<>();
 
+    private AudioManager audioManager = null;
     private PreferenceStorage preferenceStorage;
     private BecareRemoteSensorManager mRemoteSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
         setContentView(R.layout.activity_transcription_test);
 
         AppConfig.initTranscriptExercises(TranscriptionTestActivity.this);
@@ -48,6 +55,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(TranscriptionTestActivity.this);
         preferenceStorage = new PreferenceStorage(TranscriptionTestActivity.this);
 
+        initControls();
         initExercises();
         initUIElements();
     }
@@ -85,25 +93,63 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(currExercise <= numExercises) {
+                if (currExercise <= numExercises) {
                     String value = getUserActivityStats();
                     mRemoteSensorManager.uploadActivityDataInstantly(value);
                     currExercise++;
-                    header.setText("Audio #" + (1+currExercise));
-                    if(currExercise == numExercises){
+                    header.setText("Audio #" + (1 + currExercise));
+                    if (currExercise == numExercises) {
                         speaker.setVisibility(View.GONE);
                         input.setVisibility(View.GONE);
                         header.setVisibility(View.GONE);
                         submit.setText("Done");
                         currExercise++;
                     }
-                }else{
+                } else {
                     finish();
                 }
                 startTimeForExercise = System.currentTimeMillis();
                 input.setText(null);
             }
         });
+    }
+
+    private void initControls()
+    {
+        try
+        {
+            volumeSeekbar = (SeekBar)findViewById(R.id.volume_seeker);
+            audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+            volumeSeekbar.setMax(audioManager
+                    .getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+            volumeSeekbar.setProgress(audioManager
+                    .getStreamVolume(AudioManager.STREAM_MUSIC));
+
+
+            volumeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+            {
+                @Override
+                public void onStopTrackingTouch(SeekBar arg0)
+                {
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar arg0)
+                {
+                }
+
+                @Override
+                public void onProgressChanged(SeekBar arg0, int progress, boolean arg2)
+                {
+                    audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+                            progress, 0);
+                }
+            });
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     private void initExercises(){

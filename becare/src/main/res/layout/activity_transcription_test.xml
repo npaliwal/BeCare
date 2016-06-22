@@ -27,11 +27,12 @@
             android:layout_height="100dp"
             android:src="@drawable/mike"/>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <SeekBar
+            android:id="@+id/volume_seeker"
+            android:layout_width="0px"
             android:layout_height="wrap_content"
             android:text="Tap to play audio"
-            android:textSize="18sp"/>
+            android:layout_weight="1"/>
     </LinearLayout>
 
     <EditText
@@ -41,7 +42,7 @@
         android:background="@drawable/shape"
         android:padding="10dp"
         android:gravity="top"
-        android:hint="Type above phrase"
+        android:hint="Type out the audio phrase on the phone keyboard. Put your watch on the arm doing the typing."
         />
     <TextView
         android:id="@+id/submit_input"

@@ -311,11 +311,11 @@ public class BecareRemoteSensorManager {
     }
 
     public void resetMobileStats(){
-        uploadDataHelper.resetStats();
+        uploadMobileDataHelper.resetStats();
     }
 
     public void calculateWearStats(long currTime){
-        uploadMobileDataHelper.calculateStats(currTime);
+        uploadDataHelper.calculateStats(currTime);
     }
 
     public void resetWearStats(){

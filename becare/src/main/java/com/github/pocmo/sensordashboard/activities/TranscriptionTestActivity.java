@@ -6,6 +6,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
@@ -87,6 +88,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(TextUtils.isEmpty(s) || before > count)
+                    return;
                 CharSequence keys = s.subSequence(start + before, start + count);
                 int keysCount = keys.length();
                 while (keysCount > 0) {

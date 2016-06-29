@@ -37,8 +37,9 @@ public class UploadDataHelper {
     String activityValue;
 
     SensorDataWrapper gyroMeter;
-
     SensorDataWrapper accelMeter;
+
+    int seq = -1;
 
     //Helper data
     private List<SensorDataValue> allGyroData = new ArrayList<>();
@@ -303,6 +304,7 @@ public class UploadDataHelper {
         calculateMeanHighLow();
         calculateStd();
         calculateNumZeroCrossing();
+        seq++;
     }
 
     public void resetStats(){
@@ -310,6 +312,7 @@ public class UploadDataHelper {
         allGyroData.clear();
         gyroMeter.reset();
         accelMeter.reset();
+        seq = -1;
     }
 
     @Deprecated
@@ -331,7 +334,7 @@ public class UploadDataHelper {
     }
 
     public String getUserActivityData() {
-        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityValue);
+        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityValue, seq);
 
         return gson.toJson(data, ActivityUploadData.class);
     }
@@ -339,7 +342,7 @@ public class UploadDataHelper {
     public String getUserActivityData(String activityVal) {
         readTime = timeFormat.format(System.currentTimeMillis());
 
-        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityVal);
+        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityVal, seq);
 
         return gson.toJson(data, ActivityUploadData.class);
     }

@@ -100,6 +100,7 @@ public class StartingActivity extends AppCompatActivity
 
     private void initialize(){
         checkAndConfigureSocket();
+        checkandConfigureTaskSettings();
         remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -127,6 +128,8 @@ public class StartingActivity extends AppCompatActivity
             }
         });
     }
+
+
 
     @Override
     protected void onResume() {
@@ -173,6 +176,11 @@ public class StartingActivity extends AppCompatActivity
 
         if(preferenceStorage.getSocketIp() == null){
             preferenceStorage.setSocketInfo(defaultIp, defaultPort);
+        }
+    }
+    private void checkandConfigureTaskSettings() {
+        if(preferenceStorage.getArmElevationTaskDuration() == -1){
+            preferenceStorage.setArmElevationTaskDuration(AppConfig.DEFAULT_ARM_TASK_DURATION);
         }
     }
 

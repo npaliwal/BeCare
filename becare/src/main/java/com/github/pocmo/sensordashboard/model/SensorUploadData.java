@@ -11,8 +11,8 @@ public class SensorUploadData {
     @SerializedName("sensorname")
     String sensorName;// : accelerometer | gyroscope
 
-    @SerializedName("sensormsg")
-    String sensorMsg;// : sensorname.time.coordtype
+    //@SerializedName("sensormsg")
+    //String sensorMsg;// : sensorname.time.coordtype
 
     @SerializedName("time")
     String time;
@@ -90,7 +90,7 @@ public class SensorUploadData {
 
 
         this.sensorName = sensorName;
-        this.sensorMsg = sensorName + "." + readTime + "." + corrdtype;
+        //this.sensorMsg = sensorName + "." + readTime + "." + corrdtype;
         this.time = readTime;
         this.deviceId = device;
         this.numSample = numSample;

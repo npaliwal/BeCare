@@ -20,7 +20,9 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
+import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 
 /**
@@ -35,11 +37,12 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
     private boolean mStartReading = false;
 
     private BecareRemoteSensorManager mRemoteSensorManager;
+    private PreferenceStorage preferenceStorage;
     private Sensor mAccelero, mGyro, mGravity;
 
     private long lastUpdateTime = 0;
+    private int durationTask = AppConfig.DEFAULT_ARM_TASK_DURATION;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_arm_elevation);
@@ -49,11 +52,14 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
         timer = (TextView) findViewById(R.id.timer);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        preferenceStorage = new PreferenceStorage(getApplicationContext());
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(ArmElevationActivity.this);
 
         mAccelero = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mGyro = mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE);
         mGravity = mSensorManager.getDefaultSensor(Sensor.TYPE_GRAVITY);
+
+        durationTask = preferenceStorage.getArmElevationTaskDuration();
 
         final Animation mAnimation = new RotateAnimation(-80f, 80f, -15f, 50f);
         mAnimation.setDuration(3000);
@@ -81,15 +87,15 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_arm_elevation), null);
                 startButton.setClickable(false);
                 startButton.setText("Reading Sensors ...");
-                new CountDownTimer(34000, 1000) {
+                new CountDownTimer(durationTask*1000 + 4000, 1000) {
                     int timeSec  = 0;
                     public void onTick(long millisUntilFinished) {
                         timeSec = (int) (millisUntilFinished/1000);
-                        if(timeSec > 32){
+                        if(timeSec > durationTask+2){
                             timer.setText("GET");
-                        }else if(timeSec > 31){
+                        }else if(timeSec > durationTask+1){
                             timer.setText("GET SET");
-                        }else if(timeSec > 30){
+                        }else if(timeSec > durationTask){
                             timer.setText("GET SET GO !!");
                         } else{
                             timer.setText("Time : " + timeSec);

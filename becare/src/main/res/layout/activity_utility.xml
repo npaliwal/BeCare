@@ -84,14 +84,16 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:textSize="18sp"
-                    android:text="Accelerometer : "/>
+                    android:text="Accelerometer : "
+                    android:visibility="gone"/>
 
                 <RadioGroup
                     android:id="@+id/radio_grp_accel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
                     <RadioButton
                         android:id="@+id/radio_accel_all"
                         android:layout_width="wrap_content"
@@ -136,14 +138,16 @@
                     android:gravity="right"
                     android:textSize="18sp"
                     android:layout_marginTop="5dp"
-                    android:text="Gyroscope : "/>
+                    android:text="Gyroscope : "
+                    android:visibility="gone"/>
 
                 <RadioGroup
                     android:id="@+id/radio_grp_gyro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:visibility="gone">
                     <RadioButton
                         android:id="@+id/radio_gyro_all"
                         android:layout_width="wrap_content"
@@ -235,17 +239,20 @@
                         />
 
                 <TextView
+                    android:id="@+id/arm_duration_incr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="▼"/>
+                    android:text="▲"/>
                 <TextView
+                    android:id="@+id/arm_duration"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:textSize="18sp"
                     android:text="30"/>
                 <TextView
+                    android:id="@+id/arm_duration_decr"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="10dp"

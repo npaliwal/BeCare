@@ -23,6 +23,7 @@ public class AppConfig {
 
     public static int DEFAULT_NUM_CONTRAST = 3;
     public static int DEFAULT_NUM_TRANSCRIPT = 3;
+    public static int DEFAULT_ARM_TASK_DURATION = 30;
 
 
     public static Map<Integer, String>    MANDATORY_SENSORS  = new HashMap<>();

@@ -16,6 +16,7 @@ public class PreferenceStorage {
     private static final String SKIP_REG = "becare_skip_registration";
     private static final String NUM_CONTRAST_EXERCISE = "num_contrast_exercise";
     private static final String NUM_TRASNCRIPT_EXERCISE = "num_transcript_exercise";
+    private static final String ARM_TASK_DURATION = "arm_task_duration";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -76,5 +77,13 @@ public class PreferenceStorage {
 
     public void setNumTranscriptExercise(int numExercise) {
         editor.putInt(PreferenceStorage.NUM_TRASNCRIPT_EXERCISE, numExercise).commit();
+    }
+
+    public int getArmElevationTaskDuration() {
+        return sharedPreferences.getInt(PreferenceStorage.ARM_TASK_DURATION, -1);
+    }
+
+    public void setArmElevationTaskDuration(int duration) {
+        editor.putInt(PreferenceStorage.ARM_TASK_DURATION, duration).commit();
     }
 }

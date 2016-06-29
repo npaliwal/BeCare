@@ -21,11 +21,15 @@ public class ActivityUploadData {
     @SerializedName("value")
     String activityValue;
 
-    public ActivityUploadData(String activity, String deviceId, String time, String value){
+    @SerializedName("seq")
+    Integer sequenceNumber;
+
+    public ActivityUploadData(String activity, String deviceId, String time, String value, Integer seq){
         this.time = time;
         this.deviceId = deviceId;
         this.activityValue = value;
         this.activityName = activity;
         this.activityMsg = activity + "." + time;
+        this.sequenceNumber = seq;
     }
 }

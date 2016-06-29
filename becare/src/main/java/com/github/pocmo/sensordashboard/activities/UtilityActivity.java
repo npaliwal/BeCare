@@ -13,8 +13,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
@@ -27,21 +29,52 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
+
 
 /**
  * Created by neerajpaliwal on 04/05/16.
  */
-public class UtilityActivity extends AppCompatActivity {
+@ContentView(R.layout.activity_utility)
+public class UtilityActivity extends RoboActivity {
     private SensorManager mSensorManager;
     private SensorAdapter adapter;
     private PreferenceStorage preferenceStorage;
 
+    @InjectView(R.id.connection_header)
+    TextView uploadSettingsHeader;
+    @InjectView(R.id.connection_container)
+    View uploadSettingContainer;
+    @InjectView(R.id.ev_public_ip)
     private EditText socketIp;
+    @InjectView(R.id.ev_public_port)
     private EditText socketPort;
+    @InjectView(R.id.update_button)
     private Button   updateSocket;
+    @InjectView(R.id.test_button)
     private Button   testSocket;
+    boolean uploadSettingsExpand = false;
 
+
+    @InjectView(R.id.arm_header)
+    TextView armSettingsHeader;
+    @InjectView(R.id.arm_container)
+    View armSettingContainer;
+    @InjectView(R.id.arm_duration_incr)
+    TextView armDurationIncr;
+    @InjectView(R.id.arm_duration)
+    TextView armDuration;
+    @InjectView(R.id.arm_duration_decr)
+    TextView armDurationDecr;
+    boolean armSettingsExpand = false;
+    int armDurationVal = -1;
+
+
+    @InjectView(R.id.lv_sensors)
     private ListView sensorsList;
+
     private CheckBox radioAccel;
     private RadioGroup radioGyro;
 
@@ -50,7 +83,6 @@ public class UtilityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_utility);
 
         preferenceStorage = new PreferenceStorage(getApplicationContext());
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -58,23 +90,20 @@ public class UtilityActivity extends AppCompatActivity {
         ArrayList<Sensor> deviceSensorsArr = new ArrayList<>(deviceSensors);
 
         adapter = new SensorAdapter(getApplicationContext(), deviceSensorsArr);
-        sensorsList = (ListView)findViewById(R.id.lv_sensors);
         sensorsList.setAdapter(adapter);
 
-        socketIp = (EditText)findViewById(R.id.ev_public_ip);
+        initClickListeners();
+
+        //Upload Settings
         socketIp.setText(preferenceStorage.getSocketIp());
-
-        socketPort = (EditText)findViewById(R.id.ev_public_port);
-        socketPort.setText(""+preferenceStorage.getSocketPort());
-
-        updateSocket = (Button)findViewById(R.id.update_button);
+        socketPort.setText("" + preferenceStorage.getSocketPort());
         updateSocket.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int port = -1;
-                try{
+                try {
                     port = Integer.valueOf(socketPort.getText().toString());
-                }catch (Exception e){
+                } catch (Exception e) {
                 }
                 preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
                 Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
@@ -82,10 +111,64 @@ public class UtilityActivity extends AppCompatActivity {
 
             }
         });
-        testSocket = (Button)findViewById(R.id.test_button);
         testSocket.setOnClickListener(testSocketCilck);
 
+        armDurationVal = preferenceStorage.getArmElevationTaskDuration();
+        armDuration.setText("" + armDurationVal);
+
         remoteSensorManager = BecareRemoteSensorManager.getInstance(UtilityActivity.this);
+    }
+
+    private void initClickListeners(){
+        uploadSettingsHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                uploadSettingsExpand = !uploadSettingsExpand;
+                adjustContainers();
+            }
+        });
+
+        armSettingsHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                armSettingsExpand = !armSettingsExpand;
+                adjustContainers();
+            }
+        });
+        armDurationIncr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                armDurationVal++;
+                armDuration.setText(""+armDurationVal);
+                preferenceStorage.setArmElevationTaskDuration(armDurationVal);
+            }
+        });
+
+        armDurationDecr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(armDurationVal <= 10)
+                    return;
+                armDurationVal--;
+                armDuration.setText(""+armDurationVal);
+                preferenceStorage.setArmElevationTaskDuration(armDurationVal);
+            }
+        });
+    }
+
+    private void adjustContainers(){
+        if(uploadSettingsExpand){
+            uploadSettingContainer.setVisibility(View.VISIBLE);
+        }else{
+            uploadSettingContainer.setVisibility(View.GONE);
+        }
+
+        if(armSettingsExpand){
+            armSettingContainer.setVisibility(View.VISIBLE);
+        }else{
+            armSettingContainer.setVisibility(View.GONE);
+        }
+
     }
 
     private View.OnClickListener testSocketCilck = new View.OnClickListener() {

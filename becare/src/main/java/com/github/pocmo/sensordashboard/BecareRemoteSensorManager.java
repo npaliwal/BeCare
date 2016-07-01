@@ -89,6 +89,10 @@ public class BecareRemoteSensorManager {
         return uploadDataHelper;
     }
 
+    public UploadDataHelper getUploadMobileDataHelper(){
+        return uploadMobileDataHelper;
+    }
+
     public List<Sensor> getSensors() {
         return (List<Sensor>) sensors.clone();
     }
@@ -194,7 +198,6 @@ public class BecareRemoteSensorManager {
     }
 
     public void stopMeasurement() {
-        uploadDataHelper.resetSeuenceCounter();
         executorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -258,10 +261,11 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void uploadAllMobileSensorData() {
+    public void uploadAllMobileSensorData(int seq) {
         try {
             Log.d(TAG, "upload data tring upload");
             if(uploadMobileDataHelper.getUserActivityName() != null) {
+                uploadMobileDataHelper.setSeqNumber(seq);
                 Log.d(TAG, "upload data tring activity data not null");
                 String dataX = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.X_CORD);
                 String dataY = uploadMobileDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Y_CORD);
@@ -285,11 +289,12 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void uploadActivityData() {
+    public void uploadActivityData(int seq) {
         try {
             Log.d(TAG, "upload data string upload");
             if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getUserActivityData() != null) {
                 Log.d(TAG, "upload data string activity data not null");
+                uploadDataHelper.setSeqNumber(seq);
                 socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData());
             }
         }catch (Exception e){

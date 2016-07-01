@@ -293,7 +293,7 @@ public class UploadDataHelper {
                     vector = gZ;
             }
         }
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector);
+        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector, seq);
 
         return gson.toJson(data, SensorUploadData.class);
     }
@@ -312,7 +312,6 @@ public class UploadDataHelper {
         allGyroData.clear();
         gyroMeter.reset();
         accelMeter.reset();
-        seq = -1;
     }
 
     @Deprecated
@@ -345,5 +344,9 @@ public class UploadDataHelper {
         ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityVal, seq);
 
         return gson.toJson(data, ActivityUploadData.class);
+    }
+
+    public void resetSeuenceCounter(){
+        seq = -1;
     }
 }

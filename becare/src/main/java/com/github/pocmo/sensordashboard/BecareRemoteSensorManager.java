@@ -194,6 +194,7 @@ public class BecareRemoteSensorManager {
     }
 
     public void stopMeasurement() {
+        uploadDataHelper.resetSeuenceCounter();
         executorService.submit(new Runnable() {
             @Override
             public void run() {

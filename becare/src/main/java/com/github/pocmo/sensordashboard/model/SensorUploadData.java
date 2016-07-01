@@ -44,8 +44,11 @@ public class SensorUploadData {
     @SerializedName("vector")
     float[] vector;
 
+    @SerializedName("seq")
+    int sequenceNumber;
 
-    public SensorUploadData(String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device, float[] all) {
+
+    public SensorUploadData(String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device, float[] all, int seq) {
 
         switch (cord){
             case AppConfig.X_CORD:{
@@ -95,6 +98,6 @@ public class SensorUploadData {
         this.deviceId = device;
         this.numSample = numSample;
         this.vector = all;
-
+        this.sequenceNumber = seq;
     }
 }

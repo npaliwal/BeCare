@@ -276,7 +276,8 @@ public class StartingActivity extends AppCompatActivity
             startActivity(new Intent(this, ArmElevationActivity.class));
 
         } else if (id == R.id.nav_snooker) {
-            startActivity(new Intent(this, BallRectangleActivity.class));
+            //startActivity(new Intent(this, BallRectangleActivity.class));
+            startActivity(new Intent(this, SnookerActivity.class));
         } else if (id == R.id.nav_transcription) {
             startActivity(new Intent(this, TranscriptionTestActivity.class));
         } else if (id == R.id.nav_contranst) {

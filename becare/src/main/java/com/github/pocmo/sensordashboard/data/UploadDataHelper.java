@@ -39,15 +39,20 @@ public class UploadDataHelper {
     SensorDataWrapper gyroMeter;
     SensorDataWrapper accelMeter;
 
-    int seq = -1;
+    int seq = 0;
 
     //Helper data
     private List<SensorDataValue> allGyroData = new ArrayList<>();
     private List<SensorDataValue> allAcceleroData = new ArrayList<>();
 
+
     public UploadDataHelper(){
         gyroMeter = new SensorDataWrapper();
         accelMeter = new SensorDataWrapper();
+    }
+
+    public void setSeqNumber(int num) {
+        seq = num;
     }
 
     public void setDeviceId(String deviceId){
@@ -304,7 +309,7 @@ public class UploadDataHelper {
         calculateMeanHighLow();
         calculateStd();
         calculateNumZeroCrossing();
-        seq++;
+
     }
 
     public void resetStats(){
@@ -346,7 +351,5 @@ public class UploadDataHelper {
         return gson.toJson(data, ActivityUploadData.class);
     }
 
-    public void resetSeuenceCounter(){
-        seq = -1;
-    }
+
 }

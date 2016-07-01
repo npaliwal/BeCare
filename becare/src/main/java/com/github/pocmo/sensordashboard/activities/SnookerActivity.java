@@ -224,7 +224,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         //Measure frame rate (unit: frames per second).
         now=System.currentTimeMillis();
 
-        canvas.drawText("Move the ball", 30, 30, fpsPaint);
+      //  canvas.drawText("Move the ball", 30, 30, fpsPaint);
 
         framesCount++;
         if(now-framesTimer>1000) {

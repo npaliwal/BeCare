@@ -42,6 +42,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
 
     private long lastUpdateTime = 0;
     private int durationTask = AppConfig.DEFAULT_ARM_TASK_DURATION;
+    private int seq = 0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,9 +85,11 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 phoneArm.clearAnimation();
                 watchArm.clearAnimation();
                 lastUpdateTime = System.currentTimeMillis();
+                mRemoteSensorManager.getUploadMobileDataHelper().setUserActivity(getString(R.string.exercise_arm_elevation), null);
                 mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_arm_elevation), null);
                 startButton.setClickable(false);
                 startButton.setText("Reading Sensors ...");
+                seq = 0;
                 new CountDownTimer(durationTask*1000 + 4000, 1000) {
                     int timeSec  = 0;
                     public void onTick(long millisUntilFinished) {
@@ -145,13 +148,14 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
         }
         mRemoteSensorManager.addMobileSensorData(event.sensor.getType(), event.accuracy, event.timestamp, event.values);
         long currTime = System.currentTimeMillis();
-        if((currTime - lastUpdateTime) >= 3000) {
+        if((currTime - lastUpdateTime) >= 1000) {
             lastUpdateTime = currTime;
 
             mRemoteSensorManager.calculateMobileStats(currTime);
-            mRemoteSensorManager.uploadAllMobileSensorData();
-//            mRemoteSensorManager.uploadActivityData();//Already uploaded from wear
+            mRemoteSensorManager.uploadAllMobileSensorData(seq);
+            mRemoteSensorManager.uploadActivityData(seq);//Already uploaded from wear
             mRemoteSensorManager.resetMobileStats();
+            seq++;
         }
     }
 

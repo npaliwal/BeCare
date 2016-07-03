@@ -218,7 +218,7 @@ public class BecareRemoteSensorManager {
 
             for (Node node : nodes) {
                 Log.i(TAG, "add node " + node.getDisplayName());
-                uploadDataHelper.setDeviceId(node.getDisplayName());
+           //     uploadDataHelper.setDeviceId(node.getDisplayName());
                 Wearable.MessageApi.sendMessage(
                         googleApiClient, node.getId(), path, null
                 ).setResultCallback(new ResultCallback<MessageApi.SendMessageResult>() {
@@ -292,10 +292,23 @@ public class BecareRemoteSensorManager {
     public void uploadActivityData(int seq) {
         try {
             Log.d(TAG, "upload data string upload");
-            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getUserActivityData() != null) {
+            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getUserActivityData(seq) != null) {
                 Log.d(TAG, "upload data string activity data not null");
                 uploadDataHelper.setSeqNumber(seq);
-                socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData());
+                socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData(seq));
+            }
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
+    public void uploadArmActivityData(int seq, long dur) {
+        try {
+            Log.d(TAG, "upload data string upload");
+            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getArmActivityData(seq, dur) != null) {
+                Log.d(TAG, "upload data string activity data not null");
+                uploadDataHelper.setSeqNumber(seq);
+                socketManager.pushDataAsyncronously(uploadDataHelper.getArmActivityData(seq, dur));
             }
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());
@@ -314,6 +327,7 @@ public class BecareRemoteSensorManager {
 
     public void calculateMobileStats(long currTime){
         uploadMobileDataHelper.calculateStats(currTime);
+        uploadDataHelper.calculateStats(currTime);
     }
 
     public void resetMobileStats(){

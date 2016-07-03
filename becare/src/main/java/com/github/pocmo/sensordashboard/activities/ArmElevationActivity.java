@@ -87,10 +87,12 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 lastUpdateTime = System.currentTimeMillis();
                 mRemoteSensorManager.getUploadMobileDataHelper().setUserActivity(getString(R.string.exercise_arm_elevation), null);
                 mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_arm_elevation), null);
+                mRemoteSensorManager.getUploadDataHelper().setDeviceId("Phone");
+                mRemoteSensorManager.getUploadMobileDataHelper().setDeviceId("Phone");
                 startButton.setClickable(false);
                 startButton.setText("Reading Sensors ...");
                 seq = 0;
-                new CountDownTimer(durationTask*1000 + 4000, 1000) {
+                new CountDownTimer(durationTask*1000 + 3000, 1000) {
                     int timeSec  = 0;
                     public void onTick(long millisUntilFinished) {
                         timeSec = (int) (millisUntilFinished/1000);
@@ -148,12 +150,13 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
         }
         mRemoteSensorManager.addMobileSensorData(event.sensor.getType(), event.accuracy, event.timestamp, event.values);
         long currTime = System.currentTimeMillis();
-        if((currTime - lastUpdateTime) >= 1000) {
+        long dur = currTime - lastUpdateTime;
+        if(dur >= 1000) {
             lastUpdateTime = currTime;
 
             mRemoteSensorManager.calculateMobileStats(currTime);
             mRemoteSensorManager.uploadAllMobileSensorData(seq);
-            mRemoteSensorManager.uploadActivityData(seq);//Already uploaded from wear
+            mRemoteSensorManager.uploadArmActivityData(seq, dur);//Already uploaded from wear
             mRemoteSensorManager.resetMobileStats();
             seq++;
         }

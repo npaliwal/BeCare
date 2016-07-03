@@ -4,8 +4,10 @@ import android.hardware.Sensor;
 import android.util.Log;
 
 import com.github.pocmo.sensordashboard.AppConfig;
+import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.ActivityData;
 import com.github.pocmo.sensordashboard.model.ActivityUploadData;
+import com.github.pocmo.sensordashboard.model.ArmActivityUploadData;
 import com.github.pocmo.sensordashboard.model.SensorDataValue;
 import com.github.pocmo.sensordashboard.model.SensorDataWrapper;
 import com.github.pocmo.sensordashboard.model.SensorUploadData;
@@ -306,9 +308,9 @@ public class UploadDataHelper {
 
     public void calculateStats(long timeStamp){
         readTime = timeFormat.format(timeStamp);
-        calculateMeanHighLow();
-        calculateStd();
-        calculateNumZeroCrossing();
+      //  calculateMeanHighLow();
+      //  calculateStd();
+      //  calculateNumZeroCrossing();
 
     }
 
@@ -337,19 +339,29 @@ public class UploadDataHelper {
         return "this function is deprecated";
     }
 
-    public String getUserActivityData() {
-        ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityValue, seq);
+    public String getUserActivityData(int seq) {
 
-        return gson.toJson(data, ActivityUploadData.class);
+            ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityValue, seq);
+
+            return gson.toJson(data, ActivityUploadData.class);
+
     }
 
+
     public String getUserActivityData(String activityVal) {
-        readTime = timeFormat.format(System.currentTimeMillis());
+       // readTime = timeFormat.format(System.currentTimeMillis());
 
         ActivityUploadData data = new ActivityUploadData(activityName, deviceId, readTime, activityVal, seq);
 
         return gson.toJson(data, ActivityUploadData.class);
     }
 
+    public String getArmActivityData(int seq, long dur) {
+
+            ArmActivityUploadData data = new ArmActivityUploadData(activityName, deviceId, readTime, activityValue, seq, dur);
+
+            return gson.toJson(data, ArmActivityUploadData.class);
+
+    }
 
 }

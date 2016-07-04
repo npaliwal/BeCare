@@ -87,7 +87,7 @@ public class BecareSensorReceiverService extends WearableListenerService {
             String activityName =sensorManager.getUploadDataHelper().getUserActivityName();
             if (activityName == getString(R.string.exercise_ring_rect)) {
                 sensorManager.uploadAllWearSensorData();
-                sensorManager.uploadActivityData(0);
+                sensorManager.uploadActivityData(0, 0);
             }
             sensorManager.resetWearStats();
             //Intent intent = new Intent(this, DataUploadService.class);

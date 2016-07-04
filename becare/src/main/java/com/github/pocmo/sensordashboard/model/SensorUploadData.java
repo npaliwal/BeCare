@@ -17,7 +17,7 @@ public class SensorUploadData {
     @SerializedName("time")
     String time;
 
-    @SerializedName("deviceid")
+    @SerializedName("device")
     String deviceId;
 
     @SerializedName("corrdtype")

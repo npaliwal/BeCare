@@ -289,31 +289,19 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void uploadActivityData(int seq) {
+    public void uploadActivityData(int seq, long dur) {
         try {
             Log.d(TAG, "upload data string upload");
-            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getUserActivityData(seq) != null) {
+            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getUserActivityData(seq, dur) != null) {
                 Log.d(TAG, "upload data string activity data not null");
                 uploadDataHelper.setSeqNumber(seq);
-                socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData(seq));
+                socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData(seq, dur));
             }
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());
         }
     }
 
-    public void uploadArmActivityData(int seq, long dur) {
-        try {
-            Log.d(TAG, "upload data string upload");
-            if(uploadDataHelper.getUserActivityName() != null && uploadDataHelper.getArmActivityData(seq, dur) != null) {
-                Log.d(TAG, "upload data string activity data not null");
-                uploadDataHelper.setSeqNumber(seq);
-                socketManager.pushDataAsyncronously(uploadDataHelper.getArmActivityData(seq, dur));
-            }
-        }catch (Exception e){
-            Log.d(TAG, "upload data failed : " + e.getMessage());
-        }
-    }
 
     public void uploadActivityDataInstantly(String activityValue){
         try {

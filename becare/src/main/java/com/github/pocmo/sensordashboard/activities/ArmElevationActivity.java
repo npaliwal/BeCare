@@ -156,7 +156,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
 
             mRemoteSensorManager.calculateMobileStats(currTime);
             mRemoteSensorManager.uploadAllMobileSensorData(seq);
-            mRemoteSensorManager.uploadArmActivityData(seq, dur);//Already uploaded from wear
+            mRemoteSensorManager.uploadActivityData(seq, dur);//Already uploaded from wear
             mRemoteSensorManager.resetMobileStats();
             seq++;
         }

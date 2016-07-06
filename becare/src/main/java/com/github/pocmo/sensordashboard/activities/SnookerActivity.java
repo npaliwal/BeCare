@@ -8,25 +8,71 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.ViewTreeObserver;
 
+import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
+import com.github.pocmo.sensordashboard.ui.PathSegment;
+import com.github.pocmo.sensordashboard.ui.RingArea;
+import com.github.pocmo.sensordashboard.utils.FileUtils;
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by neerajpaliwal on 01/07/16.
  */
-public class SnookerActivity extends Activity {
+public class SnookerActivity extends AppCompatActivity {
     BallBounces ball;
+    private BecareRemoteSensorManager mRemoteSensorManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ball = new BallBounces(this);
+        mRemoteSensorManager = BecareRemoteSensorManager.getInstance(SnookerActivity.this);
+
+        ball = new BallBounces(this, mRemoteSensorManager);
         setContentView(ball);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mRemoteSensorManager.startMeasurement();
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
+        mRemoteSensorManager.stopMeasurement();
+    }
+
+}
+
+class PathPoint{
+    float x;
+    float y;
+
+    public PathPoint(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
 }
 
@@ -36,6 +82,7 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int screenH; //Devices's screen height.
     int ballX; //Ball x position.
     int ballY; //Ball y position.
+    int pathX, pathY;
     int initialY ;
     float dY; //Ball vertical speed.
     int ballW;
@@ -57,17 +104,15 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     long framesTimer=0;
     Paint fpsPaint=new Paint();
 
-    //Frame speed
-    long timeNow;
-    long timePrev = 0;
-    long timePrevFrame = 0;
-    long timeDelta;
+    private List<PathPoint> pathPoints = new ArrayList<>();
+    private List<PathPoint> pathPointTemps = new ArrayList<>();
+    private boolean BUILD_PATH = false;
+    BecareRemoteSensorManager mRemoteSensorManager = null;
 
-
-    public BallBounces(Context context) {
+    public BallBounces(Context context, BecareRemoteSensorManager sensorMgr) {
         super(context);
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
-        bgr = BitmapFactory.decodeResource(getResources(),R.drawable.road1); //Load a background.
+        bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road1); //Load a background.
         ballW = ball.getWidth();
         ballH = ball.getHeight();
 
@@ -89,7 +134,42 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         setFocusable(true);
         setWillNotDraw(false);
+        buildPathFromFile(context);
+        mRemoteSensorManager = BecareRemoteSensorManager.getInstance(context);
+
     }
+
+    private void buildPathFromFile(Context context) {
+        try {
+            Gson gson = new Gson();
+            String pathData = FileUtils.readResourceToString(context, R.raw.road1_path);
+            JSONArray dataArr = new JSONArray(pathData);
+            for(int i=0 ;i < dataArr.length(); i++){
+                pathPoints.add(i, gson.fromJson(dataArr.getJSONObject(i).toString(), PathPoint.class));
+            }
+            ViewTreeObserver vto = getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    int width = getMeasuredWidth();
+                    int height = getMeasuredHeight();
+
+                    for (int i = 0; i < pathPoints.size(); i++) {
+                        //TODO: For road1, we have captured absolute cordinate, hence divide by screen size
+                        // We will be storing percentage cordinate, so won't be required
+                        pathPointTemps.add(i, new PathPoint(width * (pathPoints.get(i).x / 720f),
+                                height * (pathPoints.get(i).y / 1170f)));
+
+                    }
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
     @Override
     public void onSizeChanged (int w, int h, int oldw, int oldh) {
@@ -107,11 +187,22 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         matrix.setScale(-1, 1); //Horizontal mirror effect.
         bgrReverse = Bitmap.createBitmap(bgr, 0, 0, bgrW, bgrH, matrix, true); //Create a new mirrored bitmap by applying the matrix.
 
-        //  ballX = (int) (screenW /2) - (ballW / 2) ; //Centre ball X into the centre of the screen.
-        // ballX = (int)  (ballW *3) ; //on the right
-        //  ballY = -40; //Centre ball height above the screen.
         ballX = 0;
         ballY = screenH -60;
+    }
+
+
+    private int getPathXforTouchY(int touchY){
+        int pathX = -1, i=0;
+        for(PathPoint curr : pathPointTemps){
+            if(touchY >= curr.y){
+                PathPoint prev = pathPointTemps.get(i);
+                return (int) (curr.x + (prev.x - curr.x)* (curr.y - touchY) / (touchY - prev.y));
+            }
+            i++;
+        }
+
+        return pathX;
     }
 
     //***************************************
@@ -122,10 +213,14 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {
-                ballX = (int) ev.getX() - ballW/2;
-                ballY = (int) ev.getY() - ballH/2;
+                if(BUILD_PATH){
+                    //pathPoints.add(new PathPoint((int)ev.getX(), (int)ev.getY()));
+                }else {
+                    ballX = (int) ev.getX() - ballW / 2;
+                    ballY = (int) ev.getY() - ballH / 2;
 
-                ballFingerMove = true;
+                    ballFingerMove = true;
+                }
                 invalidate();
                 break;
             }
@@ -133,6 +228,13 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_MOVE: {
                 ballX = (int) ev.getX() - ballW/2;
                 ballY = (int) ev.getY() - ballH/2;
+                pathY = (int) ev.getY();
+                pathX = getPathXforTouchY(pathY);
+                //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
+                if(mRemoteSensorManager == null) {
+                    String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
+                    mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+                }
                 invalidate();
                 break;
             }
@@ -150,81 +252,71 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        //Draw scrolling background.
-        Rect fromRect1 = new Rect(0, 0, bgrW - bgrScroll, bgrH);
-        Rect toRect1 = new Rect(bgrScroll, 0, bgrW, bgrH);
-
-        Rect fromRect2 = new Rect(bgrW - bgrScroll, 0, bgrW, bgrH);
-        Rect toRect2 = new Rect(0, 0, bgrScroll, bgrH);
-/*
-        if (!reverseBackroundFirst) {
-            canvas.drawBitmap(bgr, fromRect1, toRect1, null);
-            canvas.drawBitmap(bgrReverse, fromRect2, toRect2, null);
-        }
-        else{
-             canvas.drawBitmap(bgr, fromRect2, toRect2, null);
-            canvas.drawBitmap(bgrReverse, fromRect1, toRect1, null);
-        }
-*/
         Rect fromRect = new Rect(0, 0, bgrW, bgrH);
         Rect toRect = new Rect(0, 0, bgrW, bgrH);
 
 
         canvas.drawBitmap(bgr,fromRect, toRect, null);
 
-        //Next value for the background's position.
-        if ( (bgrScroll += dBgrY) >= bgrW) {
-            bgrScroll = 0;
-            reverseBackroundFirst = !reverseBackroundFirst;
-        }
+        if(BUILD_PATH){
+            Path path = new Path();
+            boolean first = true;
+            for(int i = 0; i < pathPointTemps.size(); i += 2){
+                PathPoint point = pathPointTemps.get(i);
+                if(first){
+                    first = false;
+                    path.moveTo(point.x, point.y);
+                }
 
-        //Compute roughly the ball's speed and location.
-        if (!ballFingerMove) {
-            ballY += (int) dY; //Increase or decrease vertical position.
-            if (ballY > (screenH - ballH)) {
-                dY=(-1)*dY; //Reverse speed when bottom hit.
+                else if(i < pathPointTemps.size() - 1){
+                    PathPoint next = pathPointTemps.get(i + 1);
+                    path.quadTo(point.x, point.y, next.x, next.y);
+                }
+                else{
+                    path.lineTo(point.x, point.y);
+                }
             }
-            dY+= acc; //Increase or decrease speed.
+            Paint p = new Paint();
+            // smooths
+            p.setAntiAlias(true);
+            p.setStyle(Paint.Style.STROKE);
+            p.setStrokeWidth(2);
+            p.setColor(Color.RED);
+            canvas.drawPath(path, p);
+            canvas.drawCircle(pathX, pathY, 50, p);
+
+        }else {
+            //Next value for the background's position.
+            if ((bgrScroll += dBgrY) >= bgrW) {
+                bgrScroll = 0;
+                reverseBackroundFirst = !reverseBackroundFirst;
+            }
+
+            if (!ballFingerMove) {
+                ballY += (int) dY; //Increase or decrease vertical position.
+                if (ballY > (screenH - ballH)) {
+                    dY = (-1) * dY; //Reverse speed when bottom hit.
+                }
+                dY += acc; //Increase or decrease speed.
+            }
+
+            angle += 5;
+            if (angle > 360)
+                angle = 0;
+
+
+
+            canvas.save(); //Save the position of the canvas matrix.
+            canvas.rotate(angle, ballX + (ballW / 2), ballY + (ballH / 2)); //Rotate the canvas matrix.
+            canvas.drawBitmap(ball, ballX, ballY, null); //Draw the ball by applying the canvas rotated matrix.
         }
-
-        //Increase rotating angle
-      /*  if (angle++ >360)
-            angle =0;*/
-        angle += 5;
-        if (angle > 360)
-            angle = 0;
-
-        //DRAW BALL
-        //Rotate method one
-        /*
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle, (ballW / 2), (ballH / 2)); //Rotate it.
-        matrix.postTranslate(ballX, ballY); //Move it into x, y position.
-        canvas.drawBitmap(ball, matrix, null); //Draw the ball with applied matrix.
-
-        */// Rotate method two
-    /*    Bitmap fillBMP =  BitmapFactory.decodeResource(getResources(),R.drawable.football_door);
-        BitmapShader fillBMPshader = new BitmapShader(fillBMP, Shader.TileMode.REPEAT, Shader.TileMode.REPEAT);
-        Paint p = new Paint();
-        p.setStyle(Paint.Style.STROKE);
-        p.setShader(fillBMPshader);
-        p.setStrokeWidth(5);
-
-     //   p.setColor(Color.GREEN);
-        canvas.drawArc(182, 0, 600, 600, 120, 90, false, p);
-*/
-
-        canvas.save(); //Save the position of the canvas matrix.
-        canvas.rotate(angle, ballX + (ballW / 2), ballY + (ballH / 2)); //Rotate the canvas matrix.
-        canvas.drawBitmap(ball, ballX, ballY, null); //Draw the ball by applying the canvas rotated matrix.
-
         canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
         //*/
 
         //Measure frame rate (unit: frames per second).
         now=System.currentTimeMillis();
 
-        canvas.drawText("Move the ball", 30, 30, fpsPaint);
+        canvas.drawText("Deviation from path: (" + pathX + ", " + pathY, 30, 30, fpsPaint);
 
         framesCount++;
         if(now-framesTimer>1000) {

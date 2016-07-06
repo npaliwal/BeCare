@@ -106,7 +106,7 @@ public class UtilityActivity extends RoboActivity {
                 } catch (Exception e) {
                 }
                 preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
-                Toast.makeText(UtilityActivity.this, "Socket Info updated", Toast.LENGTH_LONG).show();
+                Toast.makeText(UtilityActivity.this, "IP address has been updated", Toast.LENGTH_LONG).show();
                 remoteSensorManager.getSocketManager().refresh(preferenceStorage);
 
             }

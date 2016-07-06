@@ -77,6 +77,7 @@ class PathPoint{
 }
 
 class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
+    private boolean BUILD_PATH = false;
 
     int screenW; //Device's screen width.
     int screenH; //Devices's screen height.
@@ -106,7 +107,6 @@ class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
     private List<PathPoint> pathPoints = new ArrayList<>();
     private List<PathPoint> pathPointTemps = new ArrayList<>();
-    private boolean BUILD_PATH = false;
     BecareRemoteSensorManager mRemoteSensorManager = null;
 
     public BallBounces(Context context, BecareRemoteSensorManager sensorMgr) {

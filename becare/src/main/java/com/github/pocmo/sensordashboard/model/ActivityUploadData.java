@@ -9,14 +9,14 @@ public class ActivityUploadData {
     @SerializedName("activityname")
     String activityName;
 
-    @SerializedName("activitymsg")
-    String activityMsg;//: activityname.time
+  //  @SerializedName("activitymsg")
+ //   String activityMsg;//: activityname.time
 
     @SerializedName("time")
     String time;
 
-    @SerializedName("deviceid")
-    String deviceId;
+    @SerializedName("device")
+    String device;
 
     @SerializedName("value")
     String activityValue;
@@ -24,12 +24,16 @@ public class ActivityUploadData {
     @SerializedName("seq")
     Integer sequenceNumber;
 
-    public ActivityUploadData(String activity, String deviceId, String time, String value, Integer seq){
+    @SerializedName("duration")
+    long duration;
+
+    public ActivityUploadData(String activity, String deviceId, String time, String value, Integer seq, long dur){
         this.time = time;
-        this.deviceId = deviceId;
+        this.device = deviceId;
         this.activityValue = value;
         this.activityName = activity;
-        this.activityMsg = activity + "." + time;
+     //   this.activityMsg = activity + "." + time;
         this.sequenceNumber = seq;
+        duration = dur;
     }
 }

@@ -50,13 +50,18 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballH;
     int bgrW;
     int bgrH;
+    int treeW;
+    int treeH;
+    float treeXpos = 400;
+    float treeYpos = -20;
     int angle;
     int bgrScroll;
     int dBgrY; //Background scroll speed.
     float acc;
-    Bitmap ball, bgr, bgrReverse;
+    Bitmap ball, bgr, bgrReverse, tree;
     boolean reverseBackroundFirst;
     boolean ballFingerMove;
+    boolean started=false;
 
     //Measure frames per second.
     long now;
@@ -91,8 +96,14 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     public void initView(Context context) {
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
         bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road1); //Load a background.
+        tree = BitmapFactory.decodeResource(getResources(),R.drawable.tree); //Load a background.
+
         ballW = ball.getWidth();
         ballH = ball.getHeight();
+
+        treeW = tree.getWidth();
+        treeH = tree.getHeight();
+        tree = Bitmap.createScaledBitmap(tree, treeW/3, treeH/3, true);
 
         //Create a flag for the onDraw method to alternate background with its mirror image.
         reverseBackroundFirst = false;
@@ -247,11 +258,12 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 pathY = (int) ev.getY();
                 pathX = getPathXforTouchY(pathY);
                 //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
-                if (mRemoteSensorManager == null) {
+                if (mRemoteSensorManager != null) {
                     String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
                     mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
                 }
                 invalidate();
+                started = true;
                 break;
             }
 
@@ -300,6 +312,12 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 canvas.drawCircle(pathX, pathY, 50, p);
             }
         } else {
+            if (started) {
+                canvas.drawBitmap(tree, treeXpos, treeYpos, null);
+                if (treeXpos > 180)
+                   treeXpos -= 0.3;
+            }
+
             //Next value for the background's position.
             if ((bgrScroll += dBgrY) >= bgrW) {
                 bgrScroll = 0;

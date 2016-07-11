@@ -54,6 +54,7 @@ public class SnookerActivity extends Activity {
         setContentView(R.layout.activity_snooker);
         preferenceStorage = new PreferenceStorage(SnookerActivity.this);
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(SnookerActivity.this);
+        mRemoteSensorManager.setSnookerSeq(0);
 
         ball = (BallBounces)findViewById(R.id.arena);
         pathBuilderButton = (TextView)findViewById(R.id.tv_path_build);

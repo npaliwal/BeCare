@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/twentyFiveSteps"
+
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <ImageView
+            android:id="@+id/img_25_steps1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:src="@drawable/feet_walk1" />
+        <ImageView
+            android:id="@+id/img_25_steps2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="-7dp"
+            android:src="@drawable/feet_walk2" />
+
+
+        <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+        android:text="25 Steps Walking" />
+
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:textSize="18sp"
+            android:text="Enter your height : "/>
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="0sp"
+            style="@style/spinnerStyle"
+            android:entries="@array/height_arrays"
+            android:gravity="center" />
+        </LinearLayout>
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:gravity="center"
+           android:layout_marginTop="20dp"
+           android:layout_marginBottom="10dp">
+           <Button
+              android:id="@+id/start_button"
+               android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Start" >
+           </Button>
+           <Button
+            android:id="@+id/stop_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop" >
+           </Button>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_marginTop="50dp"
+
+                android:text="Steps countdown:" />
+
+            <ImageView
+                android:id="@+id/img_circle"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_marginLeft="0dp"
+                android:src="@drawable/circle1" />
+
+            <TextView
+                android:id="@+id/steps_25"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="25sp"
+                android:layout_marginTop="50dp"
+                android:layout_marginLeft="-85dp"
+                android:textStyle="bold"
+                android:lines="2"
+                android:maxLines="2"
+                android:minLines="2"
+                android:singleLine="false"
+                android:ellipsize="end"
+                android:text="25" />
+
+        </LinearLayout>
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="3"
+        android:columnCount="5"
+        android:background="@color/colorSmoke"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+
+        android:layout_gravity="center">
+        <TextView
+
+            android:text="Distance (ft)"
+            android:layout_width="90dp"
+            android:gravity="center"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:background="@color/colorSmoke"
+            android:textSize="14dip" />
+        <TextView
+
+            android:text="Speed (ft/sec)"
+            android:gravity="center"
+            android:layout_width="90dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:background="@color/colorSmoke"
+            android:textSize="14dip" />
+        <TextView
+
+            android:text="Time"
+            android:gravity="center"
+            android:layout_width="90dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+
+        <TextView
+            android:id="@+id/distance_25"
+
+            android:gravity="center"
+            android:layout_width="90dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:background="@color/colorSmoke"
+            android:textSize="14dip" />
+        <TextView
+            android:id="@+id/speed_25"
+
+            android:gravity="center"
+            android:layout_width="90dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:background="@color/colorSmoke"
+            android:textSize="14dip" />
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="90dp"
+            android:gravity="center"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+    </GridLayout>
+</LinearLayout>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/sixMinutesWalking"
+
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3">
+        <ImageView
+            android:id="@+id/img_6mon"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+
+            android:src="@drawable/walking1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:textStyle="bold"
+            android:text="6 Minutes Walking" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        android:weightSum="3">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+
+            android:textSize="18sp"
+            android:text="Enter your height : "/>
+        <Spinner
+            android:id="@+id/spinner_6min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="0sp"
+            style="@style/spinnerStyle"
+            android:entries="@array/height_arrays"
+            android:gravity="center" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="0dp">
+        <Button
+            android:id="@+id/start_button_6min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start" >
+        </Button>
+        <Button
+            android:id="@+id/stop_button_6min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Stop" >
+        </Button>
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="0dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Time:" />
+        <Chronometer
+            android:id="@+id/chronometer_6min"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:background="@color/colorPlaster2"
+            android:textStyle="bold"
+            android:textSize="20dip" />
+    </LinearLayout>
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="2"
+        android:columnCount="3"
+        android:background="@color/colorSmoke"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+
+        android:layout_gravity="center">
+        <TextView
+
+            android:text="Distance (miles)"
+            android:layout_width="150dp"
+            android:gravity="center"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:background="@color/colorSmoke"
+            android:textSize="14dip" />
+        <TextView
+
+            android:text="Speed (miles/sec)"
+            android:gravity="center"
+            android:layout_width="150dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+
+        <TextView
+            android:id="@+id/distance_6min"
+
+            android:gravity="center"
+            android:layout_width="150dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:background="@color/colorSmoke"
+            android:textSize="14dip" />
+        <TextView
+            android:id="@+id/speed_6min"
+
+            android:gravity="center"
+            android:layout_width="150dp"
+            android:background="@color/colorPlaster2"
+            android:textSize="14dip" />
+
+    </GridLayout>
+
+    <TextView
+        android:id="@+id/steps_6min"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="steps "
+        android:textSize="0dip" />
+
+    <RelativeLayout
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="70dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/main_image_dial"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/compass_dial"
+            android:src="@drawable/dial" />
+        <ImageView
+            android:id="@+id/main_image_hands"
+            android:layout_width="20dp"
+            android:layout_height="160dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/compass_hands"
+            android:scaleType="fitXY"
+            android:src="@drawable/hands" />
+
+        <!--
+        <TextView
+            android:id="@+id/txtDegrees"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Compass" />
+
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <qtx.compass.CompassView android:id="@+id/compass"
+                android:layout_centerInParent="true"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
+            </qtx.compass.CompassView>
+-->
+    </RelativeLayout>
+</LinearLayout>

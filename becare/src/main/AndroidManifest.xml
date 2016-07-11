@@ -75,6 +75,36 @@
             android:label="@string/menu_tools">
         </activity>
 
+        <activity android:name=".activities.TimedWalkedActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/exercise_timed_walk">
+
+        </activity>
+        <activity
+            android:name=".activities.TwentyFiveStepsActivity"
+            android:label="25 Steps Walking"
+            android:parentActivityName=".activities.TimedWalkedActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.TimedWalkedActivity" />
+        </activity>
+        <activity
+            android:name=".activities.SixMinutesActivity"
+            android:label="Six Minutes Walking"
+            android:parentActivityName=".activities.TimedWalkedActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.TimedWalkedActivity" />
+        </activity>
+
+        <activity
+            android:name=".activities.UpAndGoActivity"
+            android:label="Six Minutes Walking"
+            android:parentActivityName=".activities.TimedWalkedActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.TimedWalkedActivity" />
+        </activity>
         <service android:name=".network.DataUploadService" />
 
         <service android:name=".BecareSensorReceiverService">

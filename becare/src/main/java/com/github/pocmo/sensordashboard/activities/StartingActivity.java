@@ -282,10 +282,8 @@ public class StartingActivity extends AppCompatActivity
             startActivity(new Intent(this, TranscriptionTestActivity.class));
         } else if (id == R.id.nav_contranst) {
             startActivity(new Intent(this, ContrastSensitivityActivity.class));
-
         } else if (id == R.id.nav_timed_walk) {
-            // Handle the transription test
-
+            startActivity(new Intent(this, TimedWalkedActivity.class));
         } else if (id == R.id.nav_share) {
             // Handle the transription test
 

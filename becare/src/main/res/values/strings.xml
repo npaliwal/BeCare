@@ -11,6 +11,7 @@
     <string name="exercise_transcription">Transcription Test</string>
     <string name="exercise_contrast">Contrast Sensitivity</string>
     <string name="exercise_arm_elevation">Arm Elevation</string>
+    <string name="exercise_timed_walk">Timed Walk</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
 
@@ -38,4 +39,25 @@
 
 
 
+    <string-array name="height_arrays" style="@style/spinnerStyle">
+        <item style="@style/spinnerStyle">5.0</item>
+        <item style="@style/spinnerStyle">5.1</item>
+        <item>5.2</item>
+        <item>5.3</item>
+        <item>5.4</item>
+        <item>5.5</item>
+        <item>5.6</item>
+        <item>5.7</item>
+        <item>5.8</item>
+        <item>5.9</item>
+        <item>5.10</item>
+        <item>5.11</item>
+        <item>6.0</item>
+        <item>6.1</item>
+        <item>6.2</item>
+        <item>6.3</item>
+        <item>6.4</item>
+    </string-array>
+    <string name="compass_dial">Compass Dial</string>
+    <string name="compass_hands">Compass Hands</string>
 </resources>

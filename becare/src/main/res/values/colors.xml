@@ -59,4 +59,19 @@
     <color name="gray_96">#f4f4f4</color>
     <color name="gray_97">#E3E7EC</color>
     <color name="white">#ffffff</color>
+
+    <color name="colorGree0">#4EC5C1</color>
+    <color name="colorGree1">#01ABAA</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorScreen">#C5C1C0</color>
+    <color name="colorSteel">#0A1012</color>
+    <color name="colorPlaster">#CDCDCD</color>
+    <color name="colorPlaster2">#D5D5D5</color>
+    <color name="colorBeige">#F2EEE2</color>
+    <color name="colorSmoke">#6E7376</color>
+    <color name="colorRain">#6EC4D8</color>
+    <color name="colorCotton">#99CED4</color>
+    <color name="colorBlush">#EEB6B7</color>
+    <color name="colorClean">#A7D2CB</color>
+    <color name="colorMorning">#CAE4DB</color>
 </resources>

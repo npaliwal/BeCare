@@ -17,6 +17,7 @@ public class PreferenceStorage {
     private static final String NUM_CONTRAST_EXERCISE = "num_contrast_exercise";
     private static final String NUM_TRASNCRIPT_EXERCISE = "num_transcript_exercise";
     private static final String ARM_TASK_DURATION = "arm_task_duration";
+    private static final String SNOOKER_PATH_BUILD = "snooker_path_build";
 
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
@@ -85,5 +86,12 @@ public class PreferenceStorage {
 
     public void setArmElevationTaskDuration(int duration) {
         editor.putInt(PreferenceStorage.ARM_TASK_DURATION, duration).commit();
+    }
+
+    public boolean isSnookerPathBuildMode() {
+        return sharedPreferences.getBoolean(PreferenceStorage.SNOOKER_PATH_BUILD, false);
+    }
+    public boolean setSnookerPathBuildMode(boolean mode) {
+        return editor.putBoolean(PreferenceStorage.SNOOKER_PATH_BUILD, mode).commit();
     }
 }

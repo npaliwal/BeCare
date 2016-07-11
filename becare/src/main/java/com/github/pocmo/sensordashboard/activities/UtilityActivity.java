@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -71,6 +72,14 @@ public class UtilityActivity extends RoboActivity {
     boolean armSettingsExpand = false;
     int armDurationVal = -1;
 
+    @InjectView(R.id.snooker_header)
+    TextView snookerHeader;
+    @InjectView(R.id.snooker_container)
+    View snookerContainer;
+    @InjectView(R.id.ck_build_path)
+    CheckBox snookerBuildPath;
+    boolean snookerExpand = false;
+
 
     @InjectView(R.id.lv_sensors)
     private ListView sensorsList;
@@ -116,6 +125,7 @@ public class UtilityActivity extends RoboActivity {
         armDurationVal = preferenceStorage.getArmElevationTaskDuration();
         armDuration.setText("" + armDurationVal);
 
+        snookerBuildPath.setChecked(preferenceStorage.isSnookerPathBuildMode());
         remoteSensorManager = BecareRemoteSensorManager.getInstance(UtilityActivity.this);
     }
 
@@ -135,6 +145,14 @@ public class UtilityActivity extends RoboActivity {
                 adjustContainers();
             }
         });
+        snookerHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                snookerExpand = !snookerExpand;
+                adjustContainers();
+            }
+        });
+
         armDurationIncr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -147,11 +165,18 @@ public class UtilityActivity extends RoboActivity {
         armDurationDecr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(armDurationVal <= 10)
+                if (armDurationVal <= 10)
                     return;
                 armDurationVal--;
-                armDuration.setText(""+armDurationVal);
+                armDuration.setText("" + armDurationVal);
                 preferenceStorage.setArmElevationTaskDuration(armDurationVal);
+            }
+        });
+
+        snookerBuildPath.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                preferenceStorage.setSnookerPathBuildMode(isChecked);
             }
         });
     }
@@ -167,6 +192,12 @@ public class UtilityActivity extends RoboActivity {
             armSettingContainer.setVisibility(View.VISIBLE);
         }else{
             armSettingContainer.setVisibility(View.GONE);
+        }
+
+        if(snookerExpand){
+            snookerContainer.setVisibility(View.VISIBLE);
+        }else{
+            snookerContainer.setVisibility(View.GONE);
         }
 
     }

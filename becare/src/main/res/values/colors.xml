@@ -5,8 +5,6 @@
     <color name="colorAccent">#FF4081</color>
     <color name="gray_light">#D3D3D3</color>
     <color name="gray">#808080</color>
-    <color name="black">#000000</color>
-    <color name="white">#FFFFFF</color>
     <color name="green">#0AA05C</color>
     <color name="red">#D73A31</color>
 
@@ -22,4 +20,43 @@
     <color name="graph_color_9">#FFff9800</color>
     <color name="graph_color_info">#FF9e9e9e</color>
     <color name="graph_color_tag">#AA000000</color>
+
+    <color name="black">#000000</color>
+    <color name="gray_14">#242424</color>
+    <color name="gray_16">#292929</color> <!-- Dark Gray -->
+    <color name="gray_17">#2b2b2b</color>
+    <color name="gray_20">#333333</color>
+    <color name="gray_25">#404040</color>
+    <color name="gray_33">#545454</color>
+    <color name="gray_36">#5c5c5c</color>
+    <color name="gray_37">#5e5e5e</color>
+    <color name="gray_38">#616161</color>
+    <color name="gray_42">#6b6b6b</color>
+    <color name="gray_44">#707070</color>
+    <color name="gray_46">#757575</color> <!-- Gray -->
+    <color name="gray_48">#777777</color>
+    <color name="gray_47">#787878</color>
+    <color name="gray_51">#828282</color>
+    <color name="gray_55">#8c8c8c</color>
+    <color name="gray_57">#919191</color>
+    <color name="gray_58">#949494</color>
+    <color name="gray_60">#999999</color>
+    <color name="gray_61">#9c9c9c</color>
+    <color name="gray_63">#a1a1a1</color>
+    <color name="gray_64">#a4a4a4</color>
+    <color name="gray_66">#a8a8a8</color>
+    <color name="gray_68">#adadad</color>
+    <color name="gray_69">#b0b0b0</color>
+    <color name="gray_74">#bdbdbd</color>
+    <color name="gray_77">#c4c4c4</color> <!-- Light Gray -->
+    <color name="gray_80">#cccccc</color>
+    <color name="gray_84">#d6d6d6</color>
+    <color name="gray_88">#e0e0e0</color>
+    <color name="gray_91">#e8e8e8</color>
+    <color name="gray_92">#ebebeb</color>
+    <color name="gray_93">#ededed</color>
+    <color name="gray_95">#f2f2f2</color>
+    <color name="gray_96">#f4f4f4</color>
+    <color name="gray_97">#E3E7EC</color>
+    <color name="white">#ffffff</color>
 </resources>

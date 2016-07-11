@@ -33,6 +33,9 @@ public class ClientSocketManager {
     }
 
     public void pushData(String data) throws Exception{
+        if(socket == null)
+            return;
+
         String str = data;
         PrintWriter out = new PrintWriter(new BufferedWriter(
                 new OutputStreamWriter(socket.getOutputStream())),
@@ -42,6 +45,9 @@ public class ClientSocketManager {
     }
 
     public void pushDataAsyncronously(final String data) throws Exception{
+        if(socket == null)
+            return;
+
         new Thread(new Runnable() {
             @Override
             public void run() {

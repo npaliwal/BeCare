@@ -11,10 +11,24 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:contentDescription=".activities.UtilityActivity"
     >
+    <TextView
+        android:id="@+id/update_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="18sp"
+        android:padding="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="Update"
+        android:background="@color/gray_light">
+    </TextView>
+
     <ScrollView
         android:id="@+id/debug_panel"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/update_button">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -192,12 +206,7 @@
                     android:gravity="center"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp">
-                    <Button
-                        android:id="@+id/update_button"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Update" >
-                    </Button>
+
 
                     <Button
                         android:id="@+id/test_button"
@@ -286,6 +295,74 @@
                 />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/contrast_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/exercise_contrast"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:padding="5dp"
+                android:layout_marginTop="20dp"
+                android:background="@color/graph_color_1"/>
+            <LinearLayout
+                android:id="@+id/contrast_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:background="@color/gray"
+                android:weightSum="3"
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/tv_shades"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:background="@color/gray"
+                    />
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=": Shades"
+                    android:textSize="18sp"/>
+
+
+                <EditText
+                    android:id="@+id/tv_itchi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:background="@color/gray"
+                    />
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=": Itchi"
+                    android:textSize="18sp"/>
+                <EditText
+                    android:id="@+id/tv_pattern"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="0"
+                    android:textSize="18sp"
+                    android:padding="10dp"
+                    android:background="@color/gray"
+                    />
+
+                <TextView
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text=": Pattern"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

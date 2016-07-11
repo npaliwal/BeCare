@@ -64,12 +64,22 @@ public class PreferenceStorage {
         return getSkipReg();
     }
 
-    public int getNumContrastExercise() {
-        return sharedPreferences.getInt(PreferenceStorage.NUM_CONTRAST_EXERCISE, AppConfig.DEFAULT_NUM_CONTRAST);
+    public int getNumContrastExercise(AppConfig.ContrastTestType type) {
+        if(type == AppConfig.ContrastTestType.SHADES)
+            return sharedPreferences.getInt(PreferenceStorage.NUM_CONTRAST_EXERCISE+"_1", AppConfig.DEFAULT_NUM_CONTRAST);
+        else if(type == AppConfig.ContrastTestType.ITCHI_PLATE)
+            return sharedPreferences.getInt(PreferenceStorage.NUM_CONTRAST_EXERCISE+"_2", AppConfig.DEFAULT_NUM_CONTRAST);
+        else
+            return sharedPreferences.getInt(PreferenceStorage.NUM_CONTRAST_EXERCISE+"_3", AppConfig.DEFAULT_NUM_CONTRAST);
     }
 
-    public void setNumContrastExercise(int numExercise) {
-        editor.putInt(PreferenceStorage.NUM_CONTRAST_EXERCISE, numExercise).commit();
+    public void setNumContrastExercise(int numExercise, AppConfig.ContrastTestType type) {
+        if(type == AppConfig.ContrastTestType.SHADES)
+            editor.putInt(PreferenceStorage.NUM_CONTRAST_EXERCISE + "_1", numExercise).commit();
+        else if(type == AppConfig.ContrastTestType.ITCHI_PLATE)
+            editor.putInt(PreferenceStorage.NUM_CONTRAST_EXERCISE+"_2", numExercise).commit();
+        else
+            editor.putInt(PreferenceStorage.NUM_CONTRAST_EXERCISE+"_3", numExercise).commit();
     }
 
     public int getNumTranscriptExercise() {

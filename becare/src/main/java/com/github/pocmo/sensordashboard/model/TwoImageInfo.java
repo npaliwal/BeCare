@@ -6,68 +6,31 @@ import android.os.Parcelable;
 /**
  * Created by neerajpaliwal on 19/06/16.
  */
-public class TwoImageInfo implements Parcelable {
-    int contrast         = 1;
-    int imageResId       = -1;
-    String lefColor      = null;
-    String rightColor    = null;
+public class TwoImageInfo implements  Parcelable{
+    ContrastImageInfo leftImage = null;
+    ContrastImageInfo rightImage = null;
 
-    public TwoImageInfo(String left, String right) {
-        lefColor = left;
-        rightColor = right;
+
+    public TwoImageInfo(){
+        leftImage = rightImage = null;
+    }
+    public ContrastImageInfo getRightImage() {
+        return rightImage;
     }
 
-    public TwoImageInfo(int imageResId, int contrast) {
-        this.contrast = contrast;
-        this.imageResId = imageResId;
+    public void setRightImage(ContrastImageInfo rightImage) {
+        this.rightImage = rightImage;
+    }
+
+    public ContrastImageInfo getLeftImage() {
+        return leftImage;
+    }
+
+    public void setLeftImage(ContrastImageInfo leftImage) {
+        this.leftImage = leftImage;
     }
 
 
-    public float getContrast() {
-        return contrast % 10;
-    }
-
-    public void setContrast(int contrast) {
-        this.contrast = contrast;
-    }
-
-    public int getImageResId() {
-        return imageResId;
-    }
-
-    public void setImageResId(int imageResId) {
-        this.imageResId = imageResId;
-    }
-
-    public String getLefColor() {
-        if(lefColor != null)
-            return lefColor;
-        return "image";
-    }
-
-    public void setLefColor(String lefColor) {
-        this.lefColor = lefColor;
-    }
-
-    public String getRightColor() {
-        if(rightColor != null)
-            return rightColor;
-        return "image";
-    }
-
-    public void setRightColor(String rightColor) {
-        this.rightColor = rightColor;
-    }
-
-    public boolean isSimilar(){
-        if(contrast != 1){
-            return false;
-        }
-        if(lefColor != null && rightColor != null && !lefColor.equals(rightColor)){
-            return false;
-        }
-        return true;
-    }
 
     @Override
     public int describeContents() {
@@ -76,17 +39,15 @@ public class TwoImageInfo implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(contrast);
-        dest.writeInt(imageResId);
-        dest.writeString(lefColor);
-        dest.writeString(rightColor);
+        dest.writeParcelable(leftImage, flags);
+        dest.writeParcelable(rightImage, flags);
+
     }
 
     private TwoImageInfo(Parcel in){
-        this.contrast = in.readInt();
-        this.imageResId = in.readInt();
-        this.lefColor = in.readString();
-        this.rightColor = in.readString();
+        this.leftImage = in.readParcelable(ContrastImageInfo.class.getClassLoader());
+        this.rightImage = in.readParcelable(ContrastImageInfo.class.getClassLoader());
+
     }
     public static final Parcelable.Creator<TwoImageInfo> CREATOR = new Parcelable.Creator<TwoImageInfo>() {
 

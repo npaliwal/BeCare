@@ -1,11 +1,11 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.app.ListActivity;
 import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -53,7 +53,7 @@ public class UtilityActivity extends RoboActivity {
     @InjectView(R.id.ev_public_port)
     private EditText socketPort;
     @InjectView(R.id.update_button)
-    private Button   updateSocket;
+    private TextView updateSettings;
     @InjectView(R.id.test_button)
     private Button   testSocket;
     boolean uploadSettingsExpand = false;
@@ -81,6 +81,18 @@ public class UtilityActivity extends RoboActivity {
     boolean snookerExpand = false;
 
 
+    @InjectView(R.id.contrast_header)
+    TextView contrastHeader;
+    @InjectView(R.id.contrast_container)
+    View contrastContainer;
+    @InjectView(R.id.tv_shades)
+    EditText shadesNumEx;
+    @InjectView(R.id.tv_itchi)
+    EditText itchiNumEx;
+    @InjectView(R.id.tv_pattern)
+    EditText patternNumEx;
+    boolean contrastExpand = false;
+
     @InjectView(R.id.lv_sensors)
     private ListView sensorsList;
 
@@ -106,7 +118,7 @@ public class UtilityActivity extends RoboActivity {
         //Upload Settings
         socketIp.setText(preferenceStorage.getSocketIp());
         socketPort.setText("" + preferenceStorage.getSocketPort());
-        updateSocket.setOnClickListener(new View.OnClickListener() {
+        updateSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int port = -1;
@@ -118,6 +130,10 @@ public class UtilityActivity extends RoboActivity {
                 Toast.makeText(UtilityActivity.this, "IP address has been updated", Toast.LENGTH_LONG).show();
                 remoteSensorManager.getSocketManager().refresh(preferenceStorage);
 
+                preferenceStorage.setNumContrastExercise(Integer.parseInt(shadesNumEx.getText().toString()), AppConfig.ContrastTestType.SHADES);
+                preferenceStorage.setNumContrastExercise(Integer.parseInt(itchiNumEx.getText().toString()), AppConfig.ContrastTestType.ITCHI_PLATE);
+                preferenceStorage.setNumContrastExercise(Integer.parseInt(patternNumEx.getText().toString()), AppConfig.ContrastTestType.PATTERN);
+
             }
         });
         testSocket.setOnClickListener(testSocketCilck);
@@ -126,6 +142,11 @@ public class UtilityActivity extends RoboActivity {
         armDuration.setText("" + armDurationVal);
 
         snookerBuildPath.setChecked(preferenceStorage.isSnookerPathBuildMode());
+
+        shadesNumEx.setText("" + preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.SHADES));
+        itchiNumEx.setText("" + preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.ITCHI_PLATE));
+        patternNumEx.setText("" + preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.PATTERN));
+
         remoteSensorManager = BecareRemoteSensorManager.getInstance(UtilityActivity.this);
     }
 
@@ -152,7 +173,13 @@ public class UtilityActivity extends RoboActivity {
                 adjustContainers();
             }
         });
-
+        contrastHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                contrastExpand = !contrastExpand;
+                adjustContainers();
+            }
+        });
         armDurationIncr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -179,7 +206,9 @@ public class UtilityActivity extends RoboActivity {
                 preferenceStorage.setSnookerPathBuildMode(isChecked);
             }
         });
+
     }
+
 
     private void adjustContainers(){
         if(uploadSettingsExpand){
@@ -198,6 +227,13 @@ public class UtilityActivity extends RoboActivity {
             snookerContainer.setVisibility(View.VISIBLE);
         }else{
             snookerContainer.setVisibility(View.GONE);
+        }
+
+
+        if(contrastExpand){
+            contrastContainer.setVisibility(View.VISIBLE);
+        }else{
+            contrastContainer.setVisibility(View.GONE);
         }
 
     }

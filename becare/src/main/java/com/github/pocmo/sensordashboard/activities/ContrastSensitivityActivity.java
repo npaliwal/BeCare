@@ -14,6 +14,7 @@ import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
+import com.github.pocmo.sensordashboard.model.ContrastImageInfo;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
 
@@ -36,7 +37,6 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     FragmentPagerAdapter adapterViewPager;
     private String value = null;
 
-    private int numExercises = 0;
     private int correctCount = 0;
     public ArrayList<TwoImageInfo> exercises = new ArrayList<>();
     private BecareRemoteSensorManager mRemoteSensorManager;
@@ -63,6 +63,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         }else {
             pager.setCurrentItem(index + 1, true);
         }
+        TwoImageFragment fragment = (TwoImageFragment) adapterViewPager.getItem(index);
+        fragment.disposeBitMaps();
         String dataShow = getString(R.string.contrast_performance, correctCount, index+1);
         performanceText.setText(dataShow);
 
@@ -81,7 +83,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int index = pager.getCurrentItem();
                 TwoImageInfo exercise = exercises.get(index);
-                if(exercise.isSimilar()){
+                if(exercise.getLeftImage() == exercise.getRightImage()){
                     correctCount++;
                 }
                 setupNextPage(true, index);
@@ -92,7 +94,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             public void onClick(View v) {
                 int index = pager.getCurrentItem();
                 TwoImageInfo exercise = exercises.get(index);
-                if(!exercise.isSimilar()){
+                if(exercise.getLeftImage() != exercise.getRightImage()){
                     correctCount++;
                 }
                 setupNextPage(false, index);
@@ -108,16 +110,44 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
 
     private void initExercises(){
         exercises.clear();
-        numExercises = preferenceStorage.getNumContrastExercise();
-
+        int numExercises = preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.SHADES);
         int temp = 0, currId;
-        TwoImageInfo currExercise = null;
+        ContrastImageInfo currExercise = null;
         Random random = new Random();
         while(temp < numExercises){
-            currId = random.nextInt(AppConfig.CONTRAST_EXERCISES.size());
-            currExercise = AppConfig.CONTRAST_EXERCISES.get(currId);
-            if(!exercises.contains(currExercise)){
-                exercises.add(currExercise);
+            currId = random.nextInt(AppConfig.CONTRAST_EXERCISES_SHADES.size());
+            currExercise = AppConfig.CONTRAST_EXERCISES_SHADES.get(currId);
+            if(exercises.size() <= temp){
+                exercises.add(new TwoImageInfo());
+                exercises.get(temp).setLeftImage(currExercise);
+            }else{
+                exercises.get(temp).setRightImage(currExercise);
+                temp++;
+            }
+        }
+
+        numExercises += preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.ITCHI_PLATE);
+        while(temp < numExercises){
+            currId = random.nextInt(AppConfig.CONTRAST_EXERCISES_ITCHI.size());
+            currExercise = AppConfig.CONTRAST_EXERCISES_ITCHI.get(currId);
+            if(exercises.size() <= temp){
+                exercises.add(new TwoImageInfo());
+                exercises.get(temp).setLeftImage(currExercise);
+            }else{
+                exercises.get(temp).setRightImage(currExercise);
+                temp++;
+            }
+        }
+
+        numExercises += preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.PATTERN);
+        while(temp < numExercises){
+            currId = random.nextInt(AppConfig.CONTRAST_EXERCISES_PATTERN.size());
+            currExercise = AppConfig.CONTRAST_EXERCISES_PATTERN.get(currId);
+            if(exercises.size() <= temp){
+                exercises.add(new TwoImageInfo());
+                exercises.get(temp).setLeftImage(currExercise);
+            }else{
+                exercises.get(temp).setRightImage(currExercise);
                 temp++;
             }
         }
@@ -154,9 +184,9 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         JSONObject obj = new JSONObject();
         try {
             obj.put("exercise_id", currExercise);
-            obj.put("left_color", exercises.get(currExercise).getLefColor());
-            obj.put("right_color", exercises.get(currExercise).getRightColor());
-            obj.put("contrast", exercises.get(currExercise).getContrast());
+            obj.put("left_color", exercises.get(currExercise).getLeftImage().getId());
+            obj.put("right_color", exercises.get(currExercise).getRightImage().getId());
+            obj.put("left_contrast", exercises.get(currExercise).getLeftImage().getContrast());
             obj.put("user_response", userMatch ? "match" : "mismatch");
         } catch (JSONException e) {
             e.printStackTrace();

@@ -40,6 +40,8 @@ import java.util.concurrent.TimeUnit;
 /*
  * This class is equivalent to RemoteSensorMAnager of mobile module
  */
+
+
 public class BecareRemoteSensorManager {
     private static final String TAG = "RemoteSensorMgr";
 
@@ -54,6 +56,7 @@ public class BecareRemoteSensorManager {
     private GoogleApiClient googleApiClient;
     private PreferenceStorage preferenceStorage;
     private ClientSocketManager socketManager;
+    private int SnookerSeq = -1;
 
     private LinkedList<TagData> tags = new LinkedList<>();
 
@@ -167,7 +170,7 @@ public class BecareRemoteSensorManager {
         });
     }
 
-    ;
+
 
     private void filterBySensorIdInBackground(final int sensorId) {
         Log.d(TAG, "filterBySensorId(" + sensorId + ")");
@@ -234,10 +237,11 @@ public class BecareRemoteSensorManager {
     }
 
 
-    public void uploadAllWearSensorData() {
+    public void uploadAllWearSensorData(int seq) {
         try {
             Log.d(TAG, "upload data tring upload");
             if(uploadDataHelper.getUserActivityName() != null) {
+                uploadDataHelper.setSeqNumber(seq);
                 Log.d(TAG, "upload data tring activity data not null");
                 String dataX = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.X_CORD);
                 String dataY = uploadDataHelper.getSensorUploadData(android.hardware.Sensor.TYPE_ACCELEROMETER, AppConfig.Y_CORD);
@@ -296,12 +300,21 @@ public class BecareRemoteSensorManager {
                 Log.d(TAG, "upload data string activity data not null");
                 uploadDataHelper.setSeqNumber(seq);
                 socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData(seq, dur));
+
             }
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());
         }
     }
 
+    public void setSnookerSeq(int seq){
+        SnookerSeq = seq;
+    }
+
+    public int getSnookerSeq()
+    {
+        return SnookerSeq;
+    }
 
     public void uploadActivityDataInstantly(String activityValue){
         try {
@@ -335,3 +348,4 @@ public class BecareRemoteSensorManager {
         return googleApiClient;
     }
 }
+

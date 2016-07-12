@@ -113,9 +113,6 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            simpleStepDetector.updateAccel(
-                    event.timestamp, event.values[0], event.values[1], event.values[2]);
-
             if (!startMeasure)
                 return;
 
@@ -163,8 +160,9 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 return;
             }
 
-            //  if (gotStep)
-            //      processStep();
+           simpleStepDetector.updateAccel(
+                    event.timestamp, event.values[0], event.values[1], event.values[2]);
+
         }
     }
 

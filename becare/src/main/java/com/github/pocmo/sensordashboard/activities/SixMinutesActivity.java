@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SimpleStepDetector;
@@ -88,6 +89,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
                 numSteps = 0;
                 startMeasure = true;
                 startTime =System.currentTimeMillis();
+                Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -98,6 +100,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
                 numSteps = 0;
                 startMeasure = false;
                 myChronometer.stop();
+                Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
             }
         });
         // Get an instance of the SensorManager
@@ -284,6 +287,8 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
             startMeasure = false;
             myChronometer.stop();
         }
+
+
     }
 }
 

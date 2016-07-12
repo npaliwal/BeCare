@@ -19,10 +19,10 @@ public class TimedWalkedActivity extends AppCompatActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //  setContentView(new BallBounce(this));
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+     //   requestWindowFeature(Window.FEATURE_NO_TITLE);
         //set up full screen
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+     /*   getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);*/
 
         setContentView(R.layout.activity_timed_walk);
         RelativeLayout rl = (RelativeLayout)findViewById(R.id.walkingLayout);

@@ -29,8 +29,10 @@ import com.google.android.gms.wearable.NodeApi;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -302,6 +304,18 @@ public class BecareRemoteSensorManager {
                 socketManager.pushDataAsyncronously(uploadDataHelper.getUserActivityData(seq, dur));
 
             }
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
+    public void uploadWalkingActivityData(Hashtable table) {
+        try {
+            Log.d(TAG, "upload data string upload");
+            Gson gson = new Gson();
+            String str = gson.toJson(table);
+            socketManager.pushDataAsyncronously(str);
+
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());
         }

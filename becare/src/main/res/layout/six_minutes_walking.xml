@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="15dp"
         android:weightSum="3">
         <TextView
             android:layout_width="wrap_content"
@@ -57,7 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_marginBottom="0dp">
         <Button
             android:id="@+id/start_button_6min"
@@ -78,22 +78,17 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_marginBottom="0dp">
         <TextView
+            android:id="@+id/countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+
             android:textSize="20sp"
             android:textStyle="bold"
             android:text="Time:" />
-        <Chronometer
-            android:id="@+id/chronometer_6min"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:background="@color/colorPlaster2"
-            android:textStyle="bold"
-            android:textSize="20dip" />
+
     </LinearLayout>
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
@@ -107,10 +102,8 @@
 
         android:layout_gravity="center">
         <TextView
-
             android:text="Distance (miles)"
-            android:layout_width="150dp"
-
+            android:layout_width="140dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
         <TextView
@@ -119,16 +112,14 @@
             android:background="@color/colorSmoke"
             android:textSize="14dip" />
         <TextView
-
             android:text="Speed (miles/sec)"
-
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
 
         <TextView
             android:id="@+id/distance_6min"
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
         <TextView
@@ -138,7 +129,7 @@
             android:textSize="14dip" />
         <TextView
             android:id="@+id/speed_6min"
-            android:layout_width="150dp"
+            android:layout_width="140dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
 
@@ -154,7 +145,7 @@
     <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:layout_gravity="center"
         android:gravity="center">
 
@@ -192,13 +183,26 @@
             </qtx.compass.CompassView>
 -->
     </RelativeLayout>
-    <!--
-    <Button
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentEnd="true"
-        android:layout_gravity="right"
-        android:background="@drawable/arrow_button"
-        android:onClick="getUpAndGo">
-    </Button>-->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="15dp">
+        <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:background="@drawable/arrow_button_bk"
+            android:onClick="getTimedWalking">
+        </Button>
+     <!--   <Button
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center"
+            android:background="@drawable/arrow_button"
+            android:onClick="getUpAndGo">
+        </Button>-->
+    </LinearLayout>
 </LinearLayout>

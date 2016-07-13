@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -123,8 +124,15 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        startMeasure = false;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+        startMeasure = false;
         sensorManager.unregisterListener(this);
         becareRemoteSensorManager.stopMeasurement();
         becareRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
@@ -141,6 +149,18 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
             simpleStepDetector.updateAccel(
                     event.timestamp, event.values[0], event.values[1], event.values[2]);
         }
+    }
+
+    public void getTimedWalking(View view) {
+        Intent intent = new Intent(this, TimedWalkedActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void getSixMinutes(View view) {
+        Intent intent = new Intent(this, SixMinutesActivity.class);
+        startActivity(intent);
+
     }
 
     @Override
@@ -165,24 +185,23 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
         String speedStr = String.format("%.5f", speed);
         speedText.setText(speedStr);
 
-        if (countDown ==0) {
+        String stepsStr = String.format("%d", numSteps);
+        String heightStr = String.format("%.1f", (float)height);
+      //  long currTime = System.currentTimeMillis();
+       // long dur = currTime - startTime;
+
+        Hashtable dictionary = new Hashtable();
+        dictionary.put("activityName", getString(R.string.twenty_five_steps));
+        dictionary.put("dur (millsecond)", elapsedMillis);
+        dictionary.put("speed (ft/sec)", speedStr);
+        dictionary.put("distance (ft)", feetStr);
+        dictionary.put("step number",  stepsStr);
+        dictionary.put("height",  heightStr);
+        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+
+        if (countDown <= 0) {
             startMeasure = false;
             myChronometer.stop();
-
-            long currTime = System.currentTimeMillis();
-            long dur = currTime - startTime;
-          /*  becareRemoteSensorManager.calculateMobileStats(currTime);
-            becareRemoteSensorManager.uploadAllMobileSensorData(0);
-          //  int seconds = (int)(dur / 1000);
-            becareRemoteSensorManager.uploadActivityData(0, dur);
-            becareRemoteSensorManager.resetMobileStats();*/
-            Hashtable dictionary = new Hashtable();
-            dictionary.put("activityName", getString(R.string.twenty_five_steps));
-            dictionary.put("dur (millsecond)", elapsedMillis);
-            dictionary.put("speed (ft/sec)", speedStr);
-            dictionary.put("distance (ft)", feetStr);
-            dictionary.put("time",  timeFormat.format(currTime));
-            becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
         }
     }
 

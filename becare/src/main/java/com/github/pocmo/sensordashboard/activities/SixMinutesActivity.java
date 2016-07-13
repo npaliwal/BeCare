@@ -2,11 +2,13 @@ package com.github.pocmo.sensordashboard.activities;
 
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -18,10 +20,15 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SimpleStepDetector;
 import com.github.pocmo.sensordashboard.StepListener;
+
+import java.util.Hashtable;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by qtxdev on 7/5/2016.
@@ -37,14 +44,13 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
     private SensorManager sensorManager;
 
     private int numSteps = 0;
-    private TextView heightText;
+    private TextView countdown;
     private TextView stepText;
     private TextView distanceText;
     private TextView speedText;
     private Button start;
     private Button  stop;
     private Spinner spinner;
-    Chronometer myChronometer;
     private boolean startMeasure = false;
 
     private Sensor gsensor;
@@ -58,6 +64,9 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
     // compass arrow to rotate
     public ImageView arrowView = null;
     private long startTime = 0;
+    private CountDownTimer cTimer = null;
+    private long timePassed = 0;
+    private BecareRemoteSensorManager becareRemoteSensorManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -74,7 +83,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
         distanceText = (TextView) findViewById(R.id.distance_6min);
 
         speedText = (TextView) findViewById(R.id.speed_6min);
-        myChronometer = (Chronometer)findViewById(R.id.chronometer_6min);
+        countdown = (TextView) findViewById(R.id.countdown);
 
         start = (Button)findViewById(R.id.start_button_6min);
         start.setOnClickListener(new View.OnClickListener() {
@@ -83,11 +92,11 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
                 stepText.setText("0");
                 distanceText.setText("0");
                 speedText.setText("0");
-                myChronometer.setBase(SystemClock.elapsedRealtime());
-                myChronometer.start();
                 numSteps = 0;
                 startMeasure = true;
                 startTime =System.currentTimeMillis();
+                cTimer.start();
+                Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -97,19 +106,37 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
             public void onClick(View v) {
                 numSteps = 0;
                 startMeasure = false;
-                myChronometer.stop();
+
+                Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
             }
         });
         // Get an instance of the SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         gsensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         msensor = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        becareRemoteSensorManager = BecareRemoteSensorManager.getInstance(SixMinutesActivity.this);
 
         simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
 
         arrowView = (ImageView) findViewById(R.id.main_image_hands);
 
+        cTimer = new CountDownTimer(360000, 1000) { // adjust the milli seconds here
+            public void onTick(long millisUntilFinished) {
+                int seconds = (int) (millisUntilFinished / 1000);
+                int minutes = seconds / 60;
+                seconds = seconds % 60;
+                countdown.setText(String.format("%02d", minutes)
+                        + ":" + String.format("%02d", seconds));
+            }
+
+            public void onFinish() {
+                startMeasure = false;
+                countdown.setText("Done");
+            }
+        };
+
+        countdown.setText("06:00");
     }
 
     @Override
@@ -138,6 +165,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
     public void onStop() {
         super.onStop();
         Log.i(TAG, "onStop()");
+        startMeasure = false;
     }
 
     /**
@@ -153,6 +181,8 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
         sensorManager.registerListener(this, msensor,
                 SensorManager.SENSOR_DELAY_FASTEST);
         //    sensorManager.registerListener(this, gsensor, SensorManager.SENSOR_DELAY_FASTEST);
+        becareRemoteSensorManager.startMeasurement();
+    //    becareRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.six_minutes_walk), null);
     }
 
     /**
@@ -162,8 +192,9 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
     public void onPause() {
         super.onPause();
         Log.i(TAG, "onPause()");
-
-
+        startMeasure = false;
+        becareRemoteSensorManager.stopMeasurement();
+     //   becareRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
     }
 
     /**
@@ -181,6 +212,24 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    public void getTimedWalking(View view) {
+        Intent intent = new Intent(this, TimedWalkedActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void getTwentyFiveStep(View view) {
+        Intent intent = new Intent(this, TwentyFiveStepsActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void getUpAndGo(View view) {
+        Intent intent = new Intent(this, UpAndGoActivity.class);
+        startActivity(intent);
+
     }
 
     private void adjustArrow() {
@@ -270,20 +319,26 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
 
         distanceText.setText(milesStr);
 
-        long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
-        double sec = (double)elapsedMillis / 1000.0;
+        long elapsedMillis = System.currentTimeMillis() - startTime;
+        double sec = elapsedMillis / 1000.0;
         double speed = miles / sec;
         String speedStr = String.format("%.5f", speed);
         speedText.setText(speedStr);
 
-        long now = System.currentTimeMillis();
-        long seconds = (now - startTime)/1000;
-        float minutes = (float)seconds / (float)60.0;
+        long countdownTimer = 360000 - elapsedMillis;
+        String countdownTimerStr = String.format("%d", countdownTimer);
+        String stepsStr = String.format("%d", numSteps);
+        String heightStr = String.format("%.1f", (float)height);
 
-        if (minutes >=6.0) {
-            startMeasure = false;
-            myChronometer.stop();
-        }
+        Hashtable dictionary = new Hashtable();
+        dictionary.put("activityName", getString(R.string.six_minutes_walk));
+        dictionary.put("countdown time", countdownTimerStr);
+        dictionary.put("speed (miles/sec)", speedStr);
+        dictionary.put("distance (miles)", milesStr);
+        dictionary.put("time elapsed",  elapsedMillis);
+        dictionary.put("step number",  stepsStr);
+        dictionary.put("height",  heightStr);
+        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
     }
 }
 

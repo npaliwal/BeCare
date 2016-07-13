@@ -12,6 +12,9 @@
     <string name="exercise_contrast">Contrast Sensitivity</string>
     <string name="exercise_arm_elevation">Arm Elevation</string>
     <string name="exercise_timed_walk">Timed Walk</string>
+    <string name="twenty_five_steps">Twenty five steps</string>
+    <string name="six_minutes_walk">Six minutes walk</string>
+    <string name="up_and_go">Up and go</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
 

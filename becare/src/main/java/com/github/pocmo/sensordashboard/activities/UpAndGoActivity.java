@@ -1,6 +1,7 @@
 package com.github.pocmo.sensordashboard.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -13,11 +14,13 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SimpleStepDetector;
 import com.github.pocmo.sensordashboard.StepListener;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -26,6 +29,8 @@ import java.util.List;
 public class UpAndGoActivity extends Activity implements SensorEventListener, StepListener {
     private static final float THRESHOLD = (float)11.7;
     private static final int SAMPLE_SIZE = 5;
+    private final String motionMsg = "Raising/Sitting";
+    private final String walkingMsg = "Walking";
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
@@ -44,7 +49,9 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     private float mAccelCurrent = 0;
     private float mAccelLast = 0;
     private long lastMotionTime = 0;
+    private long  lastTime;
     private List<sensorData> sensorList = new ArrayList<>();
+    private BecareRemoteSensorManager becareRemoteSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +72,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 startMeasure = true;
                 Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
                 stepText.setText("0");
-
+                lastTime = SystemClock.elapsedRealtime();
                 myChronometer.setBase(SystemClock.elapsedRealtime());
                 myChronometer.start();
             }
@@ -75,10 +82,8 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 startMeasure = false;
                 Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
-
                 myChronometer.stop();
             }
         });
@@ -87,6 +92,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
+        becareRemoteSensorManager = BecareRemoteSensorManager.getInstance(UpAndGoActivity.this);
 
         lastMotionTime = -0xffffff;
     }
@@ -104,6 +110,13 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     public void onPause() {
         super.onPause();
         sensorManager.unregisterListener(this);
+        startMeasure = false;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        startMeasure = false;
     }
 
     @Override
@@ -113,9 +126,6 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     @Override
     public void onSensorChanged(SensorEvent event) {
         if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            simpleStepDetector.updateAccel(
-                    event.timestamp, event.values[0], event.values[1], event.values[2]);
-
             if (!startMeasure)
                 return;
 
@@ -144,28 +154,56 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                         break;
                     }
                     // motion += String.format("%.5f,", sensorList.get(i).accel);
-                    motion = "raising/sitting";
+                    motion = motionMsg;
                     lastMotionTime = System.currentTimeMillis();
                 }
                 //clear samples
-                if (motionFound)
+                if (motionFound) {
                     sensorList.clear();
-
+                }
             }
             else
                 motionFound = false;
 
             if (motionFound == true) {
-                int n = motion.indexOf("raising/sitting");
-                if (n < 0)
-                    motion += " raising/sitting";
+                int n = motion.indexOf(motionMsg);
+                if (n < 0) {
+                    motion += " ";
+                    motion += motionMsg;
+                }
                 deltaText.setText(motion);
+
+                long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
+                long dur = SystemClock.elapsedRealtime() - lastTime;
+                lastTime = SystemClock.elapsedRealtime();
+                String durStr = String.format("%d", dur);
+
+                Hashtable dictionary = new Hashtable();
+                dictionary.put("activityName", getString(R.string.up_and_go));
+                dictionary.put("elapsed time", elapsedMillis);
+                dictionary.put("dur (millsecond)", durStr);
+                dictionary.put("motion", motionMsg);
+                becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+
                 return;
             }
 
-            //  if (gotStep)
-            //      processStep();
+           simpleStepDetector.updateAccel(
+                    event.timestamp, event.values[0], event.values[1], event.values[2]);
+
         }
+    }
+
+    public void getTimedWalking(View view) {
+        Intent intent = new Intent(this, TimedWalkedActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void getSixMinutes(View view) {
+        Intent intent = new Intent(this, SixMinutesActivity.class);
+        startActivity(intent);
+
     }
 
     @Override
@@ -178,16 +216,30 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         stepText.setText(str);
 
         String text =deltaText.getText().toString();
-        int n = text.indexOf("walking");
-        if (n < 0)
-            text += " walking";
-        // long curr = System.currentTimeMillis();
-        // if ((curr - lastMotionTime) >= 500)
-        text = text.replace("raising/sitting", "");
+        int n = text.indexOf(walkingMsg);
+        if (n < 0) {
+            text += " ";
+            text += walkingMsg;
+        }
+
+        text = text.replace(motionMsg, "");
         deltaText.setText(text);
 
+        long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
+        long dur = SystemClock.elapsedRealtime() - lastTime;
+        lastTime = SystemClock.elapsedRealtime();
+        String durStr = String.format("%d", dur);
+        String stepsStr = String.format("%d", numSteps);
 
+        Hashtable dictionary = new Hashtable();
+        dictionary.put("activityName", getString(R.string.up_and_go));
+        dictionary.put("elapsed time", elapsedMillis);
+        dictionary.put("dur (millsecond)", durStr);
+        dictionary.put("motion", walkingMsg);
+        dictionary.put("step num", stepsStr);
+        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
     }
+
     public class sensorData{
         public float x;
         public float y;

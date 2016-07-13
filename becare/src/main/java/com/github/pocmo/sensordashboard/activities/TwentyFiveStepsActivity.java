@@ -3,6 +3,8 @@ package com.github.pocmo.sensordashboard.activities;
 
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,6 +13,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
@@ -19,11 +22,16 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SimpleStepDetector;
 import com.github.pocmo.sensordashboard.StepListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Hashtable;
+import java.util.Locale;
 
 
 /**
@@ -45,7 +53,9 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
     Chronometer myChronometer;
     private boolean startMeasure = false;
     private int countDown = 0;
+    private long startTime=0;
     private BecareRemoteSensorManager becareRemoteSensorManager;
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +88,8 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
                 myChronometer.start();
                 numSteps = 0;
                 startMeasure = true;
+                startTime = System.currentTimeMillis();
+                Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -87,10 +99,12 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
             public void onClick(View v) {
                 numSteps = 0;
                 startMeasure = false;
-
                 myChronometer.stop();
+                Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
             }
         });
+
+
         // Get an instance of the SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         becareRemoteSensorManager = BecareRemoteSensorManager.getInstance(TwentyFiveStepsActivity.this);
@@ -106,12 +120,19 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
         stepText.setText("0");
         sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_FASTEST);
         becareRemoteSensorManager.startMeasurement();
-        becareRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_timed_walk), null);
+        becareRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.twenty_five_steps), null);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        startMeasure = false;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        startMeasure = false;
         sensorManager.unregisterListener(this);
         becareRemoteSensorManager.stopMeasurement();
         becareRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
@@ -128,6 +149,18 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
             simpleStepDetector.updateAccel(
                     event.timestamp, event.values[0], event.values[1], event.values[2]);
         }
+    }
+
+    public void getTimedWalking(View view) {
+        Intent intent = new Intent(this, TimedWalkedActivity.class);
+        startActivity(intent);
+
+    }
+
+    public void getSixMinutes(View view) {
+        Intent intent = new Intent(this, SixMinutesActivity.class);
+        startActivity(intent);
+
     }
 
     @Override
@@ -152,7 +185,21 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
         String speedStr = String.format("%.5f", speed);
         speedText.setText(speedStr);
 
-        if (countDown ==0) {
+        String stepsStr = String.format("%d", numSteps);
+        String heightStr = String.format("%.1f", (float)height);
+      //  long currTime = System.currentTimeMillis();
+       // long dur = currTime - startTime;
+
+        Hashtable dictionary = new Hashtable();
+        dictionary.put("activityName", getString(R.string.twenty_five_steps));
+        dictionary.put("dur (millsecond)", elapsedMillis);
+        dictionary.put("speed (ft/sec)", speedStr);
+        dictionary.put("distance (ft)", feetStr);
+        dictionary.put("step number",  stepsStr);
+        dictionary.put("height",  heightStr);
+        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+
+        if (countDown <= 0) {
             startMeasure = false;
             myChronometer.stop();
         }

@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:textSize="20dip"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:textStyle="bold"
             android:text="Up and Go" />
 
@@ -134,8 +134,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/input_container"
         android:orientation="vertical"
-        android:gravity="center"
-        android:layout_marginTop="50dp">
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -151,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
+                android:layout_marginLeft="5dp"
                 android:textSize="18sp"
                 android:text=""/>
         </LinearLayout>
@@ -169,8 +169,7 @@
                 android:id="@+id/steps"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-
+                android:layout_marginLeft="20dp"
                 android:textSize="18sp"
                 android:text="0"/>
         </LinearLayout>
@@ -180,10 +179,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/reaadings"
-        android:gravity="center"
-        android:layout_gravity="center"
-        android:layout_marginTop="20dp">
-
+        android:layout_marginLeft="20dp">
 
         <TextView
             android:id="@+id/time_label"
@@ -200,5 +196,27 @@
             android:textSize="18sp"
             android:layout_marginLeft="10dp">
         </Chronometer>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+    <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:background="@drawable/arrow_button_bk"
+        android:onClick="getTimedWalking">
+    </Button>
+  <!--  <Button
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="20dp"
+        android:layout_gravity="center"
+        android:background="@drawable/arrow_button"
+        android:onClick="getTimedWalking">
+    </Button>-->
     </LinearLayout>
 </LinearLayout>

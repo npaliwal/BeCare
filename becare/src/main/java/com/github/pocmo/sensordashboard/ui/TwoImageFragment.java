@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.utils.ImageUtils;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by neerajpaliwal on 07/06/16.
@@ -54,7 +55,10 @@ public class TwoImageFragment extends Fragment {
             if(exercise.getLeftImage().getColor() == -1){
                 header.setText(R.string.contrast_test_contrast);
                 leftPatch.setScaleType(ImageView.ScaleType.FIT_XY);
-                leftPatch.setImageResource(exercise.getLeftImage().getImageResId());
+                //leftPatch.setImageResource(exercise.getLeftImage().getImageResId());
+                Picasso.with(getActivity())
+                        .load(exercise.getLeftImage().getImageResId())
+                        .into(leftPatch);
                 //leftBitMap = ImageUtils.getBitmapFromResource(exercise.getLeftImage().getImageResId(), getActivity());
                 //leftPatch.setImageBitmap(
                 //        leftBitMap
@@ -62,7 +66,10 @@ public class TwoImageFragment extends Fragment {
                 //);
 
                 rightPatch.setScaleType(ImageView.ScaleType.FIT_XY);
-                rightPatch.setImageResource(exercise.getRightImage().getImageResId());
+                //rightPatch.setImageResource(exercise.getRightImage().getImageResId());
+                Picasso.with(getActivity())
+                        .load(exercise.getRightImage().getImageResId())
+                        .into(rightPatch);
                 //rightMap = ImageUtils.getBitmapFromResource(exercise.getRightImage().getImageResId(), getActivity());
                 //rightPatch.setImageBitmap(
                 //        rightMap

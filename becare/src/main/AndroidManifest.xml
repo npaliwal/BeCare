@@ -54,7 +54,9 @@
         <activity
             android:name="com.github.pocmo.sensordashboard.activities.TranscriptionTestActivity"
             android:screenOrientation="portrait"
-            android:label="@string/exercise_transcription">
+            android:label="@string/exercise_transcription"
+            android:windowSoftInputMode="stateAlwaysHidden|stateUnchanged"
+            >
         </activity>
 
         <activity

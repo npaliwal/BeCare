@@ -6,9 +6,11 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -80,6 +82,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
     private void initUIElements() {
         input = (EditText)findViewById(R.id.et_user_input);
+        input.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        input.setTextIsSelectable(true);
         input.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -152,30 +156,29 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     .getStreamVolume(AudioManager.STREAM_MUSIC));
 
 
-            volumeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-            {
+            volumeSeekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
-                public void onStopTrackingTouch(SeekBar arg0)
-                {
+                public void onStopTrackingTouch(SeekBar arg0) {
                 }
 
                 @Override
-                public void onStartTrackingTouch(SeekBar arg0)
-                {
+                public void onStartTrackingTouch(SeekBar arg0) {
                 }
 
                 @Override
-                public void onProgressChanged(SeekBar arg0, int progress, boolean arg2)
-                {
+                public void onProgressChanged(SeekBar arg0, int progress, boolean arg2) {
                     audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
                             progress, 0);
                 }
             });
+
+
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
+
     }
 
     private void initExercises(){
@@ -207,5 +210,28 @@ public class TranscriptionTestActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         return obj.toString();
+    }
+
+    public void addToInput(View key){
+        if(key instanceof TextView) {
+            TextView tvKey = (TextView)key;
+            input.setText(input.getText().toString() + tvKey.getText());
+            input.setSelection(input.getText().length());
+        }
+    }
+
+    public void addSpaceToInput(View key){
+        if(key instanceof TextView) {
+            input.setText(input.getText().toString() + " ");
+            input.setSelection(input.getText().length());
+
+        }
+    }
+
+    public void removeFromInput(View key){
+        if(key instanceof TextView) {
+            input.setText(input.getText().subSequence(0, input.getText().length()-1));
+            input.setSelection(input.getText().length());
+        }
     }
 }

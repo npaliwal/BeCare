@@ -8,6 +8,9 @@ import com.google.gson.annotations.SerializedName;
  * Created by neerajpaliwal on 27/05/16.
  */
 public class SensorUploadData {
+    @SerializedName("activityname")
+    String activityName;
+
     @SerializedName("sensorname")
     String sensorName;// : accelerometer | gyroscope
 
@@ -48,7 +51,7 @@ public class SensorUploadData {
     int sequenceNumber;
 
 
-    public SensorUploadData(String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device, float[] all, int seq) {
+    public SensorUploadData(String activityName, String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device, float[] all, int seq) {
 
         switch (cord){
             case AppConfig.X_CORD:{
@@ -91,7 +94,7 @@ public class SensorUploadData {
             }
         }
 
-
+        this.activityName = activityName;
         this.sensorName = sensorName;
         //this.sensorMsg = sensorName + "." + readTime + "." + corrdtype;
         this.time = readTime;

@@ -63,8 +63,6 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         }else {
             pager.setCurrentItem(index + 1, true);
         }
-        TwoImageFragment fragment = (TwoImageFragment) adapterViewPager.getItem(index);
-        fragment.disposeBitMaps();
         String dataShow = getString(R.string.contrast_performance, correctCount, index+1);
         performanceText.setText(dataShow);
 

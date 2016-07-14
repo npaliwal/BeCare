@@ -58,10 +58,12 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int bgrScroll;
     int dBgrY; //Background scroll speed.
     float acc;
-    Bitmap ball, bgr, bgrReverse, tree;
+    Bitmap ball, bgr, bgrReverse, tree, stop;
     boolean reverseBackroundFirst;
     boolean ballFingerMove;
     boolean started=false;
+    int stopX, stopY;
+    boolean stopDraw = false;
 
     //Measure frames per second.
     long now;
@@ -97,6 +99,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
         bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road1); //Load a background.
         tree = BitmapFactory.decodeResource(getResources(),R.drawable.tree); //Load a background.
+        stop = BitmapFactory.decodeResource(getResources(),R.drawable.stop);
 
         ballW = ball.getWidth();
         ballH = ball.getHeight();
@@ -104,6 +107,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         treeW = tree.getWidth();
         treeH = tree.getHeight();
         tree = Bitmap.createScaledBitmap(tree, treeW/3, treeH/3, true);
+        stop = Bitmap.createScaledBitmap(stop, stop.getWidth()/2, stop.getHeight()/2, true);
 
         //Create a flag for the onDraw method to alternate background with its mirror image.
         reverseBackroundFirst = false;
@@ -208,6 +212,9 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         ballX = 0;
         ballY = screenH - 60;
+
+        stopX = screenW-70;
+        stopY = screenH-80;
     }
 
 
@@ -229,6 +236,22 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     //***************************************
     @Override
     public synchronized boolean onTouchEvent(MotionEvent ev) {
+
+        float x = ev.getX();
+        float y =  ev.getY();
+        float xDiff = Math.abs(x - stopX);
+        float yDiff = Math.abs(y - stopY);
+        if (xDiff < 30&& yDiff <30) {
+            stopDraw = true;
+            if (mRemoteSensorManager != null) {
+                mRemoteSensorManager.getUploadDataHelper().setNullUserActivity();
+                mRemoteSensorManager.getUploadMobileDataHelper().setNullUserActivity();
+            }
+            return true;
+        }
+      //  else
+      //      stopDraw = false;
+
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {
@@ -258,10 +281,12 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 pathY = (int) ev.getY();
                 pathX = getPathXforTouchY(pathY);
                 //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
-                if (mRemoteSensorManager != null) {
+                if (mRemoteSensorManager != null && !stopDraw) {
                     String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
                     mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
                 }
+
+
                 invalidate();
                 started = true;
                 break;
@@ -273,6 +298,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 invalidate();
                 break;
         }
+
         return true;
     }
 
@@ -282,7 +308,6 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         Rect fromRect = new Rect(0, 0, bgrW, bgrH);
         Rect toRect = new Rect(0, 0, bgrW, bgrH);
-
 
         canvas.drawBitmap(bgr, fromRect, toRect, null);
 
@@ -315,7 +340,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             if (started) {
                 canvas.drawBitmap(tree, treeXpos, treeYpos, null);
                 if (treeXpos > 180)
-                   treeXpos -= 0.3;
+                   treeXpos -= 0.4;
             }
 
             //Next value for the background's position.
@@ -343,6 +368,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         }
         canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
         //*/
+        canvas.drawBitmap(stop, stopX, stopY, null);
 
         //Measure frame rate (unit: frames per second).
         now = System.currentTimeMillis();

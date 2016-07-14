@@ -21,7 +21,6 @@ import com.squareup.picasso.Picasso;
  */
 public class TwoImageFragment extends Fragment {
     ImageView leftPatch, rightPatch;
-    Bitmap leftBitMap=null, rightMap=null;
     TextView header;
 
     private static String EXTRA_EXERCISE_ID     = "exercise_data";
@@ -49,16 +48,21 @@ public class TwoImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_two_image, container, false);
         leftPatch = (ImageView)view.findViewById(R.id.image_left);
         rightPatch = (ImageView)view.findViewById(R.id.image_right);
+        //leftPatch.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+        //rightPatch.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
         header = (TextView)view.findViewById(R.id.test_header);
 
-        if(exercise != null){
+        if (exercise != null){
             if(exercise.getLeftImage().getColor() == -1){
                 header.setText(R.string.contrast_test_contrast);
                 leftPatch.setScaleType(ImageView.ScaleType.FIT_XY);
-                //leftPatch.setImageResource(exercise.getLeftImage().getImageResId());
                 Picasso.with(getActivity())
                         .load(exercise.getLeftImage().getImageResId())
+                        .resize(100, 100)
+                        .centerCrop()
                         .into(leftPatch);
+                //leftPatch.setImageResource(exercise.getLeftImage().getImageResId());
                 //leftBitMap = ImageUtils.getBitmapFromResource(exercise.getLeftImage().getImageResId(), getActivity());
                 //leftPatch.setImageBitmap(
                 //        leftBitMap
@@ -66,10 +70,12 @@ public class TwoImageFragment extends Fragment {
                 //);
 
                 rightPatch.setScaleType(ImageView.ScaleType.FIT_XY);
-                //rightPatch.setImageResource(exercise.getRightImage().getImageResId());
                 Picasso.with(getActivity())
                         .load(exercise.getRightImage().getImageResId())
+                        .resize(100,100)
+                        .centerCrop()
                         .into(rightPatch);
+                //rightPatch.setImageResource(exercise.getRightImage().getImageResId());
                 //rightMap = ImageUtils.getBitmapFromResource(exercise.getRightImage().getImageResId(), getActivity());
                 //rightPatch.setImageBitmap(
                 //        rightMap
@@ -83,17 +89,5 @@ public class TwoImageFragment extends Fragment {
             }
         }
         return view;
-    }
-
-    public void disposeBitMaps() {
-        if(leftBitMap != null) {
-            leftBitMap = null;
-            leftBitMap.recycle();
-        }
-        if(rightMap != null) {
-            rightMap.recycle();
-            rightMap = null;
-        }
-
     }
 }

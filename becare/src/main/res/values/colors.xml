@@ -74,4 +74,22 @@
     <color name="colorBlush">#EEB6B7</color>
     <color name="colorClean">#A7D2CB</color>
     <color name="colorMorning">#CAE4DB</color>
+
+    <color name="colorGrape">#575DA9</color>
+    <color name="colorCitrus">#F7C331</color>
+    <color name="colorMustard">#E9B000</color>
+    <color name="colorPEA">#A4D555</color>
+    <color name="colorPEACH">#FFA680</color>
+    <color name="colorPINK">#EC576B</color>
+    <color name="colorPINK2">#F06376</color>
+    <color name="colorAQUA">#4EC5C1</color>
+    <color name="colorLIME">#E5E338</color>
+    <color name="colorINDIGO">#304150</color>
+    <color name="colorBlack2">#202020</color>
+    <color name="colorBlack3">#1D2731</color>
+    <color name="colorPosy">#813772</color>
+    <color name="colorBlueberry">#6B7A8F</color>
+    <color name="colorApricot">#F7882F</color>
+    <color name="colorLavender">#6C64BB</color>
+    <color name="colorDustyRose">#B6A196</color>
 </resources>

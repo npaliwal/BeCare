@@ -59,6 +59,10 @@ public class UploadDataHelper {
         this.activityValue = activityValue;
     }
 
+    public void setNullUserActivity(){
+        this.activityName = null;
+    }
+
     public String getUserActivityName(){
         return activityName;
     }
@@ -293,7 +297,7 @@ public class UploadDataHelper {
                     vector = gZ;
             }
         }
-        SensorUploadData data = new SensorUploadData(sensorName, wrapper, numSample, cord, readTime, deviceId, vector, seq);
+        SensorUploadData data = new SensorUploadData(activityName, sensorName, wrapper, numSample, cord, readTime, deviceId, vector, seq);
 
         return gson.toJson(data, SensorUploadData.class);
     }

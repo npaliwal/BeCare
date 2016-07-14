@@ -296,6 +296,12 @@ public class StartingActivity extends AppCompatActivity
         return true;
     }
 
+    public void getMenuLayout(View view) {
+        Intent intent = new Intent(this, MenuLayoutActivity.class);
+        startActivity(intent);
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(requestCode == LoginActivity.REQUEST_LOGIN_CODE){

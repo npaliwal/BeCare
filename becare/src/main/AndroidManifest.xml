@@ -113,14 +113,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.TimedWalkedActivity" />
         </activity>
+
         <service android:name=".network.DataUploadService" />
 
-        <service android:name=".BecareSensorReceiverService">
-            <intent-filter>
-                <action
-                    android:name="com.google.android.gms.wearable.BIND_LISTENER"/>
-            </intent-filter>
-        </service>
     </application>
 
 </manifest>

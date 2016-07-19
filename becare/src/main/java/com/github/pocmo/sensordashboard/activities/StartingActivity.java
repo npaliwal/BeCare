@@ -41,17 +41,13 @@ import java.util.List;
 import java.util.Map;
 
 
-public class StartingActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class StartingActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
     private boolean allSensorsAvailable = true;
-    private TextView mMobileSensorStatus, mWearSensorStatus, mCompatiblityStatus;
-    private Button mGyroTrack, mAcceleroTracking;
+    private TextView mMobileSensorStatus, mCompatiblityStatus;
     private BecareRemoteSensorManager remoteSensorManager;
-    private LinearLayout mTrackingContainer;
     private List<Node> mNodes;
-    private boolean debugGyroDisplayed = false, debugAcceleroDisplayed = false;
 
     private PreferenceStorage preferenceStorage;
     private static StartingActivity instance;
@@ -70,23 +66,11 @@ public class StartingActivity extends AppCompatActivity
 
         instance = this;
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         preferenceStorage = new PreferenceStorage(getApplicationContext());
 
@@ -105,28 +89,9 @@ public class StartingActivity extends AppCompatActivity
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mMobileSensorStatus = (TextView)findViewById(R.id.tv_mobile_Sensors);
-        mWearSensorStatus   = (TextView)findViewById(R.id.tv_wear_Sensors);
         mCompatiblityStatus = (TextView)findViewById(R.id.tv_compatiblity);
-        mGyroTrack          = (Button)findViewById(R.id.gyro_live_tracking);
-        mAcceleroTracking   = (Button)findViewById(R.id.accelero_live_tracking);
 
-        mTrackingContainer = (LinearLayout)findViewById(R.id.live_tracking);
         checkSensorCompatiblity();
-
-        mGyroTrack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remoteSensorManager.filterBySensorId(Sensor.TYPE_GYROSCOPE);
-                getFragmentManager().beginTransaction().add(R.id.live_tracking, SensorFragment.newInstance(Sensor.TYPE_GYROSCOPE), "gy").commit();
-            }
-        });
-        mAcceleroTracking.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                remoteSensorManager.filterBySensorId(Sensor.TYPE_ACCELEROMETER);
-                getFragmentManager().beginTransaction().add(R.id.live_tracking, SensorFragment.newInstance(Sensor.TYPE_ACCELEROMETER), "ac").commit();
-            }
-        });
     }
 
 
@@ -153,8 +118,6 @@ public class StartingActivity extends AppCompatActivity
     @Override
     protected void onPause() {
         super.onPause();
-        debugGyroDisplayed = false;
-        debugAcceleroDisplayed = false;
         if(preferenceStorage.isLoggedIn()) {
             BusProvider.getInstance().unregister(this);
 
@@ -240,33 +203,14 @@ public class StartingActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    private void setWatchSensorDisplayble(com.github.pocmo.sensordashboard.data.Sensor sensor){
-        mWearSensorStatus.setText("Connected Successfully with a watch !!");
-        if(sensor.getId() == Sensor.TYPE_ACCELEROMETER){
-            mAcceleroTracking.setVisibility(View.VISIBLE);
-            debugAcceleroDisplayed = true;
-        }
-        if(sensor.getId() == Sensor.TYPE_GYROSCOPE){
-            mGyroTrack.setVisibility(View.VISIBLE);
-            debugGyroDisplayed = true;
-        }
-        Toast.makeText(this, "New Sensor!\n" + sensor.getName(), Toast.LENGTH_SHORT).show();
-    }
-
-    @Subscribe
-    public void onNewSensorEvent(final NewSensorEvent event) {
-        setWatchSensorDisplayble(event.getSensor());
-    }
 
     @Subscribe
     public void onSensorUpdatedEvent(SensorUpdatedEvent event) {
-        if (debugGyroDisplayed == false || debugAcceleroDisplayed == false) {
-            setWatchSensorDisplayble(event.getSensor());
-        }
+
     }
 
-            @SuppressWarnings("StatementWithEmptyBody")
-    @Override
+    //@SuppressWarnings("StatementWithEmptyBody")
+    //@Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();

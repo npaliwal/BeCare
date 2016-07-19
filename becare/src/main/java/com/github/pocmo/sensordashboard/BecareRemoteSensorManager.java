@@ -17,8 +17,6 @@ import com.github.pocmo.sensordashboard.events.TagAddedEvent;
 import com.github.pocmo.sensordashboard.model.ActivityUploadData;
 import com.github.pocmo.sensordashboard.model.SensorDataValue;
 import com.github.pocmo.sensordashboard.network.ClientSocketManager;
-import com.github.pocmo.sensordashboard.shared.ClientPaths;
-import com.github.pocmo.sensordashboard.shared.DataMapKeys;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -163,52 +161,23 @@ public class BecareRemoteSensorManager {
         return result.isSuccess();
     }
 
-    public void filterBySensorId(final int sensorId) {
-        executorService.execute(new Runnable() {
-            @Override
-            public void run() {
-                filterBySensorIdInBackground(sensorId);
-            }
-        });
-    }
-
-
-
-    private void filterBySensorIdInBackground(final int sensorId) {
-        Log.d(TAG, "filterBySensorId(" + sensorId + ")");
-
-        if (validateConnection()) {
-            PutDataMapRequest dataMap = PutDataMapRequest.create("/filter");
-
-            dataMap.getDataMap().putInt(DataMapKeys.FILTER, sensorId);
-            dataMap.getDataMap().putLong(DataMapKeys.TIMESTAMP, System.currentTimeMillis());
-
-            PutDataRequest putDataRequest = dataMap.asPutDataRequest();
-            Wearable.DataApi.putDataItem(googleApiClient, putDataRequest).setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                @Override
-                public void onResult(DataApi.DataItemResult dataItemResult) {
-                    Log.d(TAG, "Filter by sensor " + sensorId + ": " + dataItemResult.getStatus().isSuccess());
-                }
-            });
-        }
-    }
 
     public void startMeasurement() {
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                controlMeasurementInBackground(ClientPaths.START_MEASUREMENT);
-            }
-        });
+        //executorService.submit(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        controlMeasurementInBackground(ClientPaths.START_MEASUREMENT);
+        //    }
+        //});
     }
 
     public void stopMeasurement() {
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                controlMeasurementInBackground(ClientPaths.STOP_MEASUREMENT);
-            }
-        });
+        //executorService.submit(new Runnable() {
+        //    @Override
+        //    public void run() {
+        //        controlMeasurementInBackground(ClientPaths.STOP_MEASUREMENT);
+        //    }
+        //});
     }
 
     public void getNodes(ResultCallback<NodeApi.GetConnectedNodesResult> pCallback) {

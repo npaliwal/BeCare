@@ -33,22 +33,14 @@
         />
 
     <View
+        android:id="@+id/separator"
         android:layout_width="match_parent"
         android:layout_height="2px"
         android:background="@color/gray"
         android:layout_below="@+id/tv_mobile_Sensors"
         android:layout_marginTop="10dp">
     </View>
-    <TextView
-        android:id="@+id/tv_wear_Sensors"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Waiting for a wearable..."
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/tv_mobile_Sensors"
-        />
+
 
     <Button
         android:id="@+id/start_becare"
@@ -59,39 +51,8 @@
         android:textSize="20sp"
         android:layout_marginTop="20dp"
         android:gravity="center|center_horizontal"
-        android:layout_below="@+id/tv_wear_Sensors"
+        android:layout_below="@+id/separator"
         android:onClick="getMenuLayout"
         />
-    <Button
-        android:id="@+id/accelero_live_tracking"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Accelero live tracking"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        android:gravity="center|center_horizontal"
-        android:layout_below="@+id/start_becare"
-        android:visibility="gone"
-        />
 
-    <Button
-        android:id="@+id/gyro_live_tracking"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Gyroscope live tracking"
-        android:textColor="@color/colorPrimaryDark"
-        android:textSize="20sp"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/accelero_live_tracking"
-        android:visibility="gone"
-        />
-
-    <LinearLayout
-        android:id="@+id/live_tracking"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_below="@+id/gyro_live_tracking">
-    </LinearLayout>
 </RelativeLayout>

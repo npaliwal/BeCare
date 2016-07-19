@@ -314,7 +314,7 @@ public class BecareRemoteSensorManager {
             Log.d(TAG, "upload data string upload");
             Gson gson = new Gson();
             String str = gson.toJson(table);
-            socketManager.pushData(str);
+            socketManager.pushDataAsyncronously(str);
 
         }catch (Exception e){
             Log.d(TAG, "upload data failed : " + e.getMessage());

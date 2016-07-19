@@ -66,11 +66,6 @@ public class StartingActivity extends AppCompatActivity {
 
         instance = this;
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
         preferenceStorage = new PreferenceStorage(getApplicationContext());
 
@@ -173,12 +168,12 @@ public class StartingActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //if (drawer.isDrawerOpen(GravityCompat.START)) {
+        //    drawer.closeDrawer(GravityCompat.START);
+        //} else {
             super.onBackPressed();
-        }
+        //}
     }
 
     @Override
@@ -235,8 +230,8 @@ public class StartingActivity extends AppCompatActivity {
             startActivity(new Intent(this, UtilityActivity.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        //drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

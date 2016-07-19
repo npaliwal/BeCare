@@ -1,24 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:id="@+id/input_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/instruction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Instruction:\n 1.Hold the phone and push the 'Start' buton.\n 2.Move your arm up and down while holding the phone. \n3.Push the 'Stop' button if you want to stop."
+            android:layout_centerHorizontal="true"
+            android:textSize="18sp"/>
+
+
+        <TextView
+            android:id="@+id/msg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:gravity="center"
+            android:textSize="18sp">
+
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="130dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+
+                android:text="Arm: "/>
+            <TextView
+                android:id="@+id/delta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:textSize="18sp"
+                android:text=""/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="130dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Times:  "/>
+            <TextView
+                android:id="@+id/steps"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:textSize="18sp"
+                android:text="0"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reaadings"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
+
+
+        <TextView
+            android:id="@+id/time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="Countdown:" >
+        </TextView>
+        <TextView
+            android:id="@+id/countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="Time:" />
+        <!--
+        <Chronometer
+            android:id="@+id/chronometer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="10dp">
+        </Chronometer>-->
+
+    </LinearLayout>
+<!--
     <ImageView
         android:id="@+id/iv_phone"
         android:layout_width="250dp"
         android:layout_height="100dp"
+        android:layout_marginTop="50dp"
         android:src="@drawable/phone"
         android:layout_centerVertical="true"/>
-
-    <ImageView
-        android:id="@+id/iv_watch"
-        android:layout_width="250dp"
-        android:layout_height="100dp"
-        android:src="@drawable/watch"
-        android:layout_above="@+id/iv_phone"
-        android:layout_centerVertical="true"/>
-
+-->
 
     <TextView
         android:id="@+id/timer"
@@ -30,18 +128,37 @@
         android:layout_above="@+id/button_start"
         android:layout_marginRight="20dp"/>
 
-    <TextView
-        android:id="@+id/button_start"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="START"
+        android:gravity="center"
+        android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/button_start"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Start"
         android:textSize="24sp"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:padding="5dp"
         android:layout_margin="20dp"
         android:gravity="center"
-        android:layout_alignParentBottom="true"
-        />
 
-</RelativeLayout>
+        />
+        <TextView
+            android:id="@+id/button_stop"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Stop"
+            android:textSize="24sp"
+            android:textColor="@color/white"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:layout_margin="20dp"
+            android:gravity="center"
+
+            />
+    </LinearLayout>
+</LinearLayout>

@@ -163,6 +163,19 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
 
+    private void initializeCoordinates(){
+        if(pathPointTemps != null && pathPointTemps.size() > 0) {
+            startX = (int) pathPointTemps.get(0).x;
+            startY = (int) pathPointTemps.get(0).y;
+
+            stopX = (int) pathPointTemps.get(pathPointTemps.size() - 1).x;
+            stopY = (int) pathPointTemps.get(pathPointTemps.size() - 1).y;
+
+            ballX = startX - ballW/2;
+            ballY = startY - ballH/2;
+        }
+    }
+
     private void buildPathFromFile(Context context) {
         try {
             Gson gson = new Gson();
@@ -184,14 +197,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                                 height * (pathPoints.get(i).y / 100)));
 
                     }
-                    startX = (int)pathPointTemps.get(0).x;
-                    startY = (int)pathPointTemps.get(0).y - ballH/2;
-
-                    stopX = (int)pathPointTemps.get(pathPointTemps.size() - 1).x - stop.getWidth()/2;
-                    stopY = (int)pathPointTemps.get(pathPointTemps.size() - 1).y - stop.getHeight()/2;
-
-                    ballX = startX;
-                    ballY = startY;
+                    initializeCoordinates();
                 }
             });
 
@@ -217,16 +223,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         matrix.setScale(-1, 1); //Horizontal mirror effect.
         bgrReverse = Bitmap.createBitmap(bgr, 0, 0, bgrW, bgrH, matrix, true); //Create a new mirrored bitmap by applying the matrix.
 
-        if(pathPointTemps != null && pathPointTemps.size() > 0) {
-            startX = (int) pathPointTemps.get(0).x;
-            startY = (int) pathPointTemps.get(0).y - ballH/2;
-
-            stopX = (int) pathPointTemps.get(pathPointTemps.size() - 1).x - stop.getWidth()/2;
-            stopY = (int) pathPointTemps.get(pathPointTemps.size() - 1).y - stop.getHeight()/2;
-        }
-
-        ballX = startX;
-        ballY = startY;
+        initializeCoordinates();
     }
 
     private int getPathXforTouchY(int touchY) {
@@ -252,10 +249,12 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         float y =  ev.getY();
         float xDiff = 0, yDiff = 0;
         if(started) {
-            xDiff = Math.abs(x - (stopX + stop.getWidth()/2));
-            yDiff = Math.abs(y - (stopY + stop.getHeight()/2));
+            xDiff = Math.abs(x - stopX);
+            yDiff = Math.abs(y - stopY);
             if (xDiff < 30 && yDiff < 30) {
                 started = false;
+                ballX = stopX - ballW / 2;
+                ballY = stopY - ballH / 2;
                 Toast.makeText(getContext(), "Finished snooker activity", Toast.LENGTH_LONG).show();
                 if (mRemoteSensorManager != null) {
                     mRemoteSensorManager.getUploadDataHelper().setUserActivity(getResources().getString(R.string.exercise_ring_rect), null);
@@ -264,8 +263,8 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 return true;
             }
         }else{
-            xDiff = Math.abs(x - (startX + ballW/2));
-            yDiff = Math.abs(y - (startY + ballH/2));
+            xDiff = Math.abs(x - startX);
+            yDiff = Math.abs(y - startY);
             if (xDiff < 30 && yDiff < 30) {
                 started = true;
                 Toast.makeText(getContext(), "Started snooker activity", Toast.LENGTH_LONG).show();
@@ -301,25 +300,33 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
 
             case MotionEvent.ACTION_MOVE: {
-                if(started) {
-                    ballX = (int) ev.getX() - ballW / 2;
-                    ballY = (int) ev.getY() - ballH / 2;
+                if (BUILD_PATH_MODE == 2) {
                     pathY = (int) ev.getY();
                     pathX = getPathXforTouchY(pathY);
-                    Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
-                    if (mRemoteSensorManager != null && started) {
-                        String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
-                        mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+                }else {
+                    if (started) {
+                        pathY = (int) ev.getY();
+                        pathX = getPathXforTouchY(pathY);
+
+                        ballX = (int) ev.getX() - ballW / 2;
+                        ballY = (int) ev.getY() - ballH / 2;
+                        Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
+                        if (mRemoteSensorManager != null && started) {
+                            String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
+                            mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+                        }
                     }
-                    invalidate();
                 }
+                invalidate();
                 break;
             }
 
             case MotionEvent.ACTION_UP:
-                ballFingerMove = false;
-                dY = 0;
-                invalidate();
+                if(started) {
+                    ballFingerMove = false;
+                    dY = 0;
+                    invalidate();
+                }
                 break;
         }
 
@@ -365,22 +372,21 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 canvas.drawBitmap(tree, treeXpos, treeYpos, null);
                 if (treeXpos > 180)
                     treeXpos -= 0.4;
-            }
 
-            //Next value for the background's position.
-            if ((bgrScroll += dBgrY) >= bgrW) {
-                bgrScroll = 0;
-                reverseBackroundFirst = !reverseBackroundFirst;
-            }
-
-            if (!ballFingerMove) {
-                ballY += (int) dY; //Increase or decrease vertical position.
-                if (ballY > (screenH - ballH)) {
-                    dY = (-1) * dY; //Reverse speed when bottom hit.
+                //Next value for the background's position.
+                if ((bgrScroll += dBgrY) >= bgrW) {
+                    bgrScroll = 0;
+                    reverseBackroundFirst = !reverseBackroundFirst;
                 }
-                dY += acc; //Increase or decrease speed.
-            }
 
+                if (!ballFingerMove) {
+                    ballY += (int) dY; //Increase or decrease vertical position.
+                    if (ballY > (screenH - ballH)) {
+                        dY = (-1) * dY; //Reverse speed when bottom hit.
+                    }
+                    dY += acc; //Increase or decrease speed.
+                }
+            }
             angle += 5;
             if (angle > 360)
                 angle = 0;
@@ -389,10 +395,11 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             canvas.save(); //Save the position of the canvas matrix.
             canvas.rotate(angle, ballX + (ballW / 2), ballY + (ballH / 2)); //Rotate the canvas matrix.
             canvas.drawBitmap(ball, ballX, ballY, null); //Draw the ball by applying the canvas rotated matrix.
+
+
         }
         canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
-        //*/
-        canvas.drawBitmap(stop, stopX, stopY, null);
+        canvas.drawBitmap(stop, stopX - stop.getWidth()/2, stopY - stop.getHeight()/2, null);
 
         //Measure frame rate (unit: frames per second).
         now = System.currentTimeMillis();

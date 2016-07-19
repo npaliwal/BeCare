@@ -16,6 +16,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewTreeObserver;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
@@ -63,7 +64,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     boolean ballFingerMove;
     boolean started=false;
     int stopX, stopY;
-    boolean stopDraw = false;
+    int startX, startY;
 
     //Measure frames per second.
     long now;
@@ -129,8 +130,8 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         setWillNotDraw(false);
         buildPathFromFile(context);
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(context);
-
     }
+
     private void savePathToFile() {
         try {
             Gson gson = new Gson();
@@ -179,12 +180,18 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                     int height = getMeasuredHeight();
 
                     for (int i = 0; i < pathPoints.size(); i++) {
-                        //TODO: For road1, we have captured absolute cordinate, hence divide by screen size
-                        // We will be storing percentage cordinate, so won't be required
                         pathPointTemps.add(i, new PathPoint(width * (pathPoints.get(i).x / 100),
                                 height * (pathPoints.get(i).y / 100)));
 
                     }
+                    startX = (int)pathPointTemps.get(0).x;
+                    startY = (int)pathPointTemps.get(0).y - ballH/2;
+
+                    stopX = (int)pathPointTemps.get(pathPointTemps.size() - 1).x - stop.getWidth()/2;
+                    stopY = (int)pathPointTemps.get(pathPointTemps.size() - 1).y - stop.getHeight()/2;
+
+                    ballX = startX;
+                    ballY = startY;
                 }
             });
 
@@ -210,13 +217,17 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         matrix.setScale(-1, 1); //Horizontal mirror effect.
         bgrReverse = Bitmap.createBitmap(bgr, 0, 0, bgrW, bgrH, matrix, true); //Create a new mirrored bitmap by applying the matrix.
 
-        ballX = 0;
-        ballY = screenH - 60;
+        if(pathPointTemps != null && pathPointTemps.size() > 0) {
+            startX = (int) pathPointTemps.get(0).x;
+            startY = (int) pathPointTemps.get(0).y - ballH/2;
 
-        stopX = screenW-70;
-        stopY = screenH-80;
+            stopX = (int) pathPointTemps.get(pathPointTemps.size() - 1).x - stop.getWidth()/2;
+            stopY = (int) pathPointTemps.get(pathPointTemps.size() - 1).y - stop.getHeight()/2;
+        }
+
+        ballX = startX;
+        ballY = startY;
     }
-
 
     private int getPathXforTouchY(int touchY) {
         int pathX = -1, i = 0;
@@ -239,25 +250,37 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
         float x = ev.getX();
         float y =  ev.getY();
-        float xDiff = Math.abs(x - stopX);
-        float yDiff = Math.abs(y - stopY);
-        if (xDiff < 30&& yDiff <30) {
-            stopDraw = true;
-            if (mRemoteSensorManager != null) {
-                mRemoteSensorManager.getUploadDataHelper().setNullUserActivity();
-                mRemoteSensorManager.getUploadMobileDataHelper().setNullUserActivity();
+        float xDiff = 0, yDiff = 0;
+        if(started) {
+            xDiff = Math.abs(x - (stopX + stop.getWidth()/2));
+            yDiff = Math.abs(y - (stopY + stop.getHeight()/2));
+            if (xDiff < 30 && yDiff < 30) {
+                started = false;
+                Toast.makeText(getContext(), "Finished snooker activity", Toast.LENGTH_LONG).show();
+                if (mRemoteSensorManager != null) {
+                    mRemoteSensorManager.getUploadDataHelper().setUserActivity(getResources().getString(R.string.exercise_ring_rect), null);
+                    mRemoteSensorManager.getUploadMobileDataHelper().setUserActivity(getResources().getString(R.string.exercise_ring_rect), null);
+                }
+                return true;
             }
-            return true;
+        }else{
+            xDiff = Math.abs(x - (startX + ballW/2));
+            yDiff = Math.abs(y - (startY + ballH/2));
+            if (xDiff < 30 && yDiff < 30) {
+                started = true;
+                Toast.makeText(getContext(), "Started snooker activity", Toast.LENGTH_LONG).show();
+                if (mRemoteSensorManager != null) {
+                    mRemoteSensorManager.getUploadDataHelper().setNullUserActivity();
+                    mRemoteSensorManager.getUploadMobileDataHelper().setNullUserActivity();
+                }
+                return true;
+            }
         }
-      //  else
-      //      stopDraw = false;
-
 
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 if (BUILD_PATH_MODE == 2) {
                     PathPoint newPoint = new PathPoint((int)ev.getX(), (int)ev.getY());
-                    //pathPoints.add(newPoint);
                     pathPointTemps.add(newPoint);
                     Collections.sort(pathPointTemps, new Comparator<PathPoint>() {
                         @Override
@@ -266,29 +289,30 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                         }
                     });
                 } else {
-                    ballX = (int) ev.getX() - ballW / 2;
-                    ballY = (int) ev.getY() - ballH / 2;
+                    if(started){
+                        ballX = (int) ev.getX() - ballW / 2;
+                        ballY = (int) ev.getY() - ballH / 2;
 
-                    ballFingerMove = true;
+                        ballFingerMove = true;
+                    }
                 }
                 invalidate();
                 break;
             }
 
             case MotionEvent.ACTION_MOVE: {
-                ballX = (int) ev.getX() - ballW / 2;
-                ballY = (int) ev.getY() - ballH / 2;
-                pathY = (int) ev.getY();
-                pathX = getPathXforTouchY(pathY);
-                //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
-                if (mRemoteSensorManager != null && !stopDraw) {
-                    String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
-                    mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+                if(started) {
+                    ballX = (int) ev.getX() - ballW / 2;
+                    ballY = (int) ev.getY() - ballH / 2;
+                    pathY = (int) ev.getY();
+                    pathX = getPathXforTouchY(pathY);
+                    Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
+                    if (mRemoteSensorManager != null && started) {
+                        String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
+                        mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+                    }
+                    invalidate();
                 }
-
-
-                invalidate();
-                started = true;
                 break;
             }
 
@@ -340,7 +364,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             if (started) {
                 canvas.drawBitmap(tree, treeXpos, treeYpos, null);
                 if (treeXpos > 180)
-                   treeXpos -= 0.4;
+                    treeXpos -= 0.4;
             }
 
             //Next value for the background's position.
@@ -411,16 +435,15 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-
-
 }
-    class PathPoint{
-        float x;
-        float y;
 
-        public PathPoint(float x, float y) {
-            this.x = x;
-            this.y = y;
-        }
+class PathPoint{
+    float x;
+    float y;
+
+    public PathPoint(float x, float y) {
+        this.x = x;
+        this.y = y;
     }
+}
 

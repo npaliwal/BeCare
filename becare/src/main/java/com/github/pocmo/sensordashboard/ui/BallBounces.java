@@ -139,8 +139,8 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             boolean isFirst = true;
             PathPoint fractionPoint = new PathPoint(0f, 0f);
             for(PathPointInt point : pathPointTemps){
-                fractionPoint.x = point.x / bgrW;
-                fractionPoint.y = point.y / bgrH;
+                fractionPoint.x = (float) point.x / bgrW;
+                fractionPoint.y = (float) point.y / bgrH;
                 if(isFirst){
                     data = data + gson.toJson(fractionPoint, PathPoint.class);
                     isFirst = false;

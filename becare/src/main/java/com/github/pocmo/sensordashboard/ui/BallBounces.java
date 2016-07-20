@@ -74,7 +74,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     Paint fpsPaint = new Paint();
 
     private List<PathPoint> pathPoints = new ArrayList<>();
-    private List<PathPoint> pathPointTemps = new ArrayList<>();
+    private List<PathPointInt> pathPointTemps = new ArrayList<>();
     BecareRemoteSensorManager mRemoteSensorManager = null;
     private int BUILD_PATH_MODE=0;
 
@@ -137,14 +137,15 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             Gson gson = new Gson();
             String data = "[";
             boolean isFirst = true;
-            for(PathPoint point : pathPointTemps){
-                point.x = point.x * 100 / bgrW;
-                point.y = point.y * 100 / bgrH;
+            PathPoint fractionPoint = new PathPoint(0f, 0f);
+            for(PathPointInt point : pathPointTemps){
+                fractionPoint.x = point.x / bgrW;
+                fractionPoint.y = point.y / bgrH;
                 if(isFirst){
-                    data = data + gson.toJson(point, PathPoint.class);
+                    data = data + gson.toJson(fractionPoint, PathPoint.class);
                     isFirst = false;
                 }else{
-                    data = data +", "+ gson.toJson(point, PathPoint.class);
+                    data = data +", "+ gson.toJson(fractionPoint, PathPoint.class);
                 }
             }
             data = data + "]";
@@ -165,11 +166,11 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
     private void initializeCoordinates(){
         if(pathPointTemps != null && pathPointTemps.size() > 0) {
-            startX = (int) pathPointTemps.get(0).x;
-            startY = (int) pathPointTemps.get(0).y;
+            startX = pathPointTemps.get(0).x / 100;
+            startY = pathPointTemps.get(0).y / 100;
 
-            stopX = (int) pathPointTemps.get(pathPointTemps.size() - 1).x;
-            stopY = (int) pathPointTemps.get(pathPointTemps.size() - 1).y;
+            stopX = pathPointTemps.get(pathPointTemps.size() - 1).x / 100;
+            stopY = pathPointTemps.get(pathPointTemps.size() - 1).y / 100;
 
             ballX = startX - ballW/2;
             ballY = startY - ballH/2;
@@ -193,8 +194,9 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                     int height = getMeasuredHeight();
 
                     for (int i = 0; i < pathPoints.size(); i++) {
-                        pathPointTemps.add(i, new PathPoint(width * (pathPoints.get(i).x / 100),
-                                height * (pathPoints.get(i).y / 100)));
+                        pathPointTemps.add(i, new PathPointInt(
+                                (int)(width * pathPoints.get(i).x),
+                                (int)(height * pathPoints.get(i).y)));
 
                     }
                     initializeCoordinates();
@@ -227,16 +229,19 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     }
 
     private int getPathXforTouchY(int touchY) {
-        int pathX = -1, i = 0;
-        for (PathPoint curr : pathPointTemps) {
-            if (touchY >= curr.y) {
-                PathPoint prev = pathPointTemps.get(i);
-                return (int) (curr.x + (prev.x - curr.x) * (curr.y - touchY) / (touchY - prev.y));
+        int pathX = -1, i = 0, touchYHelper = touchY*100;
+        for (PathPointInt curr : pathPointTemps) {
+            pathX = curr.x;
+            if (touchYHelper >= curr.y) {
+                if (i > 0) {
+                    PathPointInt prev = pathPointTemps.get(i - 1);
+                    pathX = curr.x + (prev.x - curr.x) * (curr.y - touchYHelper) / (touchYHelper - prev.y);
+                }
+                break;
             }
             i++;
         }
-
-        return pathX;
+        return pathX/100;
     }
 
     //***************************************
@@ -279,14 +284,11 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         switch (ev.getAction()) {
             case MotionEvent.ACTION_DOWN: {
                 if (BUILD_PATH_MODE == 2) {
-                    PathPoint newPoint = new PathPoint((int)ev.getX(), (int)ev.getY());
+                    PathPointInt newPoint = new PathPointInt((int)(100*ev.getX()), (int)(100*ev.getY()));
                     pathPointTemps.add(newPoint);
-                    Collections.sort(pathPointTemps, new Comparator<PathPoint>() {
-                        @Override
-                        public int compare(PathPoint lhs, PathPoint rhs) {
-                            return (int)(rhs.y - lhs.y);
-                        }
-                    });
+                }else if(BUILD_PATH_MODE == 1){
+                    pathY = (int) ev.getY();
+                    pathX = getPathXforTouchY(pathY);
                 } else {
                     if(started){
                         ballX = (int) ev.getX() - ballW / 2;
@@ -301,6 +303,9 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             case MotionEvent.ACTION_MOVE: {
                 if (BUILD_PATH_MODE == 2) {
+                    PathPointInt newPoint = new PathPointInt((int)(100*ev.getX()), (int)(100*ev.getY()));
+                    pathPointTemps.add(newPoint);
+                }else if(BUILD_PATH_MODE == 1){
                     pathY = (int) ev.getY();
                     pathX = getPathXforTouchY(pathY);
                 }else {
@@ -322,6 +327,15 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
 
             case MotionEvent.ACTION_UP:
+                if (BUILD_PATH_MODE == 2) {
+                    Collections.sort(pathPointTemps, new Comparator<PathPointInt>() {
+                        @Override
+                        public int compare(PathPointInt lhs, PathPointInt rhs) {
+                            return rhs.y - lhs.y;
+                        }
+                    });
+                }
+
                 if(started) {
                     ballFingerMove = false;
                     dY = 0;
@@ -346,15 +360,15 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             Path path = new Path();
             boolean first = true;
             for (int i = 0; i < pathPointTemps.size(); i += 2) {
-                PathPoint point = pathPointTemps.get(i);
+                PathPointInt point = pathPointTemps.get(i);
                 if (first) {
                     first = false;
-                    path.moveTo(point.x, point.y);
+                    path.moveTo(point.x/100, point.y/100);
                 } else if (i < pathPointTemps.size() - 1) {
-                    PathPoint next = pathPointTemps.get(i + 1);
-                    path.quadTo(point.x, point.y, next.x, next.y);
+                    PathPointInt next = pathPointTemps.get(i + 1);
+                    path.quadTo(point.x/100, point.y/100, next.x/100, next.y/100);
                 } else {
-                    path.lineTo(point.x, point.y);
+                    path.lineTo(point.x/100, point.y/100);
                 }
             }
             Paint p = new Paint();
@@ -449,6 +463,16 @@ class PathPoint{
     float y;
 
     public PathPoint(float x, float y) {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class PathPointInt{
+    int x;
+    int y;
+
+    public PathPointInt(int x, int y) {
         this.x = x;
         this.y = y;
     }

@@ -127,9 +127,9 @@ public class UtilityActivity extends RoboActivity {
                 } catch (Exception e) {
                 }
                 preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
-                Toast.makeText(UtilityActivity.this, "IP address has been updated", Toast.LENGTH_LONG).show();
                 remoteSensorManager.getSocketManager().refresh(preferenceStorage);
 
+                Toast.makeText(UtilityActivity.this, "IP address has been updated", Toast.LENGTH_LONG).show();
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(shadesNumEx.getText().toString()), AppConfig.ContrastTestType.SHADES);
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(itchiNumEx.getText().toString()), AppConfig.ContrastTestType.ITCHI_PLATE);
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(patternNumEx.getText().toString()), AppConfig.ContrastTestType.PATTERN);
@@ -246,8 +246,13 @@ public class UtilityActivity extends RoboActivity {
                 JSONObject jsonObject = new JSONObject();
                 jsonObject.put("ip", socketIp.getText().toString());
                 jsonObject.put("port", socketPort.getText().toString());
-
+                String error = remoteSensorManager.getSocketManager().getError();
+                if (!error.isEmpty()) {
+                    Toast.makeText(UtilityActivity.this, error, Toast.LENGTH_LONG).show();
+                    return;
+                }
                 remoteSensorManager.getSocketManager().pushData(jsonObject.toString());
+                Toast.makeText(UtilityActivity.this, "Data sent to socket successfully !!", Toast.LENGTH_LONG).show();
             } catch (UnknownHostException e) {
                 success = false;
                 e.printStackTrace();
@@ -257,13 +262,13 @@ public class UtilityActivity extends RoboActivity {
             } catch (Exception e) {
                 success = false;
                 e.printStackTrace();
-            }finally {
+            }/*finally {
                 if(success){
                     Toast.makeText(UtilityActivity.this, "Data sent to socket successfully !!", Toast.LENGTH_LONG).show();
                 }else{
                     Toast.makeText(UtilityActivity.this, "Data sent to socket FAILED !!", Toast.LENGTH_LONG).show();
                 }
-            }
+            }*/
         }
     };
 

@@ -4,6 +4,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.PreferenceStorage;
+import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -20,22 +21,29 @@ public class ClientSocketManager {
     private Socket socket;
     String ip;
     int port;
+    String error="";
 
-    public ClientSocketManager(PreferenceStorage preferenceStorage){
+    public ClientSocketManager(PreferenceStorage preferenceStorage) {
         refresh(preferenceStorage);
     }
 
-    public void refresh(PreferenceStorage preferenceStorage){
+    public void refresh(PreferenceStorage preferenceStorage) {
         this.socket = null;
         this.ip = preferenceStorage.getSocketIp();
         this.port = preferenceStorage.getSocketPort();
         new Thread(new ClientThread()).start();
+
+    }
+
+    public String getError(){
+        return error;
     }
 
     public void pushData(String data) throws Exception{
-        if(socket == null)
-            return;
-
+        if(socket == null) {
+            Exception e = new Exception("Socket error");
+            throw e;
+        }
         String str = data;
         PrintWriter out = new PrintWriter(new BufferedWriter(
                 new OutputStreamWriter(socket.getOutputStream())),
@@ -45,8 +53,10 @@ public class ClientSocketManager {
     }
 
     public void pushDataAsyncronously(final String data) throws Exception{
-        if(socket == null)
-            return;
+        if(socket == null) {
+            Exception e = new Exception("Socket error");
+            throw e;
+        }
 
         new Thread(new Runnable() {
             @Override
@@ -69,7 +79,7 @@ public class ClientSocketManager {
         @Override
         public void run() {
             Log.d("socketmanager", "Socket initializing start !!");
-
+            error = "";
             try {
                 InetAddress serverAddr = InetAddress.getByName(ip);
 
@@ -78,8 +88,10 @@ public class ClientSocketManager {
             } catch (UnknownHostException e1) {
                 Log.d("socketmanager", "Socket initialized FAILED unknown host !!");
                 e1.printStackTrace();
+                error = "Socket initialized FAILED unknown host !!";
             } catch (IOException e1) {
                 Log.d("socketmanager", "Socket initialized FAILED ioexception !!");
+                error = "Socket initialized FAILED ioexception !!";
                 e1.printStackTrace();
             }
             Log.d("socketmanager", "Socket initializing end !!");

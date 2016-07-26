@@ -98,7 +98,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void initView(Context context) {
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
-        bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road1); //Load a background.
+        bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road2); //Load a background.
         tree = BitmapFactory.decodeResource(getResources(),R.drawable.tree); //Load a background.
         stop = BitmapFactory.decodeResource(getResources(),R.drawable.stop);
 
@@ -150,7 +150,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
             data = data + "]";
 
-            File myFile = new File("/sdcard/road1.txt");
+            File myFile = new File("/sdcard/road2.txt");
             myFile.createNewFile();
             FileOutputStream fOut = new FileOutputStream(myFile);
             OutputStreamWriter myOutWriter =
@@ -180,7 +180,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private void buildPathFromFile(Context context) {
         try {
             Gson gson = new Gson();
-            String pathData = FileUtils.readResourceToString(context, R.raw.road1_path);
+            String pathData = FileUtils.readResourceToString(context, R.raw.road2_path);
             JSONArray dataArr = new JSONArray(pathData);
             for (int i = 0; i < dataArr.length(); i++) {
                 pathPoints.add(i, gson.fromJson(dataArr.getJSONObject(i).toString(), PathPoint.class));
@@ -245,9 +245,9 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         for (PathPointInt curr : pathPointTemps) {
             prev = pathPointTemps.get(i == 0 ? 0 : i - 1);
             if(isPointBetween(prev.y, curr.y, touchY*100)){
-                Log.d("ball debug", "Point found between -> Prev.y=" + prev.y + ", Curr.y" + curr.y + ", touchY=" + touchY);
+                //Log.d("ball debug", "Point found between -> Prev.y=" + prev.y + ", Curr.y" + curr.y + ", touchY=" + touchY);
                 if(Math.abs(curr.x - touchX*100) < minimunDistance ){
-                    Log.d("ball debug", "Minimum distance reached -> Curr.x" + curr.x + ", touchX=" + touchX*100);
+                //    Log.d("ball debug", "Minimum distance reached -> Curr.x" + curr.x + ", touchX=" + touchX*100);
                     minimunDistance = Math.abs(curr.x - touchX*100);
                     pathPointIndex = i;
                 }
@@ -345,7 +345,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
                         ballX = (int) ev.getX() - ballW / 2;
                         ballY = (int) ev.getY() - ballH / 2;
-                        Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
+                        //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
                         if (mRemoteSensorManager != null && started) {
                             String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
                             mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
@@ -357,15 +357,6 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             }
 
             case MotionEvent.ACTION_UP:
-                if (BUILD_PATH_MODE == 2) {
-                    //Collections.sort(pathPointTemps, new Comparator<PathPointInt>() {
-                    //    @Override
-                    //    public int compare(PathPointInt lhs, PathPointInt rhs) {
-                    //        return rhs.y - lhs.y;
-                    //    }
-                    //});
-                }
-
                 if(started) {
                     ballFingerMove = false;
                     dY = 0;

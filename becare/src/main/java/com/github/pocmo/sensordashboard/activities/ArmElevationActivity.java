@@ -8,9 +8,11 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.style.IconMarginSpan;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -46,6 +48,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        customTitleBar();
         setContentView(R.layout.activity_arm_elevation);
         watchArm = (ImageView) findViewById(R.id.iv_watch);
         phoneArm = (ImageView) findViewById(R.id.iv_phone);
@@ -119,6 +122,35 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 }.start();
             }
         });
+    }
+
+    private void customTitleBar(){
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false); // disables default title on
+        ab.setDisplayShowCustomEnabled(true); // enables custom view.
+        ab.setDisplayShowHomeEnabled(false); // hides app icon.
+        ab.setDisplayHomeAsUpEnabled(false);
+        // Inflating Layout
+        LayoutInflater inflater = (LayoutInflater) ab.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View customActionBar = inflater.inflate(R.layout.actionbar_layout, null);
+        TextView title = (TextView) customActionBar.findViewById(R.id.title);
+        title.setText(R.string.exercise_arm_elevation);
+
+        ImageView back = (ImageView)customActionBar.findViewById(R.id.back);
+        back.setVisibility(View.GONE);
+
+        ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getSnooker(ArmElevationActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        ab.setCustomView(customActionBar, layout);
     }
 
     @Override

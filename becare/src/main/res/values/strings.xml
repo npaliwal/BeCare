@@ -40,6 +40,9 @@
     <string name="transcript_address">Please take me to this address</string>
     <string name="transcript_greet">Nice to meet you</string>
 
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
 
 
     <string-array name="height_arrays" style="@style/spinnerStyle">

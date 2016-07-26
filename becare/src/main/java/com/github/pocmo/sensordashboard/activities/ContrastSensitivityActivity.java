@@ -5,9 +5,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.pocmo.sensordashboard.AppConfig;
@@ -45,6 +49,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        customTitleBar();
         setContentView(R.layout.activity_contrast_sensitivity);
         performanceText = (TextView) findViewById(R.id.tv_performance);
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(ContrastSensitivityActivity.this);
@@ -53,6 +58,42 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         initExercises();
         initViewPager();
         initButtons();
+    }
+
+    private void customTitleBar(){
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false); // disables default title on
+        ab.setDisplayShowCustomEnabled(true); // enables custom view.
+        ab.setDisplayShowHomeEnabled(false); // hides app icon.
+        ab.setDisplayHomeAsUpEnabled(false);
+        // Inflating Layout
+        LayoutInflater inflater = (LayoutInflater) ab.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View customActionBar = inflater.inflate(R.layout.actionbar_layout, null);
+        TextView title = (TextView) customActionBar.findViewById(R.id.title);
+        title.setText(R.string.exercise_contrast);
+
+        ImageView back = (ImageView)customActionBar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getTranscription(ContrastSensitivityActivity.this);
+                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
+                finish();
+            }
+        });
+
+        ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getTimedWalk(ContrastSensitivityActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        ab.setCustomView(customActionBar, layout);
     }
 
     private void setupNextPage(boolean userMatch, int index){

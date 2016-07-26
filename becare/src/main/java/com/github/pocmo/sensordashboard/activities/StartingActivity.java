@@ -2,25 +2,15 @@ package com.github.pocmo.sensordashboard.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 
 import com.github.pocmo.sensordashboard.AppConfig;
@@ -29,9 +19,7 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
-import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
-import com.github.pocmo.sensordashboard.ui.SensorFragment;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
@@ -44,8 +32,6 @@ import java.util.Map;
 public class StartingActivity extends AppCompatActivity {
 
     private SensorManager mSensorManager;
-    private boolean allSensorsAvailable = true;
-    private TextView mMobileSensorStatus, mCompatiblityStatus;
     private BecareRemoteSensorManager remoteSensorManager;
     private List<Node> mNodes;
 
@@ -59,8 +45,9 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
         AppConfig.initSensors();
+        setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -77,14 +64,13 @@ public class StartingActivity extends AppCompatActivity {
         }
     }
 
+
     private void initialize(){
         checkAndConfigureSocket();
         checkandConfigureTaskSettings();
         remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mMobileSensorStatus = (TextView)findViewById(R.id.tv_mobile_Sensors);
-        mCompatiblityStatus = (TextView)findViewById(R.id.tv_compatiblity);
 
         checkSensorCompatiblity();
     }
@@ -143,26 +129,17 @@ public class StartingActivity extends AppCompatActivity {
     }
 
     public void checkSensorCompatiblity(){
-        allSensorsAvailable = true;
+        //allSensorsAvailable = true;
         String sensorStatus = "Mobile Sensors Status:";
 
         for(Map.Entry<Integer, String> entry: AppConfig.MANDATORY_SENSORS.entrySet()){
             sensorStatus += "\n\t" + entry.getValue() + " : ";
             if (mSensorManager.getDefaultSensor(entry.getKey()) == null) {
-                allSensorsAvailable = false;
+                //allSensorsAvailable = false;
                 sensorStatus += "Missing";
             }else{
                 sensorStatus += "Available";
             }
-        }
-
-        mMobileSensorStatus.setText(sensorStatus);
-        if(allSensorsAvailable){
-            mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.green));
-            mCompatiblityStatus.setText("Awesome!!! All sensors available");
-        }else{
-            mCompatiblityStatus.setTextColor(ContextCompat.getColor(this, R.color.red));
-            mCompatiblityStatus.setText("Oops!!! Some exercises will not be available to you");
         }
     }
 
@@ -236,7 +213,7 @@ public class StartingActivity extends AppCompatActivity {
     }
 
     public void getMenuLayout(View view) {
-        Intent intent = new Intent(this, MenuLayoutActivity.class);
+        Intent intent = new Intent(this, MenuUtils.class);
         startActivity(intent);
 
     }
@@ -250,5 +227,32 @@ public class StartingActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    public void openTask(View view) {
+        switch (view.getId()){
+            case R.id.arm_activity:
+                MenuUtils.getArmElevation(StartingActivity.this);
+                break;
+            case R.id.snooker_activity:
+                MenuUtils.getSnooker(StartingActivity.this);
+                break;
+            case R.id.transcript_activity:
+                MenuUtils.getTranscription(StartingActivity.this);
+                break;
+            case R.id.contrast_activity:
+                MenuUtils.getContrast(StartingActivity.this);
+                break;
+            case R.id.timed_walk_activity:
+                MenuUtils.getTimedWalk(StartingActivity.this);
+                break;
+            default:
+                MenuUtils.getArmElevation(StartingActivity.this);
+                break;
+        }
+    }
+
+    public void openTools(View view) {
+        MenuUtils.getTools(StartingActivity.this);
     }
 }

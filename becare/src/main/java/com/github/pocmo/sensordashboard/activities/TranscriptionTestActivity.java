@@ -4,15 +4,18 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -53,6 +56,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        customTitleBar();
         setContentView(R.layout.activity_transcription_test);
 
         AppConfig.initTranscriptExercises(TranscriptionTestActivity.this);
@@ -63,6 +67,42 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         initControls();
         initExercises();
         initUIElements();
+    }
+
+    private void customTitleBar(){
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false); // disables default title on
+        ab.setDisplayShowCustomEnabled(true); // enables custom view.
+        ab.setDisplayShowHomeEnabled(false); // hides app icon.
+        ab.setDisplayHomeAsUpEnabled(false);
+        // Inflating Layout
+        LayoutInflater inflater = (LayoutInflater) ab.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View customActionBar = inflater.inflate(R.layout.actionbar_layout, null);
+        TextView title = (TextView) customActionBar.findViewById(R.id.title);
+        title.setText(R.string.exercise_transcription);
+
+        ImageView back = (ImageView)customActionBar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getSnooker(TranscriptionTestActivity.this);
+                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
+                finish();
+            }
+        });
+
+        ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getContrast(TranscriptionTestActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        ab.setCustomView(customActionBar, layout);
     }
 
     @Override

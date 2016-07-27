@@ -24,11 +24,13 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.AudioData;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 
@@ -45,6 +47,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     private int currKeyCount = 0;
     private int numExercises = 0;
     private int currExercise = 0;
+    private long prevTime = 0;
 
     private ArrayList<AudioData> exercises = new ArrayList<>();
 
@@ -138,9 +141,18 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 int keysCount = keys.length();
                 while (keysCount > 0) {
                     String value = getUserActivityStats(keys.subSequence(keysCount - 1, keysCount));
-                    mRemoteSensorManager.uploadActivityDataInstantly(value);
+                    Gson gson = new Gson();
+                    Hashtable dictionary = gson.fromJson(value, Hashtable.class);
+                    double seq = (double)dictionary.get("seq");
+                    dictionary.put("seq", (int)seq);
+                    dictionary.put("activityname", "Transcription Test");
+                    long now = System.currentTimeMillis();
+                    long dur = (prevTime == 0) ? 0: now - prevTime;
+                    dictionary.put("dur", dur);
+                    mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
                     keysCount--;
                     currKeyCount++;
+                    prevTime = now;
                 }
             }
 
@@ -180,6 +192,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 }
                 input.setText(null);
                 currKeyCount = 0;
+                prevTime = 0;
             }
         });
     }

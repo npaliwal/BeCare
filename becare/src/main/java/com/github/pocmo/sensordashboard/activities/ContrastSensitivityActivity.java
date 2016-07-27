@@ -21,11 +21,13 @@ import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.ContrastImageInfo;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 
@@ -40,7 +42,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     private ViewPager pager;
     FragmentPagerAdapter adapterViewPager;
     private String value = null;
-
+    private int seq = 0;
+    private long prevTime =0;
     private int correctCount = 0;
     public ArrayList<TwoImageInfo> exercises = new ArrayList<>();
     private BecareRemoteSensorManager mRemoteSensorManager;
@@ -108,7 +111,16 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         performanceText.setText(dataShow);
 
         value = getUserActivityStats(userMatch, index);
-        mRemoteSensorManager.uploadActivityDataInstantly(value);
+        Gson gson = new Gson();
+        Hashtable dictionary = gson.fromJson(value, Hashtable.class);
+        dictionary.put("seq", seq);
+        dictionary.put("activityname", "Contrast Sensitivity");
+        long now = System.currentTimeMillis();
+        long dur = (prevTime == 0)? 0: now - prevTime;
+        prevTime = now;
+        dictionary.put("dur", dur);
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+        seq++;
     }
 
     private void initButtons(){

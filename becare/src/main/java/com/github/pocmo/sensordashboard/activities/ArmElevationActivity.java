@@ -473,7 +473,7 @@ private void orientationChange(SensorEvent event) {
             dictionary.put("dur (millsecond)", ms);
             dictionary.put("seq", seq);
           //  dictionary.put("azimuth", azimuth);
-            mRemoteSensorManager.uploadWalkingActivityData(dictionary);
+            mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
             dur = (now - armDownTime) * (1.0 / 5.0);
             upReminder = (long) dur;
@@ -505,7 +505,7 @@ private void orientationChange(SensorEvent event) {
                 dictionary.put("dur (millsecond)", dur);
                 dictionary.put("seq", seq);
             //    dictionary.put("azimuth", azimuth);
-                mRemoteSensorManager.uploadWalkingActivityData(dictionary);
+                mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
                 armDownTime = now;
                 downSendData = false;

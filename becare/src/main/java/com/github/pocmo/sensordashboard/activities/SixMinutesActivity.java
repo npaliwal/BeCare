@@ -65,7 +65,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
     public ImageView arrowView = null;
     private long startTime = 0;
     private CountDownTimer cTimer = null;
-    private long timePassed = 0;
+    private long lastTime = 0;
     private BecareRemoteSensorManager becareRemoteSensorManager;
 
     @Override
@@ -95,6 +95,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
                 numSteps = 0;
                 startMeasure = true;
                 startTime =System.currentTimeMillis();
+                lastTime = System.currentTimeMillis();
                 cTimer.start();
                 Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
             }
@@ -325,20 +326,22 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
         String speedStr = String.format("%.5f", speed);
         speedText.setText(speedStr);
 
-        long countdownTimer = 360000 - elapsedMillis;
+        long countdownTimer = elapsedMillis;//360000 - elapsedMillis;
         String countdownTimerStr = String.format("%d", countdownTimer);
         String stepsStr = String.format("%d", numSteps);
         String heightStr = String.format("%.1f", (float)height);
+        long dur = System.currentTimeMillis() - lastTime;
+        lastTime = System.currentTimeMillis();
 
         Hashtable dictionary = new Hashtable();
         dictionary.put("activityName", getString(R.string.six_minutes_walk));
         dictionary.put("countdown time", countdownTimerStr);
         dictionary.put("speed (miles/sec)", speedStr);
         dictionary.put("distance (miles)", milesStr);
-        dictionary.put("time elapsed",  elapsedMillis);
+        dictionary.put("dur",  dur);
         dictionary.put("step number",  stepsStr);
         dictionary.put("height",  heightStr);
-        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
     }
 }
 

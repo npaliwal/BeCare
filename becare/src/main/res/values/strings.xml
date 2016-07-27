@@ -7,11 +7,20 @@
     <string name="action_settings">Settings</string>
 
     <string name="login">Login</string>
-    <string name="exercise_ring_rect">Snooker</string>
-    <string name="exercise_transcription">Transcription Test</string>
-    <string name="exercise_contrast">Contrast Sensitivity</string>
-    <string name="exercise_arm_elevation">Arm Elevation</string>
-    <string name="exercise_timed_walk">Timed Walk</string>
+
+    <string name="exercise_ring_rect"><b>Snooker</b></string>
+    <string name="exercise_transcription"><b>Transcription Test</b></string>
+    <string name="exercise_contrast"><b>Contrast Sensitivity</b></string>
+    <string name="exercise_arm_elevation"><b>Arm Elevation</b></string>
+    <string name="exercise_timed_walk"><b>Timed Walk</b></string>
+
+    <string name="description_ring_rect"><b>Hand stiffness is one the key for blah blah.. Combined with vision tells you more about</b></string>
+    <string name="description_transcription"><b>Lets test your hearing ability. Type in that you hear on fancy keyboard and we will</b></string>
+    <string name="description_contrast"><b>Choosing between right and wrong is life all about. Lets see if you can tell the difference</b></string>
+    <string name="description_arm_elevation"><b>Know more about your fitness. Raise your arm with device in hands and we..</b></string>
+    <string name="description_timed_walk"><b>Timed Walk test lets you know about blah blah. and you can do more with blah blah</b></string>
+
+
     <string name="twenty_five_steps">Twenty five steps</string>
     <string name="six_minutes_walk">Six minutes walk</string>
     <string name="up_and_go">Up and go</string>

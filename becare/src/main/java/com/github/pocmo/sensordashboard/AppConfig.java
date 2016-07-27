@@ -4,9 +4,15 @@ import android.content.Context;
 import android.hardware.Sensor;
 
 
+import com.github.pocmo.sensordashboard.activities.ArmElevationActivity;
+import com.github.pocmo.sensordashboard.activities.ContrastSensitivityActivity;
+import com.github.pocmo.sensordashboard.activities.SnookerActivity;
+import com.github.pocmo.sensordashboard.activities.TimedWalkedActivity;
+import com.github.pocmo.sensordashboard.activities.TranscriptionTestActivity;
 import com.github.pocmo.sensordashboard.model.AudioData;
 import com.github.pocmo.sensordashboard.model.ContrastImageInfo;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
+import com.github.pocmo.sensordashboard.model.WellnessTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +42,18 @@ public class AppConfig {
         MANDATORY_SENSORS.put(Sensor.TYPE_ACCELEROMETER,    "Accelerometer");
         MANDATORY_SENSORS.put(Sensor.TYPE_STEP_COUNTER,     "Step Counter");
     };
+
+    public static ArrayList<WellnessTask> ALL_TAKSK = new ArrayList<>();
+    public static void initWellnessTasks(){
+        if(ALL_TAKSK.size() > 0){
+            return;
+        }
+        ALL_TAKSK.add(new WellnessTask(R.string.exercise_arm_elevation, R.string.description_arm_elevation, R.drawable.arm, ArmElevationActivity.class));
+        ALL_TAKSK.add(new WellnessTask(R.string.exercise_ring_rect, R.string.description_ring_rect, R.drawable.snooker, SnookerActivity.class));
+        ALL_TAKSK.add(new WellnessTask(R.string.exercise_transcription, R.string.description_transcription, R.drawable.transcript, TranscriptionTestActivity.class));
+        ALL_TAKSK.add(new WellnessTask(R.string.exercise_contrast, R.string.description_contrast, R.drawable.contrast, ContrastSensitivityActivity.class));
+        ALL_TAKSK.add(new WellnessTask(R.string.exercise_timed_walk, R.string.description_timed_walk, R.drawable.timed, TimedWalkedActivity.class));
+    }
 
     public enum ContrastTestType{
         SHADES,

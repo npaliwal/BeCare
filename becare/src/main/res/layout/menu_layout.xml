@@ -12,92 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="25sp"
-        android:layout_marginTop="30dp"
+        android:layout_margin="10dp"
         android:layout_gravity="center"
         android:gravity="center"
         android:textStyle="bold"
+        android:text="Wellness Tasks" />
 
-        android:text="BeCare Wellness Tasks" />
-
-    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:rowCount="9"
-        android:columnCount="1"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="5dp"
-        android:layout_gravity="center">
-        <Button
-            android:id="@+id/arm_activity"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/colorAQUA"
-            android:onClick="openTask"
-            android:text="Arm Elevation" />
-        <TextView
-            android:text=" "
-            android:layout_height="10dp"/>
-        <Button
-            android:id="@+id/snooker_activity"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/colorLIME"
-            android:onClick="openTask"
-            android:text="Snooker" />
-        <TextView
-            android:text=" "
-            android:layout_height="10dp"/>
-        <Button
-            android:id="@+id/transcript_activity"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/colorPINK"
-            android:onClick="openTask"
-            android:text="Transcription Test"/>
-        <TextView
-            android:text=" "
-            android:layout_height="10dp"/>
-        <Button
-            android:id="@+id/contrast_activity"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/colorLavender"
-            android:onClick="openTask"
-            android:text="Contrast Sensitivity" />
-        <TextView
-            android:text=" "
-            android:layout_height="10dp"/>
-        <Button
-            android:id="@+id/timed_walk_activity"
-            android:layout_width="200dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:background="@color/colorMustard"
-            android:onClick="openTask"
-            android:text="Timed Walk"/>
-
-    </GridLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="25sp"
-        android:layout_marginTop="20dp"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:textStyle="bold"
-        android:text="Utility" />
-    <Button
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="center"
-        android:background="@color/colorBlueberry"
-        android:onClick="openTools"
-        android:text="Tools" />
+    <ListView
+        android:id="@+id/menu_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </ListView>
 
 </LinearLayout>

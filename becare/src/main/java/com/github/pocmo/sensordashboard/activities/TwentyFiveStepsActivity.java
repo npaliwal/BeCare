@@ -54,6 +54,7 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
     private boolean startMeasure = false;
     private int countDown = 0;
     private long startTime=0;
+    private long lastStepTime = 0;
     private BecareRemoteSensorManager becareRemoteSensorManager;
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
@@ -88,6 +89,7 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
                 myChronometer.start();
                 numSteps = 0;
                 startMeasure = true;
+                lastStepTime = 0;
                 startTime = System.currentTimeMillis();
                 Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
             }
@@ -179,7 +181,10 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
         String feetStr = String.format("%.5f", feet);
         distanceFeetText.setText(feetStr);
 
-        long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
+        long now = SystemClock.elapsedRealtime();
+        long elapsedMillis = (lastStepTime == 0) ? 0: now - lastStepTime;
+        lastStepTime = now;
+
         double sec = (double)elapsedMillis / 1000.0;
         double speed = feet / sec;
         String speedStr = String.format("%.5f", speed);
@@ -191,7 +196,7 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
        // long dur = currTime - startTime;
 
         Hashtable dictionary = new Hashtable();
-        dictionary.put("activityName", getString(R.string.twenty_five_steps));
+        dictionary.put("activityname", getString(R.string.twenty_five_steps));
         dictionary.put("dur (ms)", elapsedMillis);
         dictionary.put("speed (ft/sec)", speedStr);
         dictionary.put("distance (ft)", feetStr);

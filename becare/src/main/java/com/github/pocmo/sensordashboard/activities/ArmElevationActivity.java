@@ -182,7 +182,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 motionFound = false;
                 upReminder = 0;
                 timesText.setText("0");
-                armDownTime = System.currentTimeMillis();
+                armDownTime = 0;
                 countdown.setText("04:00");
                 deltaText.setText("");
                 eventList.clear();
@@ -333,7 +333,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                     motionFound = true;
                     String display = deltaText.getText().toString();
                     Hashtable dictionary = new Hashtable();
-                    long dur = System.currentTimeMillis()- lastMotionTime;
+                    long dur =  System.currentTimeMillis()- lastMotionTime;
                     dictionary.put("motion", dur);
                     String str=String.format("%d", motionCounter);
                     dictionary.put("counter", str);
@@ -465,10 +465,10 @@ private void orientationChange(SensorEvent event) {
             Hashtable dictionary = new Hashtable();
             double ratio = 4.0 / 5.0;
             //double dur = (now - armDownTime) * ratio;
-            double dur = (now - armDownTime);
+            double dur = (armDownTime == 0)? 0: (now - armDownTime);
             long ms = (long) dur;
 
-            dictionary.put("activityName", getString(R.string.exercise_arm_elevation));
+            dictionary.put("activityname", getString(R.string.exercise_arm_elevation));
             dictionary.put("arm motion", "up");
             dictionary.put("dur (millsecond)", ms);
             dictionary.put("seq", seq);
@@ -500,7 +500,7 @@ private void orientationChange(SensorEvent event) {
                 // long dur = (armDownTime - armUpTime) + upReminder;
                 long now = System.currentTimeMillis();
                 long dur = now - armUpTime;
-                dictionary.put("activityName", getString(R.string.exercise_arm_elevation));
+                dictionary.put("activityname", getString(R.string.exercise_arm_elevation));
                 dictionary.put("arm motion", "down");
                 dictionary.put("dur (millsecond)", dur);
                 dictionary.put("seq", seq);

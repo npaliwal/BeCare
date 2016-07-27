@@ -95,7 +95,7 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
                 numSteps = 0;
                 startMeasure = true;
                 startTime =System.currentTimeMillis();
-                lastTime = System.currentTimeMillis();
+                lastTime = 0;
                 cTimer.start();
                 Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
             }
@@ -330,11 +330,11 @@ public class  SixMinutesActivity extends Activity implements SensorEventListener
         String countdownTimerStr = String.format("%d", countdownTimer);
         String stepsStr = String.format("%d", numSteps);
         String heightStr = String.format("%.1f", (float)height);
-        long dur = System.currentTimeMillis() - lastTime;
+        long dur = (lastTime == 0) ? 0 : System.currentTimeMillis() - lastTime;
         lastTime = System.currentTimeMillis();
 
         Hashtable dictionary = new Hashtable();
-        dictionary.put("activityName", getString(R.string.six_minutes_walk));
+        dictionary.put("activityname", getString(R.string.six_minutes_walk));
         dictionary.put("countdown time", countdownTimerStr);
         dictionary.put("speed (miles/sec)", speedStr);
         dictionary.put("distance (miles)", milesStr);

@@ -211,7 +211,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 if (motion.equals(raisingMsg))
                     durStr = "0";
                 Hashtable dictionary = new Hashtable();
-                dictionary.put("activityName", getString(R.string.up_and_go));
+                dictionary.put("activityname", getString(R.string.up_and_go));
                 dictionary.put("dur (ms)", durStr);
                 dictionary.put("motion", motion);
                 becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
@@ -260,7 +260,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
             long dur = SystemClock.elapsedRealtime() - haltStart;
             String durStr = String.format("%d", dur);
             Hashtable dictionary = new Hashtable();
-            dictionary.put("activityName", getString(R.string.up_and_go));
+            dictionary.put("activityname", getString(R.string.up_and_go));
             dictionary.put("dur (ms)", durStr);
             dictionary.put("motion", "halt");
             becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
@@ -285,7 +285,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         String stepsStr = String.format("%d", numSteps);
 
         Hashtable dictionary = new Hashtable();
-        dictionary.put("activityName", getString(R.string.up_and_go));
+        dictionary.put("activityname", getString(R.string.up_and_go));
         dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", walkingMsg);
         dictionary.put("step num", stepsStr);

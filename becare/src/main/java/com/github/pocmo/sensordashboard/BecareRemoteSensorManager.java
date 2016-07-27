@@ -278,7 +278,19 @@ public class BecareRemoteSensorManager {
         }
     }
 
-    public void uploadWalkingActivityData(Hashtable table) {
+    public void uploadActivityDataAsyn(Hashtable table) {
+        try {
+            Log.d(TAG, "upload data string upload");
+            Gson gson = new Gson();
+            String str = gson.toJson(table);
+            socketManager.pushDataAsyncronously(str);
+
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
+    public void uploadActivityDataSynch(Hashtable table) {
         try {
             Log.d(TAG, "upload data string upload");
             Gson gson = new Gson();

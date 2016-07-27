@@ -30,10 +30,13 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by neerajpaliwal on 11/07/16.
@@ -53,7 +56,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int bgrH;
     int treeW;
     int treeH;
-    float treeXpos = 400;
+    float treeXpos = 500;
     float treeYpos = -20;
     int angle;
     int bgrScroll;
@@ -65,7 +68,8 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     boolean started=false;
     int stopX, stopY;
     int startX, startY;
-
+    int seq = 0;
+    long preTime = 0;
     //Measure frames per second.
     long now;
     int framesCount = 0;
@@ -77,6 +81,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     private List<PathPointInt> pathPointTemps = new ArrayList<>();
     BecareRemoteSensorManager mRemoteSensorManager = null;
     private int BUILD_PATH_MODE=0;
+    private final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     public BallBounces(Context context){
         super(context);
@@ -300,8 +305,10 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         }else{
             xDiff = Math.abs(x - startX);
             yDiff = Math.abs(y - startY);
-            if (xDiff < 30 && yDiff < 30) {
+            if (xDiff < 50 && yDiff < 50) {
                 started = true;
+                seq = 0;
+                preTime = 0;
                 Toast.makeText(getContext(), "Started snooker activity", Toast.LENGTH_LONG).show();
                 if (mRemoteSensorManager != null) {
                     mRemoteSensorManager.getUploadDataHelper().setNullUserActivity();
@@ -348,7 +355,20 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                         //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
                         if (mRemoteSensorManager != null && started) {
                             String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
-                            mRemoteSensorManager.getUploadDataHelper().setUserActivity("Snooker", value);
+                            long now = System.currentTimeMillis();
+                            if (preTime == 0)
+                                preTime = now;
+                            long dur = now - preTime;
+                            preTime = now;
+                            String readTime = timeFormat.format(now);
+                            Hashtable dictionary = new Hashtable();
+                            dictionary.put("value",value );
+                            dictionary.put("activityName", "snooker");
+                            dictionary.put("seq", seq);
+                            dictionary.put("dur (ms)", dur);
+                            dictionary.put("time", readTime);
+                            mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+                            seq++;
                         }
                     }
                 }

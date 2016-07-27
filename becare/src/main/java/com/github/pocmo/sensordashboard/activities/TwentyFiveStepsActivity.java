@@ -192,12 +192,12 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
 
         Hashtable dictionary = new Hashtable();
         dictionary.put("activityName", getString(R.string.twenty_five_steps));
-        dictionary.put("dur (millsecond)", elapsedMillis);
+        dictionary.put("dur (ms)", elapsedMillis);
         dictionary.put("speed (ft/sec)", speedStr);
         dictionary.put("distance (ft)", feetStr);
         dictionary.put("step number",  stepsStr);
         dictionary.put("height",  heightStr);
-        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
         if (countDown <= 0) {
             startMeasure = false;

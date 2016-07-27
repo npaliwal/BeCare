@@ -29,7 +29,8 @@ import java.util.List;
 public class UpAndGoActivity extends Activity implements SensorEventListener, StepListener {
     private static final float THRESHOLD = (float)11.7;
     private static final int SAMPLE_SIZE = 5;
-    private final String motionMsg = "Raising/Sitting";
+    private final String raisingMsg = "Raising";
+    private final String sittingMsg = "Sitting";
     private final String walkingMsg = "Walking";
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
@@ -46,11 +47,14 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
 
     Chronometer myChronometer;
     private boolean startMeasure = false;
+    private boolean synchStartEvent = false;
     private float mAccelCurrent = 0;
     private float mAccelLast = 0;
     private long lastMotionTime = 0;
     private long  lastTime;
+    private long haltStart = 0;
     private List<sensorData> sensorList = new ArrayList<>();
+    private List<eventData> eventList = new ArrayList<>();
     private BecareRemoteSensorManager becareRemoteSensorManager;
 
     @Override
@@ -70,8 +74,10 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
             public void onClick(View v) {
                 numSteps = 0;
                 startMeasure = true;
+                synchStartEvent = true;
                 Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
                 stepText.setText("0");
+                deltaText.setText("");
                 lastTime = SystemClock.elapsedRealtime();
                 myChronometer.setBase(SystemClock.elapsedRealtime());
                 myChronometer.start();
@@ -83,6 +89,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
             @Override
             public void onClick(View v) {
                 startMeasure = false;
+                eventList.clear();
                 Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
                 myChronometer.stop();
             }
@@ -133,7 +140,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
             float y = event.values[1];
             float z = event.values[2];
             mAccelLast = mAccelCurrent;
-            mAccelCurrent = (float)Math.sqrt(x*x + y*y + z*z);
+            mAccelCurrent = (float) Math.sqrt(x * x + y * y + z * z);
 
             sensorData data = new sensorData();
             data.x = x;
@@ -142,51 +149,89 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
             data.timestamp = event.timestamp;
             data.accel = mAccelCurrent;
 
-            if (sensorList.size() ==SAMPLE_SIZE)
+            if (sensorList.size() == SAMPLE_SIZE)
                 sensorList.remove(0);
             sensorList.add(data);
             boolean motionFound = true;
             String motion = "";
-            if (sensorList.size() ==SAMPLE_SIZE){
-                for (int i=0; i<SAMPLE_SIZE; i++){
+            if (sensorList.size() == SAMPLE_SIZE) {
+                for (int i = 0; i < SAMPLE_SIZE; i++) {
                     if (sensorList.get(i).accel < THRESHOLD) {
                         motionFound = false;
                         break;
                     }
                     // motion += String.format("%.5f,", sensorList.get(i).accel);
-                    motion = motionMsg;
+                    //    motion = motionMsg;
                     lastMotionTime = System.currentTimeMillis();
                 }
                 //clear samples
                 if (motionFound) {
                     sensorList.clear();
                 }
-            }
-            else
+            } else
                 motionFound = false;
 
             if (motionFound == true) {
-                int n = motion.indexOf(motionMsg);
-                if (n < 0) {
-                    motion += " ";
-                    motion += motionMsg;
+                if (synchStartEvent) {
+                    motion = raisingMsg;
+                    deltaText.setText(motion);
+                    eventData d = new eventData();
+                    d.name = raisingMsg;
+                    d.timestamp = SystemClock.elapsedRealtime();
+                    eventList.add(d);
+                } else {
+                    motion = sittingMsg;
+                    String delta = deltaText.getText().toString();
+                    if (delta == walkingMsg) {
+                        for (int i = eventList.size()-1; i >= 0; i--) {
+                            if (eventList.get(i).name.equals(sittingMsg) || eventList.get(i).name.equals(raisingMsg)) {
+                                long dur = SystemClock.elapsedRealtime() - eventList.get(i).timestamp;
+                                if (dur < 1000)
+                                    return;
+                            }
+                        }
+                        deltaText.setText(motion);
+                        eventData d = new eventData();
+                        d.name = sittingMsg;
+                        d.timestamp = SystemClock.elapsedRealtime();
+                        eventList.add(d);
+                    } else {
+                        //already in motion
+                        return;
+                    }
                 }
-                deltaText.setText(motion);
+
 
                 long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
-                long dur = SystemClock.elapsedRealtime() - lastTime;
+                long dur;
+                dur = SystemClock.elapsedRealtime() - lastTime;
                 lastTime = SystemClock.elapsedRealtime();
                 String durStr = String.format("%d", dur);
 
+                if (motion.equals(raisingMsg))
+                    durStr = "0";
                 Hashtable dictionary = new Hashtable();
                 dictionary.put("activityName", getString(R.string.up_and_go));
-                dictionary.put("elapsed time", elapsedMillis);
-                dictionary.put("dur (millsecond)", durStr);
-                dictionary.put("motion", motionMsg);
-                becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+                dictionary.put("dur (ms)", durStr);
+                dictionary.put("motion", motion);
+                becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
-                return;
+
+               if (synchStartEvent) {
+                   synchStartEvent = false;
+                   haltStart = SystemClock.elapsedRealtime();
+               }
+
+               return;
             }
+
+            if (synchStartEvent)
+                return;
+
+            //if it is a step, check if it is really a step
+            String step =stepText.getText().toString();
+            if (step.equals("0") && (SystemClock.elapsedRealtime() - lastTime) < 300)
+                 return;
 
            simpleStepDetector.updateAccel(
                     event.timestamp, event.values[0], event.values[1], event.values[2]);
@@ -211,18 +256,26 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         if (!startMeasure)
             return;
 
-        numSteps++;
+        if (numSteps == 0){
+            long dur = SystemClock.elapsedRealtime() - haltStart;
+            String durStr = String.format("%d", dur);
+            Hashtable dictionary = new Hashtable();
+            dictionary.put("activityName", getString(R.string.up_and_go));
+            dictionary.put("dur (ms)", durStr);
+            dictionary.put("motion", "halt");
+            becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+            lastTime = SystemClock.elapsedRealtime();
+            numSteps++;
+            return;
+        }
+
         String str =String.format("%d", numSteps);
         stepText.setText(str);
 
         String text =deltaText.getText().toString();
         int n = text.indexOf(walkingMsg);
-        if (n < 0) {
-            text += " ";
-            text += walkingMsg;
-        }
-
-        text = text.replace(motionMsg, "");
+        if (n < 0)
+            text = walkingMsg;
         deltaText.setText(text);
 
         long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
@@ -233,11 +286,11 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
 
         Hashtable dictionary = new Hashtable();
         dictionary.put("activityName", getString(R.string.up_and_go));
-        dictionary.put("elapsed time", elapsedMillis);
-        dictionary.put("dur (millsecond)", durStr);
+        dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", walkingMsg);
         dictionary.put("step num", stepsStr);
-        becareRemoteSensorManager.uploadWalkingActivityData(dictionary);
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+        numSteps++;
     }
 
     public class sensorData{
@@ -246,6 +299,11 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         public float z;
         public long timestamp;
         public float accel;
+    }
+
+    public class eventData{
+        public String name;
+        public long timestamp;
     }
 }
 

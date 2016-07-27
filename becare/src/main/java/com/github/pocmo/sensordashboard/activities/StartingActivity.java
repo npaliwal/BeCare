@@ -5,17 +5,20 @@ import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
+import android.support.v7.widget.ListViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 
 import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.AppConstant;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
+import com.github.pocmo.sensordashboard.MenuAdapter;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
@@ -34,6 +37,8 @@ public class StartingActivity extends AppCompatActivity {
     private SensorManager mSensorManager;
     private BecareRemoteSensorManager remoteSensorManager;
     private List<Node> mNodes;
+    private ListView menuItems;
+    private MenuAdapter adapter;
 
     private PreferenceStorage preferenceStorage;
     private static StartingActivity instance;
@@ -46,7 +51,12 @@ public class StartingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         AppConfig.initSensors();
+        AppConfig.initWellnessTasks();
         setContentView(R.layout.activity_main);
+
+        menuItems = (ListView) findViewById(R.id.menu_list);
+        adapter = new MenuAdapter(StartingActivity.this);
+        menuItems.setAdapter(adapter);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -169,6 +179,7 @@ public class StartingActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            MenuUtils.getTools(StartingActivity.this);
             return true;
         }
 
@@ -176,46 +187,9 @@ public class StartingActivity extends AppCompatActivity {
     }
 
 
-    @Subscribe
-    public void onSensorUpdatedEvent(SensorUpdatedEvent event) {
-
-    }
-
-    //@SuppressWarnings("StatementWithEmptyBody")
-    //@Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.nav_arm_elavation) {
-            // Handle the arm elevation test
-            startActivity(new Intent(this, ArmElevationActivity.class));
-
-        } else if (id == R.id.nav_snooker) {
-            //startActivity(new Intent(this, BallRectangleActivity.class));
-            startActivity(new Intent(this, SnookerActivity.class));
-        } else if (id == R.id.nav_transcription) {
-            startActivity(new Intent(this, TranscriptionTestActivity.class));
-        } else if (id == R.id.nav_contranst) {
-            startActivity(new Intent(this, ContrastSensitivityActivity.class));
-        } else if (id == R.id.nav_timed_walk) {
-            startActivity(new Intent(this, TimedWalkedActivity.class));
-        } else if (id == R.id.nav_share) {
-            // Handle the transription test
-
-        } else if (id == R.id.nav_tools) {
-            startActivity(new Intent(this, UtilityActivity.class));
-        }
-
-        //DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        //drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
-
     public void getMenuLayout(View view) {
         Intent intent = new Intent(this, MenuUtils.class);
         startActivity(intent);
-
     }
 
     @Override
@@ -229,30 +203,4 @@ public class StartingActivity extends AppCompatActivity {
         }
     }
 
-    public void openTask(View view) {
-        switch (view.getId()){
-            case R.id.arm_activity:
-                MenuUtils.getArmElevation(StartingActivity.this);
-                break;
-            case R.id.snooker_activity:
-                MenuUtils.getSnooker(StartingActivity.this);
-                break;
-            case R.id.transcript_activity:
-                MenuUtils.getTranscription(StartingActivity.this);
-                break;
-            case R.id.contrast_activity:
-                MenuUtils.getContrast(StartingActivity.this);
-                break;
-            case R.id.timed_walk_activity:
-                MenuUtils.getTimedWalk(StartingActivity.this);
-                break;
-            default:
-                MenuUtils.getArmElevation(StartingActivity.this);
-                break;
-        }
-    }
-
-    public void openTools(View view) {
-        MenuUtils.getTools(StartingActivity.this);
-    }
 }

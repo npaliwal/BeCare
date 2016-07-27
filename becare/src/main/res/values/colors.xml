@@ -8,6 +8,7 @@
     <color name="green">#0AA05C</color>
     <color name="red">#D73A31</color>
 
+    <color name="transparent">#00000000</color>
 
     <color name="graph_color_1">#FF3f51b5</color>
     <color name="graph_color_2">#FF9c27b0</color>

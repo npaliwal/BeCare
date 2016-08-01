@@ -57,7 +57,6 @@ public class StartingActivity extends AppCompatActivity {
         menuItems = (ListView) findViewById(R.id.menu_list);
         adapter = new MenuAdapter(StartingActivity.this);
         menuItems.setAdapter(adapter);
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

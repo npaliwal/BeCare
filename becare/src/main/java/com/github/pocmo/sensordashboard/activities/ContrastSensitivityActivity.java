@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -91,6 +92,15 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 MenuUtils.getTimedWalk(ContrastSensitivityActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.getParentActivityIntent(ContrastSensitivityActivity.this);
                 overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
                 finish();
             }

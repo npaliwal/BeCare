@@ -303,8 +303,10 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
     public void removeFromInput(View key){
         if(key instanceof TextView) {
-            input.setText(input.getText().subSequence(0, input.getText().length()-1));
-            input.setSelection(input.getText().length());
+            if(!TextUtils.isEmpty(input.getText().toString())) {
+                input.setText(input.getText().subSequence(0, input.getText().length() - 1));
+                input.setSelection(input.getText().length());
+            }
         }
     }
 }

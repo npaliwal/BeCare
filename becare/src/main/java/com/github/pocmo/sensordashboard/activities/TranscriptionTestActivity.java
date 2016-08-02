@@ -122,7 +122,17 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
     private void initUIElements() {
         input = (EditText)findViewById(R.id.et_user_input);
-        input.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        //input.setRawInputType(InputType.TYPE_CLASS_TEXT);
+        input.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                int inType = input.getInputType(); // backup the input type
+                input.setInputType(InputType.TYPE_NULL); // disable soft input
+                input.onTouchEvent(event); // call native handler
+                input.setInputType(inType); // restore input type
+                return true; // consume touch even
+            }
+        });
         input.setTextIsSelectable(true);
         input.addTextChangedListener(new TextWatcher() {
             @Override

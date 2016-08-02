@@ -18,6 +18,7 @@
     <color name="graph_color_6">#FF795548</color>
     <color name="graph_color_7">#FFe51c23</color>
     <color name="graph_color_8">#FFcddc39</color>
+
     <color name="graph_color_9">#FFff9800</color>
     <color name="graph_color_info">#FF9e9e9e</color>
     <color name="graph_color_tag">#AA000000</color>
@@ -60,6 +61,7 @@
     <color name="gray_96">#f4f4f4</color>
     <color name="gray_97">#E3E7EC</color>
     <color name="white">#ffffff</color>
+    <color name="white2">#F7FAEC</color>
 
     <color name="colorGree0">#4EC5C1</color>
     <color name="colorGree1">#01ABAA</color>
@@ -68,6 +70,7 @@
     <color name="colorSteel">#0A1012</color>
     <color name="colorPlaster">#CDCDCD</color>
     <color name="colorPlaster2">#D5D5D5</color>
+    <color name="colorLINEN">#E9E9E9</color>
     <color name="colorBeige">#F2EEE2</color>
     <color name="colorSmoke">#6E7376</color>
     <color name="colorRain">#6EC4D8</color>
@@ -85,6 +88,7 @@
     <color name="colorPINK2">#F06376</color>
     <color name="colorAQUA">#4EC5C1</color>
     <color name="colorLIME">#E5E338</color>
+    <color name="colorLIME2">#CBFF3E</color>
     <color name="colorINDIGO">#304150</color>
     <color name="colorBlack2">#202020</color>
     <color name="colorBlack3">#1D2731</color>
@@ -93,4 +97,9 @@
     <color name="colorApricot">#F7882F</color>
     <color name="colorLavender">#6C64BB</color>
     <color name="colorDustyRose">#B6A196</color>
+    <color name="colorEduc">#153B4F</color>
+    <color name="colorEduc3">#6489A3</color>
+    <color name="colorEduc2">#2F4C63</color>
+    <color name="colorBlue">#3A59C0</color>
+    <color name="colorBrown">#4B6600</color>
 </resources>

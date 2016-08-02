@@ -2,6 +2,7 @@ package com.github.pocmo.sensordashboard.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -54,6 +55,15 @@ public class TimedWalkedActivity extends AppCompatActivity{
 
         ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
         next.setVisibility(View.GONE);
+        ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.getParentActivityIntent(TimedWalkedActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
         ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
         ab.setCustomView(customActionBar, layout);
     }

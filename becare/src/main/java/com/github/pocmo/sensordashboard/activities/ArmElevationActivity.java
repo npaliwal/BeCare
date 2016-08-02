@@ -9,6 +9,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.style.IconMarginSpan;
@@ -257,6 +258,15 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
             @Override
             public void onClick(View view) {
                 MenuUtils.getSnooker(ArmElevationActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.getParentActivityIntent(ArmElevationActivity.this);
                 overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
                 finish();
             }

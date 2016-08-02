@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -21,11 +22,13 @@ import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.ContrastImageInfo;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Random;
 
 
@@ -40,7 +43,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     private ViewPager pager;
     FragmentPagerAdapter adapterViewPager;
     private String value = null;
-
+    private int seq = 0;
+    private long prevTime =0;
     private int correctCount = 0;
     public ArrayList<TwoImageInfo> exercises = new ArrayList<>();
     private BecareRemoteSensorManager mRemoteSensorManager;
@@ -92,6 +96,15 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 finish();
             }
         });
+        ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.getParentActivityIntent(ContrastSensitivityActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
         ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
         ab.setCustomView(customActionBar, layout);
     }
@@ -108,7 +121,16 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         performanceText.setText(dataShow);
 
         value = getUserActivityStats(userMatch, index);
-        mRemoteSensorManager.uploadActivityDataInstantly(value);
+        Gson gson = new Gson();
+        Hashtable dictionary = gson.fromJson(value, Hashtable.class);
+        dictionary.put("seq", seq);
+        dictionary.put("activityname", "Contrast Sensitivity");
+        long now = System.currentTimeMillis();
+        long dur = (prevTime == 0)? 0: now - prevTime;
+        prevTime = now;
+        dictionary.put("dur", dur);
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+        seq++;
     }
 
     private void initButtons(){

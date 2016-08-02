@@ -10,41 +10,60 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_marginTop="20dp">
-
+        <ImageView
+            android:id="@+id/arm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/arm_up" />
+</LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <TextView
             android:id="@+id/instruction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Instruction:\n 1.Hold the phone and push the 'Start' buton.\n 2.Move your arm up and down while holding the phone.The time interval is 40 sec. \n3.Push the 'Stop' button if you want to stop."
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/colorBrown"
+            android:text="Instruction:\n 1.Hold the phone and push the 'Start' buton.\n 2.Move your arm up and down while holding the phone.\n3.Push the 'Stop' button if you want to stop. Otherwise continue the exercise for 40 sec."
             android:layout_centerHorizontal="true"
-            android:textSize="18sp"/>
-
-
-        <TextView
-            android:id="@+id/msg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
-            android:gravity="center"
-            android:textSize="18sp">
-
-        </TextView>
+            android:textSize="16sp"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPlaster"
+
+        android:orientation="vertical">
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:orientation="vertical">
-
+     <!--   <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/line" />
+-->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:layout_marginTop="5dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
                 android:layout_marginLeft="50dp"
+                android:textStyle="bold"
                 android:text="Arm: "/>
             <TextView
                 android:id="@+id/delta"
@@ -55,7 +74,7 @@
             <TextView
                 android:id="@+id/rectangle"
                 android:layout_width="100dp"
-                android:layout_height="30dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="50dp"
                 android:gravity="center"
                 android:layout_gravity="center"
@@ -73,6 +92,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 android:text="Times:  "/>
             <TextView
                 android:id="@+id/steps"
@@ -89,7 +109,7 @@
         android:layout_below="@+id/reaadings"
         android:layout_marginLeft="50dp"
 
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="5dp">
 
 
         <TextView
@@ -97,13 +117,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:textStyle="bold"
             android:text="Countdown:" >
         </TextView>
         <TextView
             android:id="@+id/countdown"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+android:layout_marginLeft="20dp"
             android:textSize="20sp"
             android:textStyle="bold"
             android:text="Time:" />
@@ -149,7 +170,7 @@
         android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:text="Start"
-        android:textSize="24sp"
+        android:textSize="22sp"
         android:textColor="@color/white"
         android:background="@color/colorPrimary"
         android:padding="5dp"
@@ -162,7 +183,7 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:text="Stop"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textColor="@color/white"
             android:background="@color/colorPrimary"
             android:padding="5dp"
@@ -215,5 +236,5 @@
             </qtx.compass.CompassView>
 -->
     </RelativeLayout>
-
+</LinearLayout>
 </LinearLayout>

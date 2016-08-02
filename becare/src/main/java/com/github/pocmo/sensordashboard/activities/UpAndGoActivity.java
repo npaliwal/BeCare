@@ -1,12 +1,15 @@
 package com.github.pocmo.sensordashboard.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.view.View;
 import android.widget.Button;
@@ -22,20 +25,27 @@ import com.github.pocmo.sensordashboard.StepListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by qtxdev on 7/5/2016.
  */
 public class UpAndGoActivity extends Activity implements SensorEventListener, StepListener {
     private static final float THRESHOLD = (float)11.7;
+    private static final float THRESHOLD2 = (float)11.2;
     private static final int SAMPLE_SIZE = 5;
+    private static final int SAMPLE_SIZE2 = 5;
     private final String raisingMsg = "Raising";
     private final String sittingMsg = "Sitting";
     private final String walkingMsg = "Walking";
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
-
+    private CountDownTimer cTimer = null;
     private int numSteps = 0;
 
     private TextView stepText;
@@ -54,6 +64,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     private long  lastTime;
     private long haltStart = 0;
     private List<sensorData> sensorList = new ArrayList<>();
+    private List<sensorData> sensorList2 = new ArrayList<>();
     private List<eventData> eventList = new ArrayList<>();
     private BecareRemoteSensorManager becareRemoteSensorManager;
 
@@ -81,6 +92,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 lastTime = SystemClock.elapsedRealtime();
                 myChronometer.setBase(SystemClock.elapsedRealtime());
                 myChronometer.start();
+              //  cTimer.start();
             }
         });
 
@@ -92,6 +104,7 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 eventList.clear();
                 Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
                 myChronometer.stop();
+
             }
         });
         // Get an instance of the SensorManager
@@ -102,6 +115,30 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         becareRemoteSensorManager = BecareRemoteSensorManager.getInstance(UpAndGoActivity.this);
 
         lastMotionTime = -0xffffff;
+
+      //  new AsyncTaskRunner().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        int corePoolSize = 60;
+        int maximumPoolSize = 80;
+        int keepAliveTime = 10;
+
+      //  BlockingQueue<Runnable> workQueue = new LinkedBlockingQueue<Runnable>(maximumPoolSize);
+      //  Executor threadPoolExecutor = new ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, TimeUnit.SECONDS, workQueue);
+     //   new AsyncTaskRunner().executeOnExecutor(threadPoolExecutor);
+
+        cTimer = new CountDownTimer(3000000, 500) { // adjust the milli seconds here
+            public void onTick(long millisUntilFinished) {
+                long dur = SystemClock.elapsedRealtime() - lastTime;
+               if ( dur > 500)
+                   if (startMeasure && !synchStartEvent)
+                       sendStopMsg(dur);
+
+            }
+
+            public void onFinish() {
+             //   startMeasure = false;
+
+            }
+        }.start();
     }
 
     @Override
@@ -184,11 +221,10 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                     String delta = deltaText.getText().toString();
                     if (delta == walkingMsg) {
                         for (int i = eventList.size()-1; i >= 0; i--) {
-                            if (eventList.get(i).name.equals(sittingMsg) || eventList.get(i).name.equals(raisingMsg)) {
-                                long dur = SystemClock.elapsedRealtime() - eventList.get(i).timestamp;
-                                if (dur < 1000)
-                                    return;
-                            }
+                            long dur = SystemClock.elapsedRealtime() - eventList.get(i).timestamp;
+                            if (dur < 1000)
+                                return;
+
                         }
                         deltaText.setText(motion);
                         eventData d = new eventData();
@@ -197,6 +233,10 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                         eventList.add(d);
                     } else {
                         //already in motion
+                        long now = SystemClock.elapsedRealtime();
+                        long dur = now - lastTime;
+                        lastTime = now;
+
                         return;
                     }
                 }
@@ -215,11 +255,11 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 dictionary.put("dur (ms)", durStr);
                 dictionary.put("motion", motion);
                 becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-
+                haltStart = lastTime;
 
                if (synchStartEvent) {
                    synchStartEvent = false;
-                   haltStart = SystemClock.elapsedRealtime();
+                 //  haltStart = SystemClock.elapsedRealtime();
                }
 
                return;
@@ -228,13 +268,14 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
             if (synchStartEvent)
                 return;
 
-            //if it is a step, check if it is really a step
             String step =stepText.getText().toString();
-            if (step.equals("0") && (SystemClock.elapsedRealtime() - lastTime) < 300)
-                 return;
+            if (step.equals("0") && (SystemClock.elapsedRealtime() - lastTime) < 350)
+                return;
 
-           simpleStepDetector.updateAccel(
+           Boolean foundStep =simpleStepDetector.updateAccel2(
                     event.timestamp, event.values[0], event.values[1], event.values[2]);
+            if (foundStep)
+                processStep();
 
         }
     }
@@ -253,44 +294,52 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
 
     @Override
     public void step(long timeNs) {
+
+    }
+
+
+    private void processStep() {
         if (!startMeasure)
             return;
 
-        if (numSteps == 0){
-            long dur = SystemClock.elapsedRealtime() - haltStart;
-            String durStr = String.format("%d", dur);
-            Hashtable dictionary = new Hashtable();
-            dictionary.put("activityname", getString(R.string.up_and_go));
-            dictionary.put("dur (ms)", durStr);
-            dictionary.put("motion", "halt");
-            becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-            lastTime = SystemClock.elapsedRealtime();
-            numSteps++;
+        long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
+        long dur = SystemClock.elapsedRealtime() - lastTime;
+        if (dur < 200)
             return;
-        }
+
+        lastTime = SystemClock.elapsedRealtime();
+        numSteps++;
 
         String str =String.format("%d", numSteps);
         stepText.setText(str);
+        deltaText.setText(walkingMsg);
 
-        String text =deltaText.getText().toString();
-        int n = text.indexOf(walkingMsg);
-        if (n < 0)
-            text = walkingMsg;
-        deltaText.setText(text);
-
-        long elapsedMillis = SystemClock.elapsedRealtime() - myChronometer.getBase();
-        long dur = SystemClock.elapsedRealtime() - lastTime;
-        lastTime = SystemClock.elapsedRealtime();
         String durStr = String.format("%d", dur);
         String stepsStr = String.format("%d", numSteps);
-
         Hashtable dictionary = new Hashtable();
         dictionary.put("activityname", getString(R.string.up_and_go));
         dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", walkingMsg);
         dictionary.put("step num", stepsStr);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-        numSteps++;
+
+     //   eventData d = new eventData();
+     //   d.name = walkingMsg;
+   //     d.timestamp = SystemClock.elapsedRealtime();
+    //    eventList.add(d);
+    }
+
+    private void sendStopMsg(long dur)
+    {
+        deltaText.setText("stop");
+
+        String durStr = String.format("%d", dur);
+        Hashtable dictionary = new Hashtable();
+        dictionary.put("activityname", getString(R.string.up_and_go));
+        dictionary.put("dur (ms)", durStr);
+        dictionary.put("motion", "stop");
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+        lastTime = SystemClock.elapsedRealtime();
     }
 
     public class sensorData{
@@ -304,6 +353,59 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     public class eventData{
         public String name;
         public long timestamp;
+    }
+
+    private class AsyncTaskRunner extends AsyncTask<Void, Void, Void> {
+
+        TextView txtView = (TextView)findViewById(R.id.delta);
+
+        @Override
+        protected Void doInBackground(Void... param) {
+
+/*
+            try {
+
+                  Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }*/
+            return null;
+        }
+
+
+        @Override
+        protected void onPostExecute(Void result) {
+            try {
+
+                    txtView.setText("stop");
+                    Thread.sleep(100);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+
+        }
+
+
+        @Override
+        protected void onProgressUpdate(Void... test) {
+
+
+        }
     }
 }
 

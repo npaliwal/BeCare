@@ -22,14 +22,14 @@ import com.github.pocmo.sensordashboard.MenuAdapter;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
-import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
-import com.squareup.otto.Subscribe;
 
 import java.util.List;
 import java.util.Map;
+
+import ldp.games.doodlejump.DoodleJumpActivity;
 
 
 public class StartingActivity extends AppCompatActivity {
@@ -179,6 +179,11 @@ public class StartingActivity extends AppCompatActivity {
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             MenuUtils.getTools(StartingActivity.this);
+            return true;
+        }
+        if (id == R.id.action_doodle) {
+            Intent intent = new Intent(StartingActivity.this, DoodleJumpActivity.class);
+            startActivity(intent);
             return true;
         }
 

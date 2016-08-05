@@ -1,1 +1,1 @@
-include ':becare'
+include ':becare', ':doodlejump'

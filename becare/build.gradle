@@ -35,7 +35,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    //compile project(':mobile')
+    compile project(':doodlejump')
     //wearApp project(':wear')
 
     //compile project(':shared')

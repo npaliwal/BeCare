@@ -15,7 +15,6 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewTreeObserver;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
@@ -27,13 +26,10 @@ import org.json.JSONArray;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +52,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int bgrH;
     int treeW;
     int treeH;
-    float treeXpos = 500;
+    float treeXpos = 1000;
     float treeYpos = -20;
     int angle;
     int bgrScroll;
@@ -363,7 +359,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                             String readTime = timeFormat.format(now);
                             Hashtable dictionary = new Hashtable();
                             dictionary.put("value",value );
-                            dictionary.put("activityName", "snooker");
+                            dictionary.put("activityname", "snooker");
                             dictionary.put("seq", seq);
                             dictionary.put("dur (ms)", dur);
                             dictionary.put("time", readTime);
@@ -427,8 +423,8 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         } else {
             if (started) {
                 canvas.drawBitmap(tree, treeXpos, treeYpos, null);
-                if (treeXpos > 180)
-                    treeXpos -= 0.4;
+                if (treeXpos > 300)
+                    treeXpos -= 0.6;
 
                 //Next value for the background's position.
                 if ((bgrScroll += dBgrY) >= bgrW) {

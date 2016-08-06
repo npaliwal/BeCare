@@ -1,12 +1,7 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.view.View;
-
-import com.github.pocmo.sensordashboard.R;
 
 /**
  * Created by qtxdev on 7/13/2016.
@@ -39,6 +34,26 @@ public class MenuUtils{
 
     public static void getTimedWalk(Context context) {
         Intent intent = new Intent(context, TimedWalkedActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void getUpAndGo(Context context) {
+        Intent intent = new Intent(context, UpAndGoActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void getTwentyFiveStepsActivity(Context context) {
+        Intent intent = new Intent(context, TwentyFiveStepsActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void getSixMinutesActivity(Context context) {
+        Intent intent = new Intent(context, SixMinutesActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void getUpAndGoActivity(Context context) {
+        Intent intent = new Intent(context, UpAndGoActivity.class);
         context.startActivity(intent);
     }
 

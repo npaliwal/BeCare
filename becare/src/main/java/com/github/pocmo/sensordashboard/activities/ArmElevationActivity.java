@@ -1,6 +1,5 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.hardware.Sensor;
@@ -12,20 +11,13 @@ import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.style.IconMarginSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Interpolator;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -165,7 +157,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 countdown.setText("Done");
                 startButton.setText("Start");
                 startButton.setClickable(true);
-                rectangle.setBackgroundColor(Color.rgb(0, 0,0));
+                rectangle.setBackgroundColor(Color.rgb(255, 200,50));
             }
         };
 
@@ -229,7 +221,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
             public void onClick(View v) {
                 startMeasure = false;
                 Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
-                rectangle.setBackgroundColor(Color.rgb(0, 0,0));
+                rectangle.setBackgroundColor(Color.rgb(255, 200,50));
                 startButton.setClickable(true);
                 startButton.setText("Start");
 
@@ -470,8 +462,8 @@ private void orientationChange(SensorEvent event) {
             ++seq;
 
             deltaText.setText("Up");
-         //   rectangle.setBackgroundColor(Color.rgb(10, 160,92));
-            rectangle.setBackgroundColor(Color.rgb(65, 99,181));
+            rectangle.setBackgroundColor(Color.rgb(10, 160,92));
+           // rectangle.setBackgroundColor(Color.rgb(65, 99,181));
             Hashtable dictionary = new Hashtable();
             double ratio = 4.0 / 5.0;
             //double dur = (now - armDownTime) * ratio;

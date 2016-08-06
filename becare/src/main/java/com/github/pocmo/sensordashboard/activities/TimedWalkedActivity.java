@@ -7,8 +7,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -54,7 +52,15 @@ public class TimedWalkedActivity extends AppCompatActivity{
         });
 
         ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
-        next.setVisibility(View.GONE);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getUpAndGo(TimedWalkedActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+
         ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
         home.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,9 +86,5 @@ public class TimedWalkedActivity extends AppCompatActivity{
 
     }
 
-    public void getUpAndGo(View view) {
-        Intent intent = new Intent(this, UpAndGoActivity.class);
-        startActivity(intent);
 
-    }
 }

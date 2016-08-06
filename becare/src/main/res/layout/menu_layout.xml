@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:textStyle="bold"
-        android:text="Wellness Tasks" />
+        android:text="Wellness Workout" />
 
     <ListView
         android:id="@+id/menu_list"

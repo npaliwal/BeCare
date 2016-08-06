@@ -19,11 +19,11 @@
     <string name="description_contrast"><b>Choosing between right and wrong is life all about. Lets see if you can tell the difference</b></string>
     <string name="description_arm_elevation"><b>Know more about your fitness. Raise your arm with device in hands and we..</b></string>
     <string name="description_timed_walk"><b>Timed Walk test lets you know about blah blah. and you can do more with blah blah</b></string>
-
+    <string name="description_up_and_go"><b>Measure your time to get up and go. Do it procisely</b></string>
 
     <string name="twenty_five_steps">Twenty five steps</string>
     <string name="six_minutes_walk">Six minutes walk</string>
-    <string name="up_and_go">Up and go</string>
+    <string name="up_and_go">Up and Go</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
 

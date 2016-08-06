@@ -37,13 +37,5 @@
         android:onClick="getSixMinutes"
         android:text="6 Minutes Walk" />
 
-    <Button
-        android:id="@+id/btn_upgo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/btn_6min"
-        android:onClick="getUpAndGo"
-        android:text="Up and Go" />
-
 
 </RelativeLayout>

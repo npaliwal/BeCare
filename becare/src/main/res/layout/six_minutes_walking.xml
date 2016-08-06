@@ -189,20 +189,21 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:layout_marginTop="15dp">
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:background="@drawable/arrow_button_bk"
-            android:onClick="getTimedWalking">
-        </Button>
-     <!--   <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginLeft="20dp"
-            android:layout_gravity="center"
-            android:background="@drawable/arrow_button"
-            android:onClick="getUpAndGo">
-        </Button>-->
+        <!--
+       <Button
+           android:layout_width="40dp"
+           android:layout_height="40dp"
+           android:layout_gravity="center"
+           android:background="@drawable/arrow_button_bk"
+           android:onClick="getTimedWalking">
+       </Button>
+      <Button
+           android:layout_width="40dp"
+           android:layout_height="40dp"
+           android:layout_marginLeft="20dp"
+           android:layout_gravity="center"
+           android:background="@drawable/arrow_button"
+           android:onClick="getUpAndGo">
+       </Button>-->
     </LinearLayout>
 </LinearLayout>

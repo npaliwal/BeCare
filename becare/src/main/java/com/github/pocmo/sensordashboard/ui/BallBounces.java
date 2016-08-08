@@ -52,7 +52,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int bgrH;
     int treeW;
     int treeH;
-    float treeXpos = 1000;
+    float treeXpos = 1100;
     float treeYpos = -20;
     int angle;
     int bgrScroll;
@@ -101,7 +101,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
         bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road2); //Load a background.
         tree = BitmapFactory.decodeResource(getResources(),R.drawable.tree); //Load a background.
-        stop = BitmapFactory.decodeResource(getResources(),R.drawable.stop);
+        stop = BitmapFactory.decodeResource(getResources(),R.drawable.goal5);
 
         ballW = ball.getWidth();
         ballH = ball.getHeight();
@@ -392,6 +392,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         Rect toRect = new Rect(0, 0, bgrW, bgrH);
 
         canvas.drawBitmap(bgr, fromRect, toRect, null);
+        double ySubtr =  (float) stop.getHeight()/1.2;
 
         if (BUILD_PATH_MODE > 0) {
             Path path = new Path();
@@ -423,7 +424,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
         } else {
             if (started) {
                 canvas.drawBitmap(tree, treeXpos, treeYpos, null);
-                if (treeXpos > 300)
+                if (treeXpos > 600)
                     treeXpos -= 0.6;
 
                 //Next value for the background's position.
@@ -447,12 +448,16 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
 
             canvas.save(); //Save the position of the canvas matrix.
             canvas.rotate(angle, ballX + (ballW / 2), ballY + (ballH / 2)); //Rotate the canvas matrix.
-            canvas.drawBitmap(ball, ballX, ballY, null); //Draw the ball by applying the canvas rotated matrix.
 
+            if (ballY < (stopY - (long)ySubtr)* 2)
+                ballY = (int)((stopY - (long)ySubtr)* 2);
+
+            canvas.drawBitmap(ball, ballX, ballY, null); //Draw the ball by applying the canvas rotated matrix.
 
         }
         canvas.restore(); //Rotate the canvas matrix back to its saved position - only the ball bitmap was rotated not all canvas.
-        canvas.drawBitmap(stop, stopX - stop.getWidth()/2, stopY - stop.getHeight()/2, null);
+
+        canvas.drawBitmap(stop, stopX - stop.getWidth()/2, stopY - (long)ySubtr, null);
 
         //Measure frame rate (unit: frames per second).
         now = System.currentTimeMillis();

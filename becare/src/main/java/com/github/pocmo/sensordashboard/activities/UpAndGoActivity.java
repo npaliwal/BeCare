@@ -325,7 +325,15 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         });
 
         ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
-        next.setVisibility(View.GONE);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getStroop(UpAndGoActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+
 
         ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
         home.setOnClickListener(new View.OnClickListener() {

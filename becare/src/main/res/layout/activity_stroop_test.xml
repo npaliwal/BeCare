@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/sixMinutesWalking"
+
+    android:padding="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Practice"
+        android:textSize="20dip" />
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="5"
+        android:columnCount="7"
+        android:background="@color/stroopGrey"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+
+        android:layout_gravity="center">
+        <TextView
+            android:text="Red"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/red"
+            android:textSize="18dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:textSize="18dip" />
+        <TextView
+            android:text="Yellow"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/colorYellow"
+            android:textSize="18dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:textSize="18dip" />
+        <TextView
+            android:text="Blue"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/colorBlue"
+            android:textSize="18dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:textSize="18dip" />
+        <TextView
+            android:text="Green"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/green"
+            android:textSize="18dip" />
+
+
+
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+
+
+
+        <TextView
+            android:text=" "
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_height="40dp"
+            android:layout_width="75dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+
+
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+
+
+
+        <TextView
+            android:text=" "
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+
+    </GridLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Actual"
+        android:textSize="20dip" />
+
+    <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:rowCount="5"
+        android:columnCount="7"
+        android:background="@color/stroopGrey"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
+        android:padding="5dp"
+
+        android:layout_gravity="center">
+        <TextView
+            android:text="Red"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/colorBlue"
+            android:textSize="18dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:textSize="18dip" />
+        <TextView
+            android:text="Yellow"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/stroopBrown"
+            android:textSize="18dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:textSize="18dip" />
+        <TextView
+            android:text="Blue"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/red"
+            android:textSize="18dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:textSize="18dip" />
+        <TextView
+            android:text="Green"
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@color/colorLINEN"
+            android:textColor="@color/stroopPurple"
+            android:textSize="18dip" />
+
+
+
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+
+
+
+        <TextView
+            android:text=" "
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_height="40dp"
+            android:layout_width="75dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+
+
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:text=""
+            android:layout_width="75dp"
+            android:layout_height="5dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+
+
+
+        <TextView
+            android:text=" "
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+        <TextView
+            android:text=" "
+            android:layout_width="5dp"
+            android:layout_height="40dp"
+            android:background="@color/stroopGrey"
+            android:textSize="20dip" />
+        <TextView
+            android:layout_width="75dp"
+            android:layout_height="40dp"
+            android:background="@color/colorLINEN"
+            android:textSize="20dip" />
+
+    </GridLayout>
+
+</LinearLayout>

@@ -103,4 +103,11 @@
     <color name="colorBlue">#3A59C0</color>
     <color name="colorBrown">#4B6600</color>
     <color name="colorYellow">#F7C331</color>
+
+    <color name="stroopLightGrey">#dedcde</color>
+    <color name="stroopGrey2">#9d9b9d</color>
+    <color name="stroopGrey">#9D9D9D</color>
+    <color name="stroopBrown">#5e4122</color>
+    <color name="stroopPurple">#883000</color>
+    <color name="stroopWordGrey">#6a686a</color>
 </resources>

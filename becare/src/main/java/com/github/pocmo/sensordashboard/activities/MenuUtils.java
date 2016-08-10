@@ -42,6 +42,11 @@ public class MenuUtils{
         context.startActivity(intent);
     }
 
+    public static void getStroop(Context context) {
+        Intent intent = new Intent(context, StroopActivity.class);
+        context.startActivity(intent);
+    }
+
     public static void getTwentyFiveStepsActivity(Context context) {
         Intent intent = new Intent(context, TwentyFiveStepsActivity.class);
         context.startActivity(intent);

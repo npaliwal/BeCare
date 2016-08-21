@@ -17,6 +17,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
@@ -31,7 +32,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 
@@ -51,6 +56,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     private long prevTime = 0;
 
     private ArrayList<AudioData> exercises = new ArrayList<>();
+    private List<Integer> quadrantOrder = new ArrayList<>();
 
     private AudioManager audioManager = null;
     private PreferenceStorage preferenceStorage;
@@ -134,6 +140,30 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     }
 
     private void initUIElements() {
+        quadrantOrder.clear();
+        quadrantOrder.add(1);
+        quadrantOrder.add(2);
+        quadrantOrder.add(3);
+        quadrantOrder.add(4);
+        Collections.shuffle(quadrantOrder);
+
+        Map<Integer, View> quadrantMap = new HashMap<>();
+        quadrantMap.put(1, findViewById(R.id.quarter1));
+        quadrantMap.put(2, findViewById(R.id.quarter2));
+        quadrantMap.put(3, findViewById(R.id.quarter3));
+        quadrantMap.put(4, findViewById(R.id.quarter4));
+
+        LinearLayout container1 = (LinearLayout)findViewById(R.id.container1);
+        container1.removeAllViews();
+        LinearLayout container2 = (LinearLayout)findViewById(R.id.container2);
+        container2.removeAllViews();
+
+        container1.addView(quadrantMap.get(quadrantOrder.get(0)));
+        container1.addView(quadrantMap.get(quadrantOrder.get(1)));
+
+        container2.addView(quadrantMap.get(quadrantOrder.get(2)));
+        container2.addView(quadrantMap.get(quadrantOrder.get(3)));
+
         input = (EditText)findViewById(R.id.et_user_input);
         //input.setRawInputType(InputType.TYPE_CLASS_TEXT);
         input.setOnTouchListener(new View.OnTouchListener() {
@@ -255,7 +285,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     }
 
     private void initExercises(){
-
         exercises.clear();
         numExercises = preferenceStorage.getNumTranscriptExercise();
 

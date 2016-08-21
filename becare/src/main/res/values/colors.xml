@@ -7,6 +7,8 @@
     <color name="gray">#808080</color>
     <color name="green">#0AA05C</color>
     <color name="red">#D73A31</color>
+    <color name="lightBlue">#457ff5</color>
+    <color name="lightBlue2">#719FFC</color>
 
     <color name="transparent">#00000000</color>
 
@@ -110,4 +112,6 @@
     <color name="stroopBrown">#5e4122</color>
     <color name="stroopPurple">#883000</color>
     <color name="stroopWordGrey">#6a686a</color>
+    <color name="stroopBg">#ebebeb</color>
+    <color name="stroopWhite">#fafafa</color>
 </resources>

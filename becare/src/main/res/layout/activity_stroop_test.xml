@@ -38,7 +38,7 @@
             android:id="@+id/start_button"
             android:layout_width="match_parent"
             android:layout_height="180dp"
-            android:background="@drawable/stroop_bg2"
+            android:background="@drawable/stroop_bg"
             android:textAlignment="center"
             android:textSize="40sp"
             android:textStyle="bold"
@@ -159,12 +159,12 @@ android:visibility="gone"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:src="@drawable/cong6" />
+            android:src="@drawable/cong4" />
         <ImageView
             android:layout_width="80dp"
             android:layout_height="wrap_content"
 
-            android:src="@drawable/cong5" />
+            android:src="@drawable/cong3" />
         <ImageView
             android:layout_width="80dp"
             android:layout_height="wrap_content"

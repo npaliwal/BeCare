@@ -1,7 +1,5 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -11,9 +9,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Chronometer;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,16 +28,11 @@ import com.github.pocmo.sensordashboard.StepListener;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by qtxdev on 7/5/2016.
  */
-public class UpAndGoActivity extends Activity implements SensorEventListener, StepListener {
+public class UpAndGoActivity extends AppCompatActivity implements SensorEventListener, StepListener {
     private static final float THRESHOLD = (float)11.7;
     private static final float THRESHOLD2 = (float)11.2;
     private static final int SAMPLE_SIZE = 5;
@@ -42,16 +40,19 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     private final String raisingMsg = "Raising";
     private final String sittingMsg = "Sitting";
     private final String walkingMsg = "Walking";
+    private final String stopMsg = "stop";
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
     private CountDownTimer cTimer = null;
     private int numSteps = 0;
-
+     private String currMotion;
     private TextView stepText;
 
     private TextView deltaText;
-
+    ImageView stand;
+    ImageView walk;
+    ImageView sit;
     private Button start;
     private Button  stop;
 
@@ -71,9 +72,16 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        customTitleBar();
         setContentView(R.layout.up_and_go);
-        //    TextView myView = (TextView) findViewById(R.layout.activity_pedometer);
+        sit = (ImageView) findViewById(R.id.sit);
+        stand = (ImageView) findViewById(R.id.stand);
+        walk = (ImageView) findViewById(R.id.walk);
 
+        sit.setTag("green");
+        stand.setTag("purple");
+        walk.setTag("purple");
+     //   qImageView.setImageResource(R.drawable.sit_green);
         stepText = (TextView) findViewById(R.id.steps);
 
         deltaText = (TextView) findViewById(R.id.delta);
@@ -92,6 +100,8 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 lastTime = SystemClock.elapsedRealtime();
                 myChronometer.setBase(SystemClock.elapsedRealtime());
                 myChronometer.start();
+
+                setImageColor(sittingMsg);
               //  cTimer.start();
             }
         });
@@ -104,6 +114,8 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 eventList.clear();
                 Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
                 myChronometer.stop();
+
+                setImageColor(currMotion);
 
             }
         });
@@ -128,9 +140,17 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         cTimer = new CountDownTimer(3000000, 500) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
                 long dur = SystemClock.elapsedRealtime() - lastTime;
-               if ( dur > 500)
-                   if (startMeasure && !synchStartEvent)
-                       sendStopMsg(dur);
+               if ( dur > 500 && startMeasure && !synchStartEvent) {
+                   for (int i = eventList.size()-1; i >= 0; i--) {
+                       if (eventList.get(i).name.equals(sittingMsg)) {
+                           long elps = SystemClock.elapsedRealtime() - eventList.get(i).timestamp;
+                           if (elps < 1000)
+                               return;
+                       }
+                   }
+
+                   sendStopMsg(dur);
+               }
 
             }
 
@@ -256,7 +276,8 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 dictionary.put("motion", motion);
                 becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
                 haltStart = lastTime;
-
+                setImageColor(motion);
+                currMotion = motion;
                if (synchStartEvent) {
                    synchStartEvent = false;
                  //  haltStart = SystemClock.elapsedRealtime();
@@ -278,6 +299,53 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
                 processStep();
 
         }
+    }
+
+    private void customTitleBar(){
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false); // disables default title on
+        ab.setDisplayShowCustomEnabled(true); // enables custom view.
+        ab.setDisplayShowHomeEnabled(false); // hides app icon.
+        ab.setDisplayHomeAsUpEnabled(false);
+        // Inflating Layout
+        LayoutInflater inflater = (LayoutInflater) ab.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View customActionBar = inflater.inflate(R.layout.actionbar_layout, null);
+        TextView title = (TextView) customActionBar.findViewById(R.id.title);
+        title.setText(R.string.up_and_go);
+
+        ImageView back = (ImageView)customActionBar.findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getTimedWalk(UpAndGoActivity.this);
+                overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
+                finish();
+            }
+        });
+
+        ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getStroop(UpAndGoActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+
+
+        ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.getParentActivityIntent(UpAndGoActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        ab.setCustomView(customActionBar, layout);
     }
 
     public void getTimedWalking(View view) {
@@ -322,7 +390,8 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         dictionary.put("motion", walkingMsg);
         dictionary.put("step num", stepsStr);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-
+        setImageColor(walkingMsg);
+        currMotion = walkingMsg;
      //   eventData d = new eventData();
      //   d.name = walkingMsg;
    //     d.timestamp = SystemClock.elapsedRealtime();
@@ -339,9 +408,69 @@ public class UpAndGoActivity extends Activity implements SensorEventListener, St
         dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", "stop");
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-        lastTime = SystemClock.elapsedRealtime();
+      //  lastTime = SystemClock.elapsedRealtime();
+
+        setImageColor(stopMsg);
+     /*   if (!stand.getTag().equals("green")) {
+            stand.setImageResource(R.drawable.stand_green);
+            stand.setTag("green");
+        }
+        if (sit.getTag().equals("green")) {
+            sit.setImageResource(R.drawable.sit);
+            sit.setTag("purple");
+        }
+        if (walk.getTag().equals("green")) {
+            walk.setImageResource(R.drawable.walking);
+            walk.setTag("purple");
+        }*/
     }
 
+    void setImageColor(String motion)
+    {
+        if (motion.equals(sittingMsg) ){
+            if (!sit.getTag().equals("green")) {
+                sit.setImageResource(R.drawable.sit_green);
+                sit.setTag("green");
+            }
+            if (stand.getTag().equals("green")) {
+                stand.setImageResource(R.drawable.stand);
+                stand.setTag("purple");
+            }
+            if (walk.getTag().equals("green")) {
+                walk.setImageResource(R.drawable.walking);
+                walk.setTag("purple");
+            }
+        }
+        if (motion.equals(raisingMsg)|| motion.equals(stopMsg)) {
+            if (!stand.getTag().equals("green")) {
+                stand.setImageResource(R.drawable.stand_green);
+                stand.setTag("green");
+            }
+            if (sit.getTag().equals("green")) {
+                sit.setImageResource(R.drawable.sit);
+                sit.setTag("purple");
+            }
+            if (walk.getTag().equals("green")) {
+                walk.setImageResource(R.drawable.walking);
+                walk.setTag("purple");
+            }
+        }
+
+        if (motion.equals(walkingMsg)) {
+            if (stand.getTag().equals("green")) {
+                stand.setImageResource(R.drawable.stand);
+                stand.setTag("purple");
+            }
+            if (sit.getTag().equals("green")) {
+                sit.setImageResource(R.drawable.sit);
+                sit.setTag("purple");
+            }
+            if (!walk.getTag().equals("green")) {
+                walk.setImageResource(R.drawable.walk_green);
+                walk.setTag("green");
+            }
+        }
+    }
     public class sensorData{
         public float x;
         public float y;

@@ -1,6 +1,5 @@
 package com.github.pocmo.sensordashboard.activities;
 
-
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -11,10 +10,14 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
@@ -37,7 +40,7 @@ import java.util.Locale;
 /**
  * Created by qtxdev on 7/5/2016.
  */
-public class  TwentyFiveStepsActivity extends Activity implements SensorEventListener, StepListener {
+public class  TwentyFiveStepsActivity extends AppCompatActivity implements SensorEventListener, StepListener {
     private SimpleStepDetector simpleStepDetector;
     private SensorManager sensorManager;
     private Sensor accel;
@@ -61,6 +64,7 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        customTitleBar();
         setContentView(R.layout.twenty_five_steps);
 
         ImageView mImgSample = (ImageView) findViewById(R.id.img_25_steps1);
@@ -151,6 +155,44 @@ public class  TwentyFiveStepsActivity extends Activity implements SensorEventLis
             simpleStepDetector.updateAccel(
                     event.timestamp, event.values[0], event.values[1], event.values[2]);
         }
+    }
+
+    private void customTitleBar(){
+        ActionBar ab = getSupportActionBar();
+        ab.setDisplayShowTitleEnabled(false); // disables default title on
+        ab.setDisplayShowCustomEnabled(true); // enables custom view.
+        ab.setDisplayShowHomeEnabled(false); // hides app icon.
+        ab.setDisplayHomeAsUpEnabled(false);
+        // Inflating Layout
+        LayoutInflater inflater = (LayoutInflater) ab.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+
+        View customActionBar = inflater.inflate(R.layout.actionbar_layout, null);
+        TextView title = (TextView) customActionBar.findViewById(R.id.title);
+        title.setText(R.string.exercise_timed_walk);
+
+        ImageView back = (ImageView)customActionBar.findViewById(R.id.back);
+        back.setVisibility(View.GONE);
+
+        ImageView next = (ImageView)customActionBar.findViewById(R.id.next);
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MenuUtils.getSixMinutesActivity(TwentyFiveStepsActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ImageView home = (ImageView) customActionBar.findViewById(R.id.home);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                NavUtils.getParentActivityIntent(TwentyFiveStepsActivity.this);
+                overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
+                finish();
+            }
+        });
+        ActionBar.LayoutParams layout = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        ab.setCustomView(customActionBar, layout);
     }
 
     public void getTimedWalking(View view) {

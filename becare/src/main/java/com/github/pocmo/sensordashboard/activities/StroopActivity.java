@@ -30,7 +30,7 @@ import java.util.Random;
  * Created by qtxdev on 8/9/2016.
  */
 public class StroopActivity extends AppCompatActivity {
-    private final int TRIALS = 14;
+    private final int TRIALS = 10;
     private ImageView numberImg;
     private TextView message;
     private ImageView match;
@@ -49,6 +49,7 @@ public class StroopActivity extends AppCompatActivity {
     private int count = 0;
     private int answerIndex =0;
     private Ringtone ring;
+    Random random = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -145,6 +146,7 @@ public class StroopActivity extends AppCompatActivity {
                         test.setVisibility(View.VISIBLE);
                         for (int i=0; i<answers.length; i++)
                             answers[i] = false;
+                        random =new Random();
                         setWord();
                         cTimer.start();
                     }
@@ -198,7 +200,7 @@ public class StroopActivity extends AppCompatActivity {
                             correct++;
                     double score = (double)correct / (double)answers.length * 100;
                     int s = (int)score;
-                    String str = String.format("Congratulations!You are Done.\n Total tests:%d \n Correct answers: %d\n Score: %d", answers.length,correct, s );
+                    String str = String.format(" You have completed the test.\n Total tests:%d \n Correct answers: %d\n Score: %d", answers.length,correct, s );
                     str += "%";
                     message.setText(str);
                     message.setTextSize(17);
@@ -334,14 +336,10 @@ public class StroopActivity extends AppCompatActivity {
         }
 
         //get color index for word1
-        yes = genIndexLeft();
-        if (yes)
-            colorName1 = word1;
-        else{
-            while (colors[index] == word1)
-                index = randomGen();
-            colorName1 = colors[index];
-        }
+        index = randomGen();
+        while (colors[index] == word1)
+            index = randomGen();
+        colorName1 = colors[index];
 
         //get color index for word2
         index = randomGen();
@@ -410,9 +408,9 @@ public class StroopActivity extends AppCompatActivity {
     {
         int min = 0;
         int max = colors.length-1;
-        Random r = new Random();
+    //    Random r = new Random();
         int ran = 0;
-        ran = r.nextInt(max - min + 1) + min;
+        ran = random.nextInt(max - min + 1) + min;
         return ran;
     }
 }

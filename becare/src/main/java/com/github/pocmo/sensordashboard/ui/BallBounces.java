@@ -293,6 +293,13 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 ballY = stopY - ballH / 2;
                 Toast.makeText(getContext(), "Finished snooker activity", Toast.LENGTH_LONG).show();
                 if (mRemoteSensorManager != null) {
+                    long now = System.currentTimeMillis();
+                    String readTime = timeFormat.format(now);
+                    Hashtable dictionary = new Hashtable();
+                    dictionary.put("value", "appdone" );
+                    dictionary.put("activityname", "snooker");
+                    dictionary.put("time", readTime);
+                    mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
                     mRemoteSensorManager.getUploadDataHelper().setUserActivity(getResources().getString(R.string.exercise_ring_rect), null);
                     mRemoteSensorManager.getUploadMobileDataHelper().setUserActivity(getResources().getString(R.string.exercise_ring_rect), null);
                 }

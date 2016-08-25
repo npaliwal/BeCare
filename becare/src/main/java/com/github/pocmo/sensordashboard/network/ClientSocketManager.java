@@ -1,10 +1,8 @@
 package com.github.pocmo.sensordashboard.network;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.PreferenceStorage;
-import com.google.gson.Gson;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -22,17 +20,22 @@ public class ClientSocketManager {
     String ip;
     int port;
     String error="";
+    Callback callback;
 
     public ClientSocketManager(PreferenceStorage preferenceStorage) {
-        refresh(preferenceStorage);
+        restore(preferenceStorage);
     }
 
-    public void refresh(PreferenceStorage preferenceStorage) {
+    public void refresh(String newIp, int newPort, Callback cbk) {
         this.socket = null;
-        this.ip = preferenceStorage.getSocketIp();
-        this.port = preferenceStorage.getSocketPort();
+        this.ip = newIp;
+        this.port = newPort;
+        this.callback = cbk;
         new Thread(new ClientThread()).start();
+    }
 
+    public void restore(PreferenceStorage preferenceStorage) {
+        refresh(preferenceStorage.getSocketIp(), preferenceStorage.getSocketPort(), null);
     }
 
     public String getError(){
@@ -50,6 +53,9 @@ public class ClientSocketManager {
                 true);
         out.println(str);
         Log.d("socketmanager", "Data uploaded successfully !!");
+        if(callback != null){
+            callback.onDataUploadSuccess();
+        }
     }
 
     public void pushDataAsyncronously(final String data) throws Exception{
@@ -71,6 +77,9 @@ public class ClientSocketManager {
                 }
                 out.println(data);
                 Log.d("socketmanager", "Data uploaded successfully !!");
+                if(callback != null){
+                    callback.onDataUploadSuccess();
+                }
             }
         }).start();
     }
@@ -85,19 +94,35 @@ public class ClientSocketManager {
 
                 socket = new Socket(serverAddr, port);
                 Log.d("socketmanager", "Socket initialized successfully !!");
+                if(callback != null){
+                    callback.onSocketUpdateSuccess();
+                }
             } catch (UnknownHostException e1) {
                 Log.d("socketmanager", "Socket initialized FAILED unknown host !!");
                 e1.printStackTrace();
                 error = "Socket initialized FAILED unknown host !!";
+                if(callback != null){
+                    callback.onSocketUpdateError(error);
+                }
             } catch (IOException e1) {
                 Log.d("socketmanager", "Socket initialized FAILED ioexception !!");
                 error = "Socket initialized FAILED ioexception !!";
                 e1.printStackTrace();
+                if(callback != null){
+                    callback.onSocketUpdateError(error);
+                }
             }
             Log.d("socketmanager", "Socket initializing end !!");
 
 
         }
 
+    }
+
+    public interface Callback{
+        void onDataUploadSuccess();
+        void onDataUploadError(String error);
+        void onSocketUpdateSuccess();
+        void onSocketUpdateError(String error);
     }
 }

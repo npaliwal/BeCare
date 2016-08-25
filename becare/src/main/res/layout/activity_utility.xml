@@ -216,6 +216,13 @@
                         android:layout_marginLeft="20dp">
                     </Button>
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/ip_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Awesome!! Click Update button above to use this IP"
+                    android:visibility="invisible"/>
             </LinearLayout>
 
             <TextView

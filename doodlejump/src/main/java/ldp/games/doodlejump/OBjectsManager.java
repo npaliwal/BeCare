@@ -39,7 +39,7 @@ import android.graphics.Paint;
 public class OBjectsManager {
     
 	
-	public static  long sum;  //Ëæ×ÅbarµÄÏòÏÂÒÆ¶¯Ôö¼Ó
+	public static  long sum;  //ï¿½ï¿½ï¿½ï¿½barï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	
 	public int bar_level = 0;
@@ -54,15 +54,15 @@ public class OBjectsManager {
 	private Map<String, AbstractBar> barMap;
 	public Map<String, AbstractMonster> monsterMap;
 	
-	private long bar_identifier = 0;  //±êÊ¶Ã¿Ò»Ìõbar
-	private long monster_identifier = 0; //±êÊ¶Ã¿Ò»¸ö¹ÖÊÞ
+	private long bar_identifier = 0;  //ï¿½ï¿½Ê¶Ã¿Ò»ï¿½ï¿½bar
+	private long monster_identifier = 0; //ï¿½ï¿½Ê¶Ã¿Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	
 	private long repeate_long = 100;
 	//private String repeate_String; 
     public boolean isrepeated = false;
 	public int touch_bar_type = AbstractBar.TYPE_NORMAL;
 	
-	//Í¬²½»¥³â£¬personËã·¨
+	//Í¬ï¿½ï¿½ï¿½ï¿½ï¿½â£¬personï¿½ã·¨
 	public static boolean[] person;
 	public static int choose;
 	private DoodleJumpActivity context;
@@ -123,7 +123,7 @@ public class OBjectsManager {
 		monsterMap.clear();
 	}
 	
-	//³õÊ¼»¯ÓÎÏ·
+	//ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ï·
 	public void initBarMap(){
 		int count = 0;
 		int CoorX;
@@ -134,12 +134,13 @@ public class OBjectsManager {
 				AbstractBar bar = new NormalBar(CoorX, count * (20 * DoodleJumpActivity.height_mul), GetRandomItem(), context);
 				barMap.put(""+bar_identifier, bar);
 				bar_identifier ++;
+				break;
 			}
 			count ++;
 		}
 	}
 	
-	//È·¶¨¸ÃÐÐÊÇ·ñ»áÓÐbar³öÏÖ
+	//È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½barï¿½ï¿½ï¿½ï¿½
 	private boolean hasBar() {
 		int temp = new Random().nextInt(100);
 		if(temp > barApperrate)
@@ -147,7 +148,7 @@ public class OBjectsManager {
 		return false;
 	}
 	
-	//È·¶¨¸ÃÐÐÊÇ·ñ»áÓÐbar³öÏÖ
+	//È·ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½barï¿½ï¿½ï¿½ï¿½
 	private boolean hasMonster() {
 		int temp = new Random().nextInt(100);
 		if(temp > monsterApperrate)
@@ -156,12 +157,12 @@ public class OBjectsManager {
 	}
 	
 	
-    //»­³öËùÓÐbars
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bars
 	public void DrawBarsAndMonsters(Canvas canvas){
 		person[0] = true;
 		choose = 1;
 		while(person[1]&&choose==1);
-		/**************ÁÙ½çÇø****************/
+		/**************ï¿½Ù½ï¿½ï¿½ï¿½****************/
 		for(String key : barMap.keySet()){
 			barMap.get(key).drawSelf(canvas);
 		}
@@ -170,16 +171,16 @@ public class OBjectsManager {
 		}
 		drawHeight(canvas);
 		RemoveOuterBarsAndMonsters();
-		/**************ÁÙ½çÇø****************/
+		/**************ï¿½Ù½ï¿½ï¿½ï¿½****************/
 		person[0] = false;
 	}
 	
-	//ÔÚ×óÉÏ½Ç»­³öµ±Ç°¸ß¶È
+	//ï¿½ï¿½ï¿½ï¿½ï¿½Ï½Ç»ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ß¶ï¿½
 	private void drawHeight(Canvas canvas) {
 		canvas.drawText(""+sum, 5 * DoodleJumpActivity.width_mul, 20 * DoodleJumpActivity.height_mul, paint);
 	}
 	
-	//ÅÐ¶ÏandroidÊÇ·ñÅöµ½bar
+	//ï¿½Ð¶ï¿½androidï¿½Ç·ï¿½ï¿½ï¿½ï¿½ï¿½bar
 	public boolean isTouchBars(float CoorX, float CoorY){
 		
 		for(String key : barMap.keySet()){
@@ -215,12 +216,12 @@ public class OBjectsManager {
 		return false;
 	}
 	
-	//½«ËùÓÐbarsÏòÏÂÒÆ¶¯
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½barsï¿½ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½
 	public void MoveBarsAndMonstersDown(float vertical_speed, float add){
 		person[1] = true;
 		choose = 0;
 		while(person[0]&&choose==0);
-		/**************ÁÙ½çÇø****************/
+		/**************ï¿½Ù½ï¿½ï¿½ï¿½****************/
 		for(String key : barMap.keySet()){
 			barMap.get(key).TLCoorY -= vertical_speed;
 			barMap.get(key).TLCoorY += add;
@@ -232,8 +233,8 @@ public class OBjectsManager {
 		sum += add - vertical_speed;
 		monstersappear = itemappear += add - vertical_speed;
 		bar_level += add - vertical_speed;
-		AddNewBarsAndMonsters();
-		/**************ÁÙ½çÇø****************/
+		//AddNewBarsAndMonsters();
+		/**************ï¿½Ù½ï¿½ï¿½ï¿½****************/
 		person[1] = false;
 	}
 	
@@ -271,7 +272,7 @@ public class OBjectsManager {
 		tempY = GetTopCoorY();
 		if(tempY > (20 * DoodleJumpActivity.height_mul)){
 			if(hasBar()){
-				int temp = new Random().nextInt(100);  //¾ö¶¨³öÏÖÊ²Ã´bar
+				int temp = new Random().nextInt(100);  //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê²Ã´bar
 				int CoorX = new Random().nextInt((int) (DoodleJumpActivity.screen_width - 50));
 				if(temp <= 5){
 					bar = new SpringBar(CoorX, (int) (-15 * DoodleJumpActivity.height_mul), context);
@@ -361,7 +362,7 @@ public class OBjectsManager {
 		return (int) Math.sqrt(x_length*x_length + y_length*y_length);
 	}
 	
-	//»ñµÃ×î¶¥¶ËµÄ bar »ò monster µÄY×ø±ê
+	//ï¿½ï¿½ï¿½ï¿½î¶¥ï¿½Ëµï¿½ bar ï¿½ï¿½ monster ï¿½ï¿½Yï¿½ï¿½ï¿½
 	private float GetTopCoorY() {
 		float tempY = 100;
 		for(String key : barMap.keySet()){

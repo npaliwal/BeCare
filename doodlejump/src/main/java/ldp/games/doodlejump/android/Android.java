@@ -36,7 +36,7 @@ public class Android extends AbstractAndroid {
 		this.LTCoorX = INITIAL_COORX;
 		this.LTCoorY = INITIAL_COORY;
 		this.horizonal_speed = 0;
-		this.vertical_speed = INITIAL_VERTICAL_SPEED + 5 * DoodleJumpActivity.height_mul;
+		this.vertical_speed = 0;//INITIAL_VERTICAL_SPEED + 5 * DoodleJumpActivity.height_mul;
 		this.current_state = STATE_GO_UP;
 	    accelerameter = DEFAULT_VERTICAL_ACCELERATE;
 	    this.life_bar = INITIAL_LIFE_BAR;

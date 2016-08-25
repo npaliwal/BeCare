@@ -33,7 +33,7 @@ public class LogicManager {
 	private boolean game_started = false;
 	public static boolean isrunning;
 
-	//Í¬²½»¥³â£¬personËã·¨
+	//Í¬ï¿½ï¿½ï¿½ï¿½ï¿½â£¬personï¿½ã·¨
 	public static boolean[] person;
 	public static int choose;
 	DoodleJumpActivity context;
@@ -62,7 +62,7 @@ public class LogicManager {
 		person[0] = true;
 		choose = 1;
 		while(person[1]&&choose==1);
-		/*************ÁÙ½çÇø***********************/
+		/*************ï¿½Ù½ï¿½ï¿½ï¿½***********************/
 		
 		objectsManager.DrawBarsAndMonsters(canvas);
 		android.DrawSelf(canvas);
@@ -75,10 +75,13 @@ public class LogicManager {
 	    RemoveBulletSets();
 	    RemoveExplodes();
 	    
-		/*************ÁÙ½çÇø***********************/
+		/*************ï¿½Ù½ï¿½ï¿½ï¿½***********************/
 		person[0] = false;
 	}
-	
+
+	public void MoveAndroidUp(){
+		android.Move();
+	}
 	private void RemoveExplodes() {
 		 for(int i=0; i<explodes.size(); i++){
 			 if(explodes.get(i) != null){
@@ -88,7 +91,7 @@ public class LogicManager {
 		 }
 	}
 
-	//Çå³ý·É³öÆÁÄ»·¶Î§µÄ×Óµ¯
+	//ï¿½ï¿½ï¿½É³ï¿½ï¿½ï¿½Ä»ï¿½ï¿½Î§ï¿½ï¿½ï¿½Óµï¿½
 	private void RemoveBulletSets() {
 		for(int i=0; i<bulletSets.size(); i++){
 			if(bulletSets.get(i).GetY() < 0)
@@ -108,7 +111,7 @@ public class LogicManager {
 		android.bitmap_index = Android.HANDS_UP;
 	}
 	
-	//¸ù¾ÝÖØÁ¦¸ÐÓ¦À´¸Ä±äË®Æ½ËÙ¶È
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó¦ï¿½ï¿½ï¿½Ä±ï¿½Ë®Æ½ï¿½Ù¶ï¿½
 	public void SetAndroid_HSpeed(float horizonal_speed){
 		android.horizonal_speed = - horizonal_speed;
 	}
@@ -152,7 +155,7 @@ public class LogicManager {
 			person[1] = true;
 			choose = 0;
 			while(person[0]&&choose==0);
-			/**************ÁÙ½çÇø****************/
+			/**************ï¿½Ù½ï¿½ï¿½ï¿½****************/
  			for(BulletSet bulletSet : bulletSets){
 				for(String key : objectsManager.monsterMap.keySet()){
 					if(bulletSet.isTouchBullet(objectsManager.monsterMap.get(key))){
@@ -166,7 +169,7 @@ public class LogicManager {
 				}
 				DestoryMonsters.clear();
 			}
- 			/**************ÁÙ½çÇø****************/
+ 			/**************ï¿½Ù½ï¿½ï¿½ï¿½****************/
  			person[1] = false;
  			
 		}
@@ -197,7 +200,7 @@ public class LogicManager {
 		    	if(android.vertical_speed >= Android.MAX_VERTICAL_SPEED)
 			    		android.vertical_speed = Android.MAX_VERTICAL_SPEED;
 		    	float temp =  android.vertical_speed;
-		    	for(float i=0; i<=temp; i += 0.5){	//½«Ôö¼ÓµÄÏñËØ£¬·Ö¿ª¼Ó£¬Ã¿´Î¼ÓÒ»
+		    	for(float i=0; i<=temp; i += 0.5){	//ï¿½ï¿½ï¿½ï¿½ï¿½Óµï¿½ï¿½ï¿½ï¿½Ø£ï¿½ï¿½Ö¿ï¿½ï¿½Ó£ï¿½Ã¿ï¿½Î¼ï¿½Ò»
 		    		android.LTCoorY += 0.5;
 			    	if(objectsManager.isTouchBars(android.LTCoorX, android.LTCoorY)){
 			    		if(objectsManager.isrepeated){

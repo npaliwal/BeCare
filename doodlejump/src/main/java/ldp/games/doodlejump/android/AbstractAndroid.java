@@ -9,10 +9,10 @@ public abstract class AbstractAndroid {
 	
 	
 	
-	public static final float DEFAULT_VERTICAL_ACCELERATE       = 1 * DoodleJumpActivity.height_mul; 
+	public static final float DEFAULT_VERTICAL_ACCELERATE       = 1 * DoodleJumpActivity.height_mul;
 	protected static final float INITIAL_COORX                  = 145 * DoodleJumpActivity.width_mul;
 	protected static final float INITIAL_COORY                  = 380 * DoodleJumpActivity.height_mul;
-	public static final float INITIAL_VERTICAL_SPEED            = -19 * DoodleJumpActivity.height_mul; 
+	public static final float INITIAL_VERTICAL_SPEED            = 0;//-19 * DoodleJumpActivity.height_mul;
 	public static final float MAX_VERTICAL_SPEED                = 19 * DoodleJumpActivity.height_mul;
 	public static final int   STATE_GO_UP                       = 1;
 	public static final int   STATE_GO_DOWN                     = 2;

@@ -21,10 +21,12 @@
     <string name="description_timed_walk"><b>Move your body in the timed distance workout</b></string>
     <string name="description_up_and_go"><b>Measure your motion from sitting to standing, in a timed period.</b></string>
     <string name="description_stroop_test"><b>Finding the naming the colors of color words.</b></string>
+    <string name="description_tapping_task"><b>Tap to jump and score maximum</b></string>
     <string name="twenty_five_steps">Twenty five steps</string>
     <string name="six_minutes_walk">Six minutes walk</string>
     <string name="up_and_go">Up and Go</string>
     <string name="stroop">Stroop Test</string>
+    <string name="tapping_task">Tapping Task</string>
     <string name="sensors_list">List of Sensors</string>
     <string name="menu_tools">Tools</string>
 

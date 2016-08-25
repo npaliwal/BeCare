@@ -120,6 +120,11 @@
             android:label="Stroop test">
         </activity>
 
+        <activity
+            android:name=".activities.TapTaskActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/tapping_task">
+        </activity>
 
         <service android:name=".network.DataUploadService" />
 

@@ -2,18 +2,12 @@ package ldp.games.doodlejump;
 
 import java.util.Calendar;
 
-import ldp.games.doodlejump.resource.BitmapManager;
-import ldp.games.doodlejump.resource.SoundPlayer;
 import ldp.games.doodlejump.sqlite.DataBaseOperation;
-import android.R.bool;
-import android.content.Context;
+
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -24,7 +18,7 @@ public class GameView extends View /* SurfaceView implements SurfaceHolder.Callb
 	//public static BitmapManager bitmapManager;
 	public LogicManager logicManager;
 	private Paint paint;
-	public  static boolean isGameOver;  //ÅÐ¶ÏÓÎÏ·ÊÇ·ñ½áÊø
+	public  static boolean isGameOver;  //ï¿½Ð¶ï¿½ï¿½ï¿½Ï·ï¿½Ç·ï¿½ï¿½ï¿½ï¿½
 	DoodleJumpActivity doodleJumpActivity;
 	private DataBaseOperation dataBaseOperation;
 	public static boolean ispause = false;
@@ -110,8 +104,9 @@ public class GameView extends View /* SurfaceView implements SurfaceHolder.Callb
     	if(event.getAction() == MotionEvent.ACTION_DOWN){
     		if(!ispause){
 				logicManager.SetAndroidHands();
-				logicManager.AddNewBulletSet();
-    		}
+				//logicManager.AddNewBulletSet();
+                logicManager.MoveAndroidUp();
+            }
     		else{
     			float x = event.getX();
     			float y = event.getY();
@@ -133,11 +128,11 @@ public class GameView extends View /* SurfaceView implements SurfaceHolder.Callb
 
 	private String GetDate() {
 		 Calendar c = Calendar.getInstance();
-		 int mYear = c.get(Calendar.YEAR); //»ñÈ¡µ±Ç°Äê·Ý
-		 int mMonth = c.get(Calendar.MONTH);//»ñÈ¡µ±Ç°ÔÂ·Ý
-		 int mDay = c.get(Calendar.DAY_OF_MONTH);//»ñÈ¡µ±Ç°ÔÂ·ÝµÄÈÕÆÚºÅÂë
-		 int mHour = c.get(Calendar.HOUR_OF_DAY);//»ñÈ¡µ±Ç°µÄÐ¡Ê±Êý
-		 int mMinute = c.get(Calendar.MINUTE);//»ñÈ¡µ±Ç°µÄ·ÖÖÓÊý
+		 int mYear = c.get(Calendar.YEAR); //ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½ï¿½
+		 int mMonth = c.get(Calendar.MONTH);//ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Â·ï¿½
+		 int mDay = c.get(Calendar.DAY_OF_MONTH);//ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Â·Ýµï¿½ï¿½ï¿½ï¿½Úºï¿½ï¿½ï¿½
+		 int mHour = c.get(Calendar.HOUR_OF_DAY);//ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½ï¿½Ð¡Ê±ï¿½ï¿½
+		 int mMinute = c.get(Calendar.MINUTE);//ï¿½ï¿½È¡ï¿½ï¿½Ç°ï¿½Ä·ï¿½ï¿½ï¿½ï¿½ï¿½
 		 
 		 return ""+mYear+"-"+mMonth+"-"+mDay+" "+mHour+":"+mMinute;
 	}

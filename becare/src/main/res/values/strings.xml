@@ -45,10 +45,17 @@
     <string name="contrast_done">Done</string>
     <string name="contrast_performance">Performance: %1$d correct out of %2$d</string>
 
-    <string name="transcript_honesty">Honesty is the best policy</string>
-    <string name="transcript_walk">I would like to go for a walk</string>
-    <string name="transcript_address">Please take me to this address</string>
-    <string name="transcript_greet">Nice to meet you</string>
+    <string name="another_day">another day</string>
+    <string name="frankly_speaking">frankly speaking</string>
+    <string name="keep_in_touch">keep in touch</string>
+    <string name="transcript_greet">nice to meet you</string>
+    <string name="no_problem">no problem</string>
+    <string name="take_a_message">take a message</string>
+    <string name="take_me_away">take me away</string>
+    <string name="see_you_later">see you later</string>
+
+    <string name="transcript_performance">Time: %1$s  |  ✔ %2$d  |  ✖ %3$d </string>
+
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

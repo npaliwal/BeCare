@@ -46,7 +46,7 @@ import java.util.Random;
 public class TranscriptionTestActivity extends AppCompatActivity {
 
     View speaker;
-    TextView submit, header;
+    TextView submit, header, performance;
     EditText input;
     SeekBar volumeSeekbar;
 
@@ -61,6 +61,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     private AudioManager audioManager = null;
     private PreferenceStorage preferenceStorage;
     private BecareRemoteSensorManager mRemoteSensorManager;
+    private long timeConsumed = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,7 +186,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if(TextUtils.isEmpty(s) || before > count)
+                if (TextUtils.isEmpty(s) || before > count)
                     return;
                 CharSequence keys = s.subSequence(start + before, start + count);
                 int keysCount = keys.length();
@@ -193,11 +194,11 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     String value = getUserActivityStats(keys.subSequence(keysCount - 1, keysCount));
                     Gson gson = new Gson();
                     Hashtable dictionary = gson.fromJson(value, Hashtable.class);
-                    double seq = (double)dictionary.get("seq");
-                    dictionary.put("seq", (int)seq);
+                    double seq = (double) dictionary.get("seq");
+                    dictionary.put("seq", (int) seq);
                     dictionary.put("activityname", "Transcription Test");
                     long now = System.currentTimeMillis();
-                    long dur = (prevTime == 0) ? 0: now - prevTime;
+                    long dur = (prevTime == 0) ? 0 : now - prevTime;
                     dictionary.put("dur", dur);
                     mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
                     keysCount--;
@@ -215,12 +216,16 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         speaker = findViewById(R.id.speaker);
         submit = (TextView) findViewById(R.id.submit_input);
         header = (TextView) findViewById(R.id.exercise_header);
+        performance = (TextView) findViewById(R.id.tv_performance);
 
         speaker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MediaPlayer mp = MediaPlayer.create(getApplicationContext(), exercises.get(currExercise).getSpeechResId());
                 mp.start();
+                if(timeConsumed <= 0){
+                    timeConsumed = System.currentTimeMillis();
+                }
             }
         });
 
@@ -243,6 +248,13 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 input.setText(null);
                 currKeyCount = 0;
                 prevTime = 0;
+                long timeTaken = 0;
+                if(timeConsumed > 1){
+                    timeTaken = (System.currentTimeMillis() - timeConsumed)/1000;
+                }
+                timeConsumed = 0;
+                performance.setVisibility(View.VISIBLE);
+                performance.setText(getString(R.string.transcript_performance, timeTaken + " secs",  15, 3));
             }
         });
     }

@@ -67,6 +67,13 @@
                     android:layout_weight="1"/>
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tv_performance"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:text="@string/transcript_performance"
+                android:visibility="invisible"/>
             <EditText
                 android:id="@+id/et_user_input"
                 android:layout_width="match_parent"

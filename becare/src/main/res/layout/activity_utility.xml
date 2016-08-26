@@ -11,23 +11,32 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:contentDescription=".activities.UtilityActivity"
     >
-    <TextView
-        android:id="@+id/update_button"
+    <LinearLayout
+        android:id="@+id/update_button_frame"
         android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_marginBottom="10dp"
+        >
+
+    <Button
+        android:id="@+id/update_button"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:layout_gravity="center"
         android:textSize="18sp"
         android:padding="10dp"
         android:layout_marginBottom="10dp"
         android:text="Update"
         android:background="@color/gray_light">
-    </TextView>
-
+    </Button>
+    </LinearLayout>
     <ScrollView
         android:id="@+id/debug_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/update_button">
+        android:layout_below="@+id/update_button_frame">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -204,7 +213,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:gravity="center"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical"
                     android:layout_marginBottom="10dp">
 
 
@@ -213,8 +223,17 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Test"
-                        android:layout_marginLeft="20dp">
+                       >
                     </Button>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="17sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorYellow"
+                        android:text="Please press the 'Update' button on the top after you update the IP address and port. After that you can test."
+                        />
                 </LinearLayout>
             </LinearLayout>
 

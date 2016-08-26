@@ -4,8 +4,6 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -53,7 +51,7 @@ public class UtilityActivity extends RoboActivity {
     @InjectView(R.id.ev_public_port)
     private EditText socketPort;
     @InjectView(R.id.update_button)
-    private TextView updateSettings;
+    private Button updateSettings;
     @InjectView(R.id.test_button)
     private Button   testSocket;
     boolean uploadSettingsExpand = false;
@@ -129,7 +127,7 @@ public class UtilityActivity extends RoboActivity {
                 preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
                 remoteSensorManager.getSocketManager().refresh(preferenceStorage);
 
-                Toast.makeText(UtilityActivity.this, "IP address has been updated", Toast.LENGTH_LONG).show();
+                Toast.makeText(UtilityActivity.this, "IP address and port have been updated", Toast.LENGTH_LONG).show();
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(shadesNumEx.getText().toString()), AppConfig.ContrastTestType.SHADES);
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(itchiNumEx.getText().toString()), AppConfig.ContrastTestType.ITCHI_PLATE);
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(patternNumEx.getText().toString()), AppConfig.ContrastTestType.PATTERN);
@@ -255,12 +253,15 @@ public class UtilityActivity extends RoboActivity {
                 Toast.makeText(UtilityActivity.this, "Data sent to socket successfully !!", Toast.LENGTH_LONG).show();
             } catch (UnknownHostException e) {
                 success = false;
+                Toast.makeText(UtilityActivity.this, "Test failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             } catch (IOException e) {
                 success = false;
+                Toast.makeText(UtilityActivity.this, "Test failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             } catch (Exception e) {
                 success = false;
+                Toast.makeText(UtilityActivity.this, "Test failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }/*finally {
                 if(success){

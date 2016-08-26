@@ -107,11 +107,14 @@ public class AppConfig {
         if(TRANSCRIPT_EXERCISES != null && TRANSCRIPT_EXERCISES.size() > 0){
             return;
         }
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_address, context.getString(R.string.transcript_honesty)));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_2, context.getString(R.string.transcript_walk)));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_3, context.getString(R.string.transcript_address)));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_4, context.getString(R.string.transcript_greet)));
-        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.transcript_5, context.getString(R.string.transcript_greet)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.another_day, context.getString(R.string.another_day)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.frankly_speaking, context.getString(R.string.frankly_speaking)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.keep_in_touch, context.getString(R.string.keep_in_touch)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.nice_to_meet_you, context.getString(R.string.transcript_greet)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.no_problem, context.getString(R.string.no_problem)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.take_a_message, context.getString(R.string.take_a_message)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.take_me_away, context.getString(R.string.take_me_away)));
+        TRANSCRIPT_EXERCISES.add(new AudioData(R.raw.see_you_later, context.getString(R.string.see_you_later)));
 
     }
 

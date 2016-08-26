@@ -235,6 +235,13 @@
                         android:text="Please press the 'Update' button on the top after you update the IP address and port. After that you can test."
                         />
                 </LinearLayout>
+                <TextView
+                    android:id="@+id/ip_feedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="Awesome!! Click Update button above to use this IP"
+                    android:visibility="invisible"/>
             </LinearLayout>
 
             <TextView

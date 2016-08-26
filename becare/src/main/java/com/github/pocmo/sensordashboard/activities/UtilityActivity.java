@@ -20,8 +20,11 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SensorAdapter;
+import com.github.pocmo.sensordashboard.network.ClientSocketManager;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -51,9 +54,12 @@ public class UtilityActivity extends RoboActivity {
     @InjectView(R.id.ev_public_port)
     private EditText socketPort;
     @InjectView(R.id.update_button)
-    private Button updateSettings;
+    private TextView updateSettings;
     @InjectView(R.id.test_button)
     private Button   testSocket;
+    @InjectView(R.id.ip_feedback)
+    private TextView testFeedback;
+    boolean socketTestSuccess = true;
     boolean uploadSettingsExpand = false;
 
 
@@ -122,12 +128,14 @@ public class UtilityActivity extends RoboActivity {
                 int port = -1;
                 try {
                     port = Integer.valueOf(socketPort.getText().toString());
+                    if(socketTestSuccess){
+                        preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
+                        remoteSensorManager.getSocketManager().restore(preferenceStorage);
+                        Toast.makeText(UtilityActivity.this, "IP address has been updated", Toast.LENGTH_LONG).show();
+                    }
                 } catch (Exception e) {
                 }
-                preferenceStorage.setSocketInfo(socketIp.getText().toString(), port);
-                remoteSensorManager.getSocketManager().refresh(preferenceStorage);
 
-                Toast.makeText(UtilityActivity.this, "IP address and port have been updated", Toast.LENGTH_LONG).show();
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(shadesNumEx.getText().toString()), AppConfig.ContrastTestType.SHADES);
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(itchiNumEx.getText().toString()), AppConfig.ContrastTestType.ITCHI_PLATE);
                 preferenceStorage.setNumContrastExercise(Integer.parseInt(patternNumEx.getText().toString()), AppConfig.ContrastTestType.PATTERN);
@@ -236,40 +244,71 @@ public class UtilityActivity extends RoboActivity {
 
     }
 
+    class SocketCallback implements ClientSocketManager.Callback{
+
+        @Override
+        public void onDataUploadSuccess() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    testFeedback.setVisibility(View.VISIBLE);
+                    socketTestSuccess = true;
+                    Toast.makeText(UtilityActivity.this, "Data sent to socket successfully !!", Toast.LENGTH_LONG).show();
+                }
+            });
+            remoteSensorManager.getSocketManager().restore(preferenceStorage);
+
+        }
+
+        @Override
+        public void onDataUploadError(String error) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    testFeedback.setVisibility(View.INVISIBLE);
+                    socketTestSuccess = false;
+                    Toast.makeText(UtilityActivity.this, "Data sent to socket FAILED !!", Toast.LENGTH_LONG).show();
+                }
+            });
+
+        }
+
+        @Override
+        public void onSocketUpdateSuccess() {
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("ip", socketIp.getText().toString());
+                jsonObject.put("port", socketPort.getText().toString());
+                remoteSensorManager.getSocketManager().pushData(jsonObject.toString());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void onSocketUpdateError(String error) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    testFeedback.setVisibility(View.INVISIBLE);
+                    socketTestSuccess = false;
+                    Toast.makeText(UtilityActivity.this, "Socket update FAILED  !!", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+
+    }
+
+
     private View.OnClickListener testSocketCilck = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            boolean success = true;
-            try {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("ip", socketIp.getText().toString());
-                jsonObject.put("port", socketPort.getText().toString());
-                String error = remoteSensorManager.getSocketManager().getError();
-                if (!error.isEmpty()) {
-                    Toast.makeText(UtilityActivity.this, error, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                remoteSensorManager.getSocketManager().pushData(jsonObject.toString());
-                Toast.makeText(UtilityActivity.this, "Data sent to socket successfully !!", Toast.LENGTH_LONG).show();
-            } catch (UnknownHostException e) {
-                success = false;
-                Toast.makeText(UtilityActivity.this, "Test failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            } catch (IOException e) {
-                success = false;
-                Toast.makeText(UtilityActivity.this, "Test failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            } catch (Exception e) {
-                success = false;
-                Toast.makeText(UtilityActivity.this, "Test failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }/*finally {
-                if(success){
-                    Toast.makeText(UtilityActivity.this, "Data sent to socket successfully !!", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(UtilityActivity.this, "Data sent to socket FAILED !!", Toast.LENGTH_LONG).show();
-                }
-            }*/
+            remoteSensorManager.getSocketManager().refresh(
+                    socketIp.getText().toString(),
+                    Integer.parseInt(socketPort.getText().toString()),
+                    new SocketCallback());
         }
     };
 

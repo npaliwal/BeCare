@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "7032304268",
+    "project_id": "firebase-becare"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:7032304268:android:a6d86402ed950519",
+        "android_client_info": {
+          "package_name": "com.becare.users"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "7032304268-q9nfkhaj1s93qa0mompvsgvk97d88if1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.becare.users",
+            "certificate_hash": "E916B23A85FAE4E9525DCEDD46C69C2639568448"
+          }
+        },
+        {
+          "client_id": "7032304268-et3tc11pi0orvu8gbqlq2vdnphb3r2ga.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFJItLXBC7BYQIBrA_jTw5hsgnmNX9kW8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

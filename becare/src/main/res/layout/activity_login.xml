@@ -213,6 +213,49 @@
         android:layout_marginRight="50dp"
         android:background="@color/colorBlue"/>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="10dp"
+        android:layout_above="@+id/social_login_container">
+
+        <View
+            android:layout_width="0px"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="@color/colorBlue"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorBlue"
+            android:padding="10dp"
+            android:textStyle="bold"
+            android:text="OR"/>
+        <View
+            android:layout_width="0px"
+            android:layout_height="2dp"
+            android:layout_weight="1"
+            android:background="@color/colorBlue"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/social_login_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:padding="10dp"
+        android:gravity="center"
+        android:layout_above="@+id/tv_skip_registration">
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/sign_in_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
     <TextView
         android:id="@+id/tv_skip_registration"
         android:layout_width="match_parent"

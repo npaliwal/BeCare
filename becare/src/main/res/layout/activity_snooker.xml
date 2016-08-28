@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.github.pocmo.sensordashboard.activities.SnookerActivity">
 
-    <com.github.pocmo.sensordashboard.ui.BallBounces
+    <com.becare.users.ui.BallBounces
         android:id="@+id/arena"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -17,7 +17,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.github.pocmo.sensordashboard.ui.InstructionView
+        <com.becare.users.ui.InstructionView
             android:id="@+id/msg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
                 android:layout_marginRight="25dp"
                 />
 
-            <com.github.pocmo.sensordashboard.ui.FlowLayout
+            <com.becare.users.ui.FlowLayout
                 android:id="@+id/user_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:visibility="gone"
                 >
-            </com.github.pocmo.sensordashboard.ui.FlowLayout>
+            </com.becare.users.ui.FlowLayout>
 
             <EditText
                 android:id="@+id/et_user_input"

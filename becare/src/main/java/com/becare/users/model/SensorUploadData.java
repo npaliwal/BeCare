@@ -1,0 +1,104 @@
+package com.becare.users.model;
+import com.becare.users.AppConfig;
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by neerajpaliwal on 27/05/16.
+ */
+public class SensorUploadData {
+    @SerializedName("activityname")
+    String activityName;
+
+    @SerializedName("sensorname")
+    String sensorName;// : accelerometer | gyroscope
+
+    //@SerializedName("sensormsg")
+    //String sensorMsg;// : sensorname.time.coordtype
+
+    @SerializedName("time")
+    String time;
+
+    @SerializedName("device")
+    String deviceId;
+
+    @SerializedName("corrdtype")
+    String corrdtype;// : xvalue | yvalue | zvalue
+
+    @SerializedName("cnt")
+    int numSample;//: samples taken every second
+
+  /*  @SerializedName("high")
+    float high;
+
+    @SerializedName("low")
+    float low;
+
+    @SerializedName("avg")
+    float avg;
+
+    @SerializedName("zc")
+    int zeroCrossing;
+
+    @SerializedName("vola")
+    float volatility; //: volatility (standard deviation)
+*/
+    @SerializedName("vector")
+    float[] vector;
+
+    @SerializedName("seq")
+    int sequenceNumber;
+
+
+    public SensorUploadData(String activityName, String sensorName, SensorDataWrapper wrapper, int numSample, int cord, String readTime, String device, float[] all, int seq) {
+
+        switch (cord){
+            case AppConfig.X_CORD:{
+                corrdtype = "x";
+             /*   if (numSample > 0) {
+                    high = wrapper.getHigh().getRoundX();
+                    low = wrapper.getLow().getRoundX();
+                    avg = wrapper.getMean().getRoundX();
+
+                    this.zeroCrossing = wrapper.getZcX();
+                    this.volatility = wrapper.getVolatility().getRoundX();
+                }*/
+                break;
+            }
+
+            case AppConfig.Y_CORD:{
+                corrdtype = "y";
+            /*    if (numSample > 0) {
+                    high = wrapper.getHigh().getRoundY();
+                    low = wrapper.getLow().getRoundY();
+                    avg = wrapper.getMean().getRoundY();
+
+                    this.zeroCrossing = wrapper.getZcY();
+                    this.volatility = wrapper.getVolatility().getRoundY();
+                }*/
+                break;
+            }
+
+            case AppConfig.Z_CORD:{
+                corrdtype = "z";
+            /*    if (numSample > 0) {
+                    high = wrapper.getHigh().getRoundZ();
+                    low = wrapper.getLow().getRoundZ();
+                    avg = wrapper.getMean().getRoundZ();
+
+                    this.zeroCrossing = wrapper.getZcZ();
+                    this.volatility = wrapper.getVolatility().getRoundZ();
+                }*/
+                break;
+            }
+        }
+
+        this.activityName = activityName;
+        this.sensorName = sensorName;
+        //this.sensorMsg = sensorName + "." + readTime + "." + corrdtype;
+        this.time = readTime;
+        this.deviceId = device;
+        this.numSample = numSample;
+        this.vector = all;
+        this.sequenceNumber = seq;
+    }
+}

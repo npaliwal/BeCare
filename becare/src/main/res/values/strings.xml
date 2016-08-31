@@ -86,4 +86,7 @@
     </string-array>
     <string name="compass_dial">Compass Dial</string>
     <string name="compass_hands">Compass Hands</string>
+
+    <string name="facebook_app_id">333233053683173</string>
+
 </resources>

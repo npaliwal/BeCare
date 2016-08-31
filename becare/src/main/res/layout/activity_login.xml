@@ -243,17 +243,28 @@
     <LinearLayout
         android:id="@+id/social_login_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:padding="10dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:gravity="center"
         android:layout_above="@+id/tv_skip_registration">
 
         <com.google.android.gms.common.SignInButton
-            android:id="@+id/sign_in_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:id="@+id/sign_in_google"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="40dp" />
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="match_parent"></View>
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/sign_in_facebook"
+            android:layout_width="0px"
+            android:layout_weight="1"
+            android:layout_height="40dp"
+            />
+
     </LinearLayout>
 
     <TextView

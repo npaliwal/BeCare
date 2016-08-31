@@ -1,6 +1,5 @@
 package com.becare.users.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
@@ -18,19 +17,35 @@ import android.widget.Toast;
 
 import com.becare.users.PreferenceStorage;
 import com.becare.users.R;
+import com.becare.users.events.BusProvider;
+import com.becare.users.events.LoginCompleted;
 import com.becare.users.model.NewUserPostData;
 import com.becare.users.model.QueryPostData;
 import com.becare.users.model.UserQueryResponse;
 import com.becare.users.network.BecareHiveApi;
 import com.becare.users.network.HiveHelper;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.plus.Plus;
 import com.google.inject.Inject;
+
+import org.json.JSONObject;
 
 import retrofit.Callback;
 import retrofit.RestAdapter;
@@ -47,6 +62,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     public static int LOGIN_RESULT_SKIPPED = 2;
 
     private static final int RC_SIGN_IN = 9001;
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     //Common UI elements
     TextView headerText;
@@ -75,6 +91,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
 
     private GoogleApiClient mGoogleApiClient;
 
+    CallbackManager callbackManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +124,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
+                .requestScopes(Plus.SCOPE_PLUS_PROFILE)
                 .build();
         // [END configure_signin]
 
@@ -118,6 +136,55 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         // [END build_client]
+        SignInButton signInButton = (SignInButton) findViewById(R.id.sign_in_google);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setScopes(gso.getScopeArray());
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        LoginButton loginButton = (LoginButton) findViewById(R.id.sign_in_facebook);
+        //loginButton.setReadPermissions("email");
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+
+                        // App code
+                        GraphRequest request = GraphRequest.newMeRequest(
+                                loginResult.getAccessToken(),
+                                new GraphRequest.GraphJSONObjectCallback() {
+                                    @Override
+                                    public void onCompleted(JSONObject object, GraphResponse response) {
+                                        Log.v("LoginActivity", response.toString());
+                                        try {
+                                            // Application code
+                                            String email = object.getString("email");
+                                            String name = object.optString("name");
+                                            preferenceStorage.setUserInfo(name, email);
+                                            preferenceStorage.setUserId(email);
+                                            BusProvider.postOnMainThread(new LoginCompleted(name));
+                                        }catch (Exception e){
+                                            Log.d(TAG, e.getMessage());
+                                        }
+                                    }
+                                });
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id,name,email,gender,birthday");
+                        request.setParameters(parameters);
+                        request.executeAsync();
+                        setResult(LOGIN_RESULT_SUCCESS);
+                        finish();
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "user cancelled");
+                    }
+
+                    @Override
+                    public void onError(FacebookException error) {
+                        Log.d(TAG, error.getMessage());
+                    }
+                });
 
         alreadyResgistered.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +192,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 showRegister = false;
                 switchView();
             }
-        });
+                });
 
         skipToApp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,15 +215,15 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                 onSubmit();
             }
         });
-        findViewById(R.id.sign_in_button).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.sign_in_google).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn();
+                signInWithGoogle();
             }
         });
     }
 
-    private void signIn() {
+    private void signInWithGoogle() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -352,6 +419,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {

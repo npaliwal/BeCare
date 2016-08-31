@@ -6,6 +6,7 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.ListViewCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +24,9 @@ import com.becare.users.MenuAdapter;
 import com.becare.users.PreferenceStorage;
 import com.becare.users.R;
 import com.becare.users.events.BusProvider;
+import com.becare.users.events.LoginCompleted;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
@@ -33,6 +37,7 @@ import java.util.Map;
 
 
 public class StartingActivity extends AppCompatActivity {
+    private static final String TAG = StartingActivity.class.getSimpleName();
 
     private SensorManager mSensorManager;
     private BecareRemoteSensorManager remoteSensorManager;
@@ -64,6 +69,8 @@ public class StartingActivity extends AppCompatActivity {
 
         instance = this;
 
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
 
         preferenceStorage = new PreferenceStorage(getApplicationContext());
 
@@ -92,9 +99,9 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        BusProvider.getInstance().register(this);
 
         if(preferenceStorage.isLoggedIn()) {
-            BusProvider.getInstance().register(this);
 
             remoteSensorManager.startMeasurement();
 
@@ -102,7 +109,6 @@ public class StartingActivity extends AppCompatActivity {
                 @Override
                 public void onResult(NodeApi.GetConnectedNodesResult pGetConnectedNodesResult) {
                     mNodes = pGetConnectedNodesResult.getNodes();
-
                 }
             });
         }
@@ -111,8 +117,8 @@ public class StartingActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        BusProvider.getInstance().unregister(this);
         if(preferenceStorage.isLoggedIn()) {
-            BusProvider.getInstance().unregister(this);
 
             remoteSensorManager.stopMeasurement();
         }
@@ -205,4 +211,9 @@ public class StartingActivity extends AppCompatActivity {
         }
     }
 
+    @Subscribe
+    public void onLoginCompletedEvent(LoginCompleted event){
+        Log.d(TAG, "Login completed with name=" + event.getName());
+        welcome.setText("Hello " + preferenceStorage.getUserName());
+    }
 }

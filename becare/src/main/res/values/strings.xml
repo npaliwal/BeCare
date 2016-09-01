@@ -45,16 +45,19 @@
     <string name="contrast_done">Done</string>
     <string name="contrast_performance">Performance: %1$d correct out of %2$d</string>
 
-    <string name="another_day">another day</string>
-    <string name="frankly_speaking">frankly speaking</string>
-    <string name="keep_in_touch">keep in touch</string>
-    <string name="transcript_greet">nice to meet you</string>
-    <string name="no_problem">no problem</string>
-    <string name="take_a_message">take a message</string>
-    <string name="take_me_away">take me away</string>
-    <string name="see_you_later">see you later</string>
 
-    <string name="transcript_performance">Time: %1$s  |  ✔ %2$d  |  ✖ %3$d </string>
+    <string name="transcript_instruction">Type the phrase using the quadrant keyboard as quickly as possible.\nContinue past wrong key"</string>
+
+    <string name="another_day">Another day</string>
+    <string name="frankly_speaking">Frankly speaking</string>
+    <string name="keep_in_touch">Keep in touch</string>
+    <string name="transcript_greet">Nice to meet you</string>
+    <string name="no_problem">No Problem</string>
+    <string name="take_a_message">Take a message</string>
+    <string name="take_me_away">Take me away</string>
+    <string name="see_you_later">See you later</string>
+
+    <string name="transcript_performance">✔ %1$d \t\t  ✖ %2$d </string>
 
 
     <string name="next">Next</string>

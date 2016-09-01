@@ -1,6 +1,7 @@
 package com.github.pocmo.sensordashboard.activities;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -11,10 +12,12 @@ import android.text.Editable;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.AttributeSet;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +29,8 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.AudioData;
+import com.github.pocmo.sensordashboard.ui.FlowLayout;
+import com.github.pocmo.sensordashboard.ui.InstructionView;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -46,13 +51,16 @@ import java.util.Random;
 public class TranscriptionTestActivity extends AppCompatActivity {
 
     View speaker;
-    TextView submit, header, performance;
+    TextView startEnd, header, performance;
+    InstructionView message;
     EditText input;
     SeekBar volumeSeekbar;
+    FlowLayout flowLayout;
 
     private int currKeyCount = 0;
     private int numExercises = 0;
-    private int currExercise = 0;
+    private int currExercise = 0, currWordIndex = 0, currCharIndex = 0, currInputIndex = 0;
+    private int correctInputCount = 0, incorrectInputCount = 0;
     private long prevTime = 0;
 
     private ArrayList<AudioData> exercises = new ArrayList<>();
@@ -62,6 +70,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     private PreferenceStorage preferenceStorage;
     private BecareRemoteSensorManager mRemoteSensorManager;
     private long timeConsumed = 0;
+    private boolean autoSpeakerPlay = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +85,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         preferenceStorage = new PreferenceStorage(TranscriptionTestActivity.this);
 
         initControls();
-        initExercises();
         initUIElements();
+        initExercises();
     }
 
     private void customTitleBar(){
@@ -214,49 +223,47 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         });
 
         speaker = findViewById(R.id.speaker);
-        submit = (TextView) findViewById(R.id.submit_input);
+        startEnd = (TextView) findViewById(R.id.start_end);
         header = (TextView) findViewById(R.id.exercise_header);
         performance = (TextView) findViewById(R.id.tv_performance);
 
         speaker.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                message.setMessage(exercises.get(currExercise).getTextRes(), false);
                 MediaPlayer mp = MediaPlayer.create(getApplicationContext(), exercises.get(currExercise).getSpeechResId());
                 mp.start();
-                if(timeConsumed <= 0){
-                    timeConsumed = System.currentTimeMillis();
-                }
+                mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                    @Override
+                    public void onCompletion(MediaPlayer mp) {
+                        if(timeConsumed <= 0){
+                            timeConsumed = System.currentTimeMillis();
+                        }
+                        if(autoSpeakerPlay){
+                            message.resetTimer();
+                        }
+                        message.setState(InstructionView.STATE.SHOW_TIMER);
+                        autoSpeakerPlay = false;
+                    }
+                });
+
             }
         });
 
-        submit.setOnClickListener(new View.OnClickListener() {
+        startEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (currExercise <= numExercises) {
-                    currExercise++;
-                    header.setText("Audio #" + (1 + currExercise));
-                    if (currExercise == numExercises) {
-                        speaker.setVisibility(View.GONE);
-                        input.setVisibility(View.GONE);
-                        header.setVisibility(View.GONE);
-                        submit.setText("Done");
-                        currExercise++;
-                    }
-                } else {
+                if(message.getState() == InstructionView.STATE.SHOW_INSTRUCTION){
+                    startEnd.setVisibility(View.GONE);
+                    flowLayout.setVisibility(View.VISIBLE);
+                    populateTextForAudio();
+                }else{
                     finish();
                 }
-                input.setText(null);
-                currKeyCount = 0;
-                prevTime = 0;
-                long timeTaken = 0;
-                if(timeConsumed > 1){
-                    timeTaken = (System.currentTimeMillis() - timeConsumed)/1000;
-                }
-                timeConsumed = 0;
-                performance.setVisibility(View.VISIBLE);
-                performance.setText(getString(R.string.transcript_performance, timeTaken + " secs",  15, 3));
             }
         });
+        flowLayout = (FlowLayout)findViewById(R.id.user_input);
+        message = (InstructionView)findViewById(R.id.msg);
     }
 
     private void initControls()
@@ -311,6 +318,39 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 temp++;
             }
         }
+        this.currExercise = 0;
+        message.setInstruction(getString(R.string.transcript_instruction));
+    }
+
+    private void populateTextForAudio(){
+        flowLayout.removeAllViews();
+        performance.setVisibility(View.VISIBLE);
+        correctInputCount = incorrectInputCount = 0;
+        performance.setText(getString(R.string.transcript_performance, correctInputCount, incorrectInputCount));
+        speaker.setVisibility(View.VISIBLE);
+        this.currCharIndex = 0;
+        this.currWordIndex = 0;
+        autoSpeakerPlay = true;
+        speaker.performClick();
+        AudioData currAudio = exercises.get(currExercise);
+        String audioText = currAudio.getTextRes();
+        FlowLayout.LayoutParams flowLP = new FlowLayout.LayoutParams(5, 5);
+        View word = getLayoutInflater().inflate(R.layout.bubble_word, null);
+        for(int i=0; i <= audioText.length(); i++){
+            if(i == audioText.length()){
+                flowLayout.addView(word, flowLP);
+            }else{
+                String currchar = audioText.substring(i, i + 1);
+                if(currchar.equals(" ")){
+                    flowLayout.addView(word, flowLP);
+                    word = getLayoutInflater().inflate(R.layout.bubble_word, null);
+                }else{
+                    View view = getLayoutInflater().inflate(R.layout.bubble_char, null);
+                    TextView textView = (TextView)view;
+                    ((ViewGroup)word).addView(textView);
+                }
+            }
+        }
     }
 
     public String getUserActivityStats(CharSequence currChar) {
@@ -327,10 +367,49 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     }
 
     public void addToInput(View key){
-        if(key instanceof TextView) {
+        if(key instanceof TextView && flowLayout != null && currExercise < numExercises) {
             TextView tvKey = (TextView)key;
-            input.setText(input.getText().toString() + tvKey.getText());
-            input.setSelection(input.getText().length());
+            String currCharinput = tvKey.getText().toString();
+            String originalText = exercises.get(currExercise).getTextRes();
+            String expectedChar = originalText.substring(currInputIndex, currInputIndex + 1);
+            View bubbleWord = flowLayout.getChildAt(currWordIndex);
+            if(bubbleWord == null)
+                return;
+            View bubbleChar = ((LinearLayout) bubbleWord).getChildAt(currCharIndex);
+            if(bubbleChar == null)
+                return;
+            if(expectedChar.equalsIgnoreCase(currCharinput)){
+                correctInputCount++;
+                bubbleChar.setBackgroundResource(R.color.green);
+            }else {
+                incorrectInputCount++;
+                bubbleChar.setBackgroundResource(R.color.red);
+            }
+            performance.setText(getString(R.string.transcript_performance, correctInputCount, incorrectInputCount));
+            ((TextView)bubbleChar).setText(currCharinput);
+            currInputIndex++;
+            currCharIndex++;
+            if(currInputIndex == originalText.length()){
+                this.currExercise++;
+                this.currInputIndex = 0;
+
+                if(this.currExercise < this.numExercises) {
+                    populateTextForAudio();
+                }else {
+                    message.setState(InstructionView.STATE.PAUSE_TIMER);
+                    startEnd.setText("END");
+                    startEnd.setVisibility(View.VISIBLE);
+                    flowLayout.setVisibility(View.GONE);
+                    speaker.setVisibility(View.INVISIBLE);
+                }
+            }else {
+                String nextExpectedChar = originalText.substring(currInputIndex, currInputIndex + 1);
+                if (nextExpectedChar.equals(" ")) {
+                    currCharIndex = 0;
+                    currInputIndex++;
+                    currWordIndex++;
+                }
+            }
         }
     }
 
@@ -350,4 +429,5 @@ public class TranscriptionTestActivity extends AppCompatActivity {
             }
         }
     }
+
 }

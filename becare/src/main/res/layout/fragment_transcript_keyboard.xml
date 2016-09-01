@@ -279,7 +279,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:weightSum="3">
+                android:weightSum="4">
 
                 <TextView
                     android:id="@+id/q3_r1_l1"
@@ -317,6 +317,18 @@
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:onClick="addToInput"/>
+                <TextView
+                    android:id="@+id/q4_r1_l1"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="S"
+                    android:padding="10dp"
+                    android:background="@color/gray_light"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:onClick="addToInput"/>
 
             </LinearLayout>
 
@@ -338,20 +350,8 @@
                 android:gravity="center"
                 android:weightSum="3">
 
-                <TextView
-                    android:id="@+id/q4_r1_l1"
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="S"
-                    android:padding="10dp"
-                    android:background="@color/gray_light"
-                    android:layout_margin="1dp"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:onClick="addToInput"/>
-                <TextView
 
+                <TextView
                     android:id="@+id/q4_r1_l2"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
@@ -375,13 +375,6 @@
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:onClick="addToInput"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:weightSum="3">
                 <TextView
                     android:id="@+id/q4_r2_l1"
                     android:layout_width="0px"
@@ -394,8 +387,15 @@
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:onClick="addToInput"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:weightSum="4">
+
                 <TextView
-                    android:id="@+id/q4_r2_l2"
+                    android:id="@+id/q4_r2_l1"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -407,7 +407,7 @@
                     android:textColor="@color/black"
                     android:onClick="addToInput"/>
                 <TextView
-                    android:id="@+id/q4_r2_l3"
+                    android:id="@+id/q4_r2_l2"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -418,7 +418,30 @@
                     android:gravity="center"
                     android:textColor="@color/black"
                     android:onClick="addToInput"/>
-
+                <TextView
+                    android:id="@+id/q4_r2_l3"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Y"
+                    android:padding="10dp"
+                    android:background="@color/gray_light"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:onClick="addToInput"/>
+                <TextView
+                    android:id="@+id/q4_r2_l4"
+                    android:layout_width="0px"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Z"
+                    android:padding="10dp"
+                    android:background="@color/gray_light"
+                    android:layout_margin="1dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:onClick="addToInput"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -429,7 +452,8 @@
         android:gravity="center"
         android:padding="4dp"
         android:background="@drawable/shape"
-        android:weightSum="6">
+        android:weightSum="6"
+        android:visibility="gone">
         <TextView
             android:id="@+id/q5_r1_l1"
             android:layout_width="0px"

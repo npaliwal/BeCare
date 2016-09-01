@@ -13,4 +13,5 @@ crashlytics-build.properties
 *.apk
 *.alloc
 *.hprof
+local.properties
 

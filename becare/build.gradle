@@ -28,7 +28,7 @@ android {
         release {
             storeFile file("becare.keystore")
             storePassword 'keystorebecare'
-            keyAlias "BeCare"
+            keyAlias "BeCareNew"
             keyPassword 'keystorebecare'
         }
     }

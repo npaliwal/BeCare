@@ -89,4 +89,6 @@
 
     <string name="facebook_app_id">333233053683173</string>
 
+    <string name="com_facebook_loginview_log_in_button">LOGIN</string>
+    <string name="com_facebook_loginview_log_out_button">LOGOUT</string>
 </resources>

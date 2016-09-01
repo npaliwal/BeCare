@@ -376,7 +376,7 @@
                     android:textColor="@color/black"
                     android:onClick="addToInput"/>
                 <TextView
-                    android:id="@+id/q4_r2_l1"
+                    android:id="@+id/q4_r1_l4"
                     android:layout_width="0px"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

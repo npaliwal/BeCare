@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "7032304268",
-    "project_id": "firebase-becare"
+    "project_number": "884646041063",
+    "project_id": "becare-f2cfa"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:7032304268:android:a6d86402ed950519",
+        "mobilesdk_app_id": "1:884646041063:android:a6d86402ed950519",
         "android_client_info": {
           "package_name": "com.becare.users"
         }
       },
       "oauth_client": [
         {
-          "client_id": "7032304268-q9nfkhaj1s93qa0mompvsgvk97d88if1.apps.googleusercontent.com",
+          "client_id": "884646041063-p1q6nm8d9tdmgas0mqso2c1m2ndu8b37.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.becare.users",
-            "certificate_hash": "E916B23A85FAE4E9525DCEDD46C69C2639568448"
+            "certificate_hash": "2535BBA3276CD8A4C910E3D9973C739D08D5C9CA"
           }
         },
         {
-          "client_id": "7032304268-et3tc11pi0orvu8gbqlq2vdnphb3r2ga.apps.googleusercontent.com",
+          "client_id": "884646041063-nksukbjab78cqk1hri8rrg1a80n4vbba.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDFJItLXBC7BYQIBrA_jTw5hsgnmNX9kW8"
+          "current_key": "AIzaSyCgNalHNgRF63OPpUXh4j4hnYpxEmEaQ3c"
         }
       ],
       "services": {

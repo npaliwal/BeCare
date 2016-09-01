@@ -47,6 +47,8 @@ import com.google.inject.Inject;
 
 import org.json.JSONObject;
 
+import java.util.Arrays;
+
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -85,6 +87,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
     private boolean showRegister = false;
     private String registerType = null;
     private BecareHiveApi api = null;
+    private View fbLogin = null;
 
     @Inject
     PreferenceStorage preferenceStorage;
@@ -124,7 +127,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         // profile. ID and basic profile are included in DEFAULT_SIGN_IN.
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail()
-                .requestScopes(Plus.SCOPE_PLUS_PROFILE)
+                .requestScopes(Plus.SCOPE_PLUS_PROFILE, Plus.SCOPE_PLUS_LOGIN)
                 .build();
         // [END configure_signin]
 
@@ -143,48 +146,54 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.sign_in_facebook);
-        //loginButton.setReadPermissions("email");
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
+        fbLogin = findViewById(R.id.button_fb);
+        fbLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile"));
+            }
+        });
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
 
-                        // App code
-                        GraphRequest request = GraphRequest.newMeRequest(
-                                loginResult.getAccessToken(),
-                                new GraphRequest.GraphJSONObjectCallback() {
-                                    @Override
-                                    public void onCompleted(JSONObject object, GraphResponse response) {
-                                        Log.v("LoginActivity", response.toString());
-                                        try {
-                                            // Application code
-                                            String email = object.getString("email");
-                                            String name = object.optString("name");
-                                            preferenceStorage.setUserInfo(name, email);
-                                            preferenceStorage.setUserId(email);
-                                            BusProvider.postOnMainThread(new LoginCompleted(name));
-                                        }catch (Exception e){
-                                            Log.d(TAG, e.getMessage());
-                                        }
-                                    }
-                                });
-                        Bundle parameters = new Bundle();
-                        parameters.putString("fields", "id,name,email,gender,birthday");
-                        request.setParameters(parameters);
-                        request.executeAsync();
-                        setResult(LOGIN_RESULT_SUCCESS);
-                        finish();
-                    }
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("LoginActivity", response.toString());
+                                try {
+                                    // Application code
+                                    String email = object.getString("email");
+                                    String name = object.optString("name");
+                                    preferenceStorage.setUserInfo(name, email);
+                                    preferenceStorage.setUserId(email);
+                                    BusProvider.postOnMainThread(new LoginCompleted(name));
+                                } catch (Exception e) {
+                                    Log.d(TAG, e.getMessage());
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+                setResult(LOGIN_RESULT_SUCCESS);
+                finish();
+            }
 
-                    @Override
-                    public void onCancel() {
-                        Log.d(TAG, "user cancelled");
-                    }
+            @Override
+            public void onCancel() {
+                Log.d(TAG, "user cancelled");
+            }
 
-                    @Override
-                    public void onError(FacebookException error) {
-                        Log.d(TAG, error.getMessage());
-                    }
-                });
+            @Override
+            public void onError(FacebookException error) {
+                Log.d(TAG, error.getMessage());
+            }
+        });
 
         alreadyResgistered.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -284,7 +293,7 @@ public class LoginActivity extends FragmentActivity implements GoogleApiClient.O
                     int count = userQueryResponse.getUserCount();
                     if (count > 0) {
                         UserQueryResponse.UserData userData = userQueryResponse.getAllUsers().get(0);
-                        //preferenceStorage.setUserId(userData.getUserBecareId());
+                        preferenceStorage.setUserId(userData.getUserBecareId());
                         setResult(LOGIN_RESULT_SUCCESS);
                         finish();
                     }

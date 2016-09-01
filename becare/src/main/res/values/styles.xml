@@ -21,4 +21,8 @@
         <item name="android:padding">0sp</item>
         <item name="android:layout_margin">0sp</item>
     </style>
+
+    <style name="FacebookLoginButton">
+        <item name="android:background">@drawable/com_facebook_button_background</item>
+    </style>
 </resources>

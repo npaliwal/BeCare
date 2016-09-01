@@ -1,129 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/upAndGo">
 
     <LinearLayout
+        android:id="@+id/instruction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:gravity="center"
-        android:weightSum="3">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20dip"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:textStyle="bold"
-            android:text="Up and Go" />
+        >
+       <TextView
+          android:layout_width="match_parent"
+           android:layout_height="40dp"
+          android:textSize="21dip"
+           android:gravity="center"
+         android:layout_gravity="center"
+          android:textStyle="bold"
+           android:background="@color/colorAQUA"
+          android:text="Instructions:" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="80dp"
+                android:textSize="16dip"
+                android:layout_marginTop="0dp"
+                android:background="@color/colorLIME"
+               android:text="There are 6 stages in this test. Please follow the 6 stages to complete the test. Press the 'START' button to start the test. Press 'STOP' at any time if you wish to stop the test." />
 
     </LinearLayout>
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="18dip"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="20dp"
+        android:orientation="vertical"
+        android:layout_below="@+id/instruction"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="20dp"
+        android:id="@+id/images"
+        android:gravity="center">
 
-        android:text="Instructions:" />
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:rowCount="2"
-        android:columnCount="5"
-        android:layout_marginTop="30dp"
+        android:columnCount="3"
+android:layout_marginLeft="5dp"
         android:layout_marginBottom="5dp"
 
         android:layout_gravity="center">
         <ImageView
             android:id="@+id/sit"
-            android:layout_width="70dp"
+            android:layout_width="120dp"
             android:layout_height="70dp"
             android:src="@drawable/sit_green" />
         <ImageView
             android:id="@+id/stand"
-            android:layout_width="70dp"
+            android:layout_width="120dp"
             android:layout_height="70dp"
             android:src="@drawable/stand" />
         <ImageView
             android:id="@+id/walk"
-            android:layout_width="70dp"
+            android:layout_width="120dp"
             android:layout_height="70dp"
             android:src="@drawable/walking" />
-        <ImageView
 
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/return1" />
-        <ImageView
-
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:src="@drawable/sit" />
         <TextView
 
-            android:text="Sit in a chair and push the start button."
-            android:layout_width="70dp"
-            android:gravity="center"
-
+            android:text="Stage 1: Sit in a chair."
+            android:layout_width="120dp"
+            android:textStyle="bold"
             android:textSize="14dip" />
 
         <TextView
 
-            android:text="Stand up"
-            android:gravity="center"
-            android:layout_width="70dp"
+            android:text="Stage 2: Stand\nup from the chair"
 
+            android:layout_width="120dp"
+            android:textStyle="bold"
             android:textSize="14dip" />
 
         <TextView
 
-            android:text="Walk"
-            android:gravity="center"
-            android:layout_width="70dp"
+            android:text="Stage 3: Walk"
 
+            android:layout_width="120dp"
+            android:textStyle="bold"
             android:textSize="14dip" />
 
-        <TextView
-
-            android:text="Walk back to the chair."
-            android:gravity="center"
-            android:layout_width="70dp"
-
-            android:textSize="14dip" />
-        <TextView
-
-            android:text="Sit down, then push stop."
-            android:gravity="center"
-            android:layout_width="70dp"
-
-            android:textSize="14dip" />
     </GridLayout>
+        <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:rowCount="2"
+            android:columnCount="3"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_gravity="center">
+            <ImageView
+                android:id="@+id/sit_back"
+                android:layout_width="120dp"
+                android:layout_height="70dp"
+                android:src="@drawable/sit" />
+            <ImageView
+                android:id="@+id/walk_back"
+                android:layout_width="120dp"
+                android:layout_height="70dp"
+                android:src="@drawable/walking_back" />
+            <ImageView
+                android:id="@+id/turn"
+                android:layout_width="120dp"
+                android:layout_height="70dp"
+                android:src="@drawable/return1" />
+
+            <TextView
+
+                android:text="Stage 6: Sit back in the chair."
+                android:layout_width="120dp"
+                android:textStyle="bold"
+                android:textSize="14dip" />
+
+            <TextView
+
+                android:text="Stage 5: Walk back."
+                android:textStyle="bold"
+                android:layout_width="120dp"
+
+                android:textSize="14dip" />
+
+            <TextView
+                android:text="Stage 4: Turn back."
+                android:layout_width="120dp"
+                android:textStyle="bold"
+                android:textSize="14dip" />
+
+
+        </GridLayout>
+
+</LinearLayout>
     <LinearLayout
+        android:id="@+id/buttonFrame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp">
+        android:background="@color/stroopLightGrey"
+        android:layout_below="@+id/images"
+        android:layout_marginTop="0dp"
+        >
         <Button
             android:id="@+id/start_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
             android:text="Start" >
         </Button>
         <Button
-            android:id="@+id/stop_button"
+            android:id="@+id/reset_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
             android:text="Stop" >
         </Button>
+
 
     </LinearLayout>
 
@@ -131,33 +179,38 @@
     <LinearLayout
         android:id="@+id/reaadings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/input_container"
-        android:orientation="vertical"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="30dp">
+        android:layout_height="60dp"
+        android:layout_below="@+id/buttonFrame"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@color/stroopLightGrey"
+        android:layout_marginTop="0dp">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
+                android:textStyle="bold"
                 android:text="Motion:"/>
             <TextView
                 android:id="@+id/delta"
-                android:layout_width="wrap_content"
+                android:layout_width="120dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:textSize="18sp"
-                android:text=""/>
+                android:text="Sitting"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginLeft="20dp"
             android:orientation="horizontal">
             <TextView
                 android:layout_width="wrap_content"
@@ -166,25 +219,29 @@
                 android:text="Steps:"/>
             <TextView
                 android:id="@+id/steps"
-                android:layout_width="wrap_content"
+                android:layout_width="10dp"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:textSize="18sp"
                 android:text="0"/>
         </LinearLayout>
 
-    </LinearLayout>
-    <LinearLayout
+
+       <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/reaadings"
-        android:layout_marginLeft="20dp">
+
+        android:gravity="center"
+        android:layout_gravity="center"
+
+       >
 
         <TextView
             android:id="@+id/time_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
+            android:textStyle="bold"
             android:text="Time:" >
         </TextView>
 
@@ -195,28 +252,52 @@
             android:textSize="18sp"
             android:layout_marginLeft="10dp">
         </Chronometer>
-    </LinearLayout>
-    <LinearLayout
+        </LinearLayout>
+
+  <!--  <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="20dp">
-        <!--
-        <Button
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:background="@drawable/arrow_button_bk"
-            android:onClick="getTimedWalking">
-        </Button>
-          <Button
-              android:layout_width="40dp"
-              android:layout_height="40dp"
-              android:layout_marginLeft="20dp"
-              android:layout_gravity="center"
-              android:background="@drawable/arrow_button"
-              android:onClick="getTimedWalking">
-          </Button>-->
+        android:layout_marginTop="0dp">
+        <ImageView
+            android:id="@+id/main_image_dial"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/compass_dial"
+            android:src="@drawable/dial" />
+        <ImageView
+            android:id="@+id/main_image_hands"
+            android:layout_width="17dp"
+            android:layout_height="110dp"
+            android:gravity="center"
+            android:layout_centerInParent="true"
+            android:contentDescription="@string/compass_hands"
+            android:scaleType="fitXY"
+            android:src="@drawable/hands" />
+
+    </RelativeLayout>-->
+        </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/reaadings"
+        android:background="@color/stroopLightGrey"
+
+        >
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@+id/reaadings"
+        android:textSize="17sp"
+        android:textStyle="bold"
+
+        android:gravity="center"
+        android:background="@color/stroopLightGrey"
+
+        android:text=""/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>

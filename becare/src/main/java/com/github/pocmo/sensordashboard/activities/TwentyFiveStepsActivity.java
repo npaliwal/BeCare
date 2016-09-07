@@ -1,31 +1,24 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
@@ -58,6 +51,9 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
     private int countDown = 0;
     private long startTime=0;
     private long lastStepTime = 0;
+    private ImageView walkImage;
+    private CountDownTimer  imageTimer;
+    private int imageCounter = 2;
     private BecareRemoteSensorManager becareRemoteSensorManager;
     private final SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
@@ -67,10 +63,9 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
         customTitleBar();
         setContentView(R.layout.twenty_five_steps);
 
-        ImageView mImgSample = (ImageView) findViewById(R.id.img_25_steps1);
-        ImageView mImgSample2 = (ImageView) findViewById(R.id.img_25_steps2);
+        walkImage = (ImageView) findViewById(R.id.img_25_steps1);
         LinearLayout rl = (LinearLayout)findViewById(R.id.twentyFiveSteps);
-        rl.setBackgroundResource(R.drawable.wallpaper7);
+      //  rl.setBackgroundResource(R.drawable.wallpaper7);
 
         spinner = (Spinner) findViewById(R.id.spinner);
 
@@ -95,7 +90,9 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
                 startMeasure = true;
                 lastStepTime = 0;
                 startTime = System.currentTimeMillis();
-                Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
+           //     Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
+                imageCounter=2;
+                imageTimer.start();
             }
         });
 
@@ -106,7 +103,8 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
                 numSteps = 0;
                 startMeasure = false;
                 myChronometer.stop();
-                Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
+                imageTimer.cancel();
+             //   Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -117,6 +115,95 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
         accel = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         simpleStepDetector = new SimpleStepDetector();
         simpleStepDetector.registerListener(this);
+
+        imageTimer = new CountDownTimer(160000, 150) { // adjust the milli seconds here
+            public void onTick(long millisUntilFinished) {
+
+                switch (imageCounter){
+
+                    case 2:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0002);
+                        break;
+                    case 3:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0003);
+                        break;
+                    case 4:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0004);
+                        break;
+                    case 5:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0005);
+                        break;
+                    case 6:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0006);
+                        break;
+                    case 7:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0007);
+                        break;
+                    case 8:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0008);
+                        break;
+                    case 9:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0009);
+                        break;
+                    case 10:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0010);
+                        break;
+                    case 11:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0011);
+                        break;
+                    case 12:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0012);
+                        break;
+                    case 13:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0013);
+                        break;
+                    case 14:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0014);
+                        break;
+                    case 15:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0015);
+                        break;
+                    case 16:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0016);
+                        break;
+                    case 17:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0017);
+                        break;
+            /*        case 18:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0018);
+                        break;
+                    case 19:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0019);
+                        break;
+                    case 20:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0020);
+                        break;
+                    case 21:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0021);
+                        break;
+                    case 22:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0022);
+                        break;
+                    case 23:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0023);
+                        break;
+                    case 24:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0024);
+                        break;
+                    case 25:
+                        walkImage.setImageResource(R.mipmap.walk7_frame_0025);
+                        break;*/
+
+                }
+                imageCounter++;
+                if (imageCounter > 17)
+                    imageCounter = 2;
+            }
+
+            public void onFinish() {
+
+            }
+        };
     }
 
     @Override
@@ -207,6 +294,89 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
 
     }
 
+    private void setImage()
+    {
+        /*
+        switch (numSteps) {
+            case 2:
+                walkImage.setImageResource(R.drawable.walk7_frame_0025);
+                break;
+            case 3:
+                walkImage.setImageResource(R.drawable.walk7_frame_0024);
+                break;
+            case 4:
+                walkImage.setImageResource(R.drawable.walk7_frame_0023);
+                break;
+            case 5:
+                walkImage.setImageResource(R.drawable.walk7_frame_0022);
+                break;
+            case 6:
+                walkImage.setImageResource(R.drawable.walk7_frame_0021);
+                break;
+            case 7:
+                walkImage.setImageResource(R.drawable.walk7_frame_0020);
+                break;
+            case 8:
+                walkImage.setImageResource(R.drawable.walk7_frame_0019);
+                break;
+            case 9:
+                walkImage.setImageResource(R.drawable.walk7_frame_0018);
+                break;
+            case 10:
+                walkImage.setImageResource(R.drawable.walk7_frame_0017);
+                break;
+            case 11:
+                walkImage.setImageResource(R.drawable.walk7_frame_0016);
+                break;
+            case 12:
+                walkImage.setImageResource(R.drawable.walk7_frame_0015);
+                break;
+            case 13:
+                walkImage.setImageResource(R.drawable.walk7_frame_0014);
+                break;
+            case 14:
+                walkImage.setImageResource(R.drawable.walk7_frame_0013);
+                break;
+            case 15:
+                walkImage.setImageResource(R.drawable.walk7_frame_0012);
+                break;
+            case 16:
+                walkImage.setImageResource(R.drawable.walk7_frame_0011);
+                break;
+            case 17:
+                walkImage.setImageResource(R.drawable.walk7_frame_0010);
+                break;
+            case 18:
+                walkImage.setImageResource(R.drawable.walk7_frame_0009);
+                break;
+            case 19:
+                walkImage.setImageResource(R.drawable.walk7_frame_0008);
+                break;
+            case 20:
+                walkImage.setImageResource(R.drawable.walk7_frame_0007);
+                break;
+            case 21:
+                walkImage.setImageResource(R.drawable.walk7_frame_0006);
+                break;
+            case 22:
+                walkImage.setImageResource(R.drawable.walk7_frame_0005);
+                break;
+
+            case 23:
+                walkImage.setImageResource(R.drawable.walk7_frame_0004);
+                break;
+            case 24:
+                walkImage.setImageResource(R.drawable.walk7_frame_0003);
+                break;
+        }
+*/
+ /*       int d = numSteps % 2;
+        if (d > 0)
+            walkImage.setImageResource(R.drawable.walk7_frame_0002);
+        else
+            walkImage.setImageResource(R.drawable.walk7_frame_0014);*/
+    }
+
     @Override
     public void step(long timeNs) {
         if (!startMeasure)
@@ -246,9 +416,12 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
         dictionary.put("height",  heightStr);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
+     //   setImage();
+
         if (countDown <= 0) {
             startMeasure = false;
             myChronometer.stop();
+            imageTimer.cancel();
         }
     }
 

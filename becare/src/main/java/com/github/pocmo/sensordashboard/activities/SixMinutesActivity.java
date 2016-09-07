@@ -18,10 +18,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
@@ -63,9 +61,12 @@ public class  SixMinutesActivity extends AppCompatActivity implements SensorEven
 
     // compass arrow to rotate
     public ImageView arrowView = null;
+    private ImageView walkImage;
+ //   AnimationDrawable walkAnimation;
     private long startTime = 0;
-    private CountDownTimer cTimer = null;
+    private CountDownTimer cTimer, imageTimer;
     private long lastTime = 0;
+    private int imageCounter = 1;
     private BecareRemoteSensorManager becareRemoteSensorManager;
 
     @Override
@@ -75,10 +76,13 @@ public class  SixMinutesActivity extends AppCompatActivity implements SensorEven
         Log.i(TAG, "onCreate()");
 
         setContentView(R.layout.six_minutes_walking);
-        LinearLayout rl = (LinearLayout)findViewById(R.id.sixMinutesWalking);
-        rl.setBackgroundResource(R.drawable.wallpaper7);
+      //  LinearLayout rl = (LinearLayout)findViewById(R.id.sixMinutesWalking);
+     //   rl.setBackgroundResource(R.drawable.wallpaper7);
 
         spinner = (Spinner) findViewById(R.id.spinner_6min);
+        walkImage = (ImageView) findViewById(R.id.img_6mon);
+      //  walkImage.setBackgroundResource(R.drawable.six_minutes_walking_filling);
+     //   walkAnimation = (AnimationDrawable) walkImage.getBackground();
 
         stepText = (TextView) findViewById(R.id.steps_6min);
         distanceText = (TextView) findViewById(R.id.distance_6min);
@@ -98,7 +102,12 @@ public class  SixMinutesActivity extends AppCompatActivity implements SensorEven
                 startTime =System.currentTimeMillis();
                 lastTime = 0;
                 cTimer.start();
-                Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
+                imageCounter = 1;
+                imageTimer.start();
+
+              //  Toast.makeText(getApplicationContext(), "Started", Toast.LENGTH_SHORT).show();
+              //  walkAnimation.start();
+
             }
         });
 
@@ -108,8 +117,10 @@ public class  SixMinutesActivity extends AppCompatActivity implements SensorEven
             public void onClick(View v) {
                 numSteps = 0;
                 startMeasure = false;
-
-                Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
+             //   walkAnimation.stop();
+            //    Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
+                imageCounter = -0xFFFFFF;
+                imageTimer.cancel();
             }
         });
         // Get an instance of the SensorManager
@@ -130,11 +141,93 @@ public class  SixMinutesActivity extends AppCompatActivity implements SensorEven
                 seconds = seconds % 60;
                 countdown.setText(String.format("%02d", minutes)
                         + ":" + String.format("%02d", seconds));
+           //     if (!walkAnimation.isRunning())
+              //      walkAnimation.start();
             }
 
             public void onFinish() {
                 startMeasure = false;
                 countdown.setText("Done");
+                imageTimer.cancel();
+            }
+        };
+
+        imageTimer = new CountDownTimer(360000, 150) { // adjust the milli seconds here
+            public void onTick(long millisUntilFinished) {
+
+               switch (imageCounter){
+                   case 1:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0001);
+                       break;
+                   case 2:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0002);
+                       break;
+                   case 3:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0003);
+                       break;
+                   case 4:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0004);
+                       break;
+                   case 5:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0005);
+                       break;
+                   case 6:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0006);
+                       break;
+                   case 7:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0007);
+                       break;
+                   case 8:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0008);
+                       break;
+                   case 9:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0009);
+                       break;
+                   case 10:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0010);
+                       break;
+                   case 11:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0011);
+                       break;
+                   case 12:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0012);
+                       break;
+                   case 13:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0013);
+                       break;
+                   case 14:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0014);
+                       break;
+                   case 15:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0015);
+                       break;
+                   case 16:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0016);
+                       break;
+                   case 17:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0017);
+                       break;
+                   case 18:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0018);
+                       break;
+                   case 19:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0019);
+                       break;
+                   case 20:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0020);
+                       break;
+                   case 21:
+                       walkImage.setImageResource(R.mipmap.walk12_frame_0021);
+                       break;
+
+               }
+                imageCounter++;
+                if (imageCounter > 21)
+                    imageCounter = 1;
+            }
+
+            public void onFinish() {
+
             }
         };
 

@@ -11,36 +11,31 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3">
-        <ImageView
-            android:id="@+id/img_6mon"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-
-            android:src="@drawable/walking1" />
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="20sp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginLeft="20dp"
             android:textStyle="bold"
             android:text="6 Minutes Walking" />
 
     </LinearLayout>
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="15dp"
-        android:weightSum="3">
+        android:layout_marginTop="5dp"
+      android:gravity="center"
+       >
         <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-
+            android:layout_height="20dp"
             android:textSize="18sp"
             android:text="Enter your height : "/>
         <Spinner
@@ -57,7 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:layout_marginBottom="0dp">
         <Button
             android:id="@+id/start_button_6min"
@@ -76,10 +71,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="0dp">
+        android:orientation="horizontal"
+        android:gravity="center"
+        >
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+       >
         <TextView
             android:id="@+id/countdown"
             android:layout_width="wrap_content"
@@ -93,17 +93,15 @@
     <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
         android:rowCount="2"
         android:columnCount="3"
         android:background="@color/colorSmoke"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="5dp"
         android:padding="5dp"
-
-        android:layout_gravity="center">
+       >
         <TextView
             android:text="Distance (miles)"
-            android:layout_width="140dp"
+            android:layout_width="115dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
         <TextView
@@ -113,13 +111,13 @@
             android:textSize="14dip" />
         <TextView
             android:text="Speed (miles/sec)"
-            android:layout_width="140dp"
+            android:layout_width="130dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
 
         <TextView
             android:id="@+id/distance_6min"
-            android:layout_width="140dp"
+            android:layout_width="115dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
         <TextView
@@ -129,12 +127,13 @@
             android:textSize="14dip" />
         <TextView
             android:id="@+id/speed_6min"
-            android:layout_width="140dp"
+            android:layout_width="130dp"
             android:background="@color/colorPlaster2"
             android:textSize="14dip" />
 
-    </GridLayout>
 
+    </GridLayout>
+    </LinearLayout>
     <TextView
         android:id="@+id/steps_6min"
         android:layout_width="wrap_content"
@@ -183,27 +182,19 @@
             </qtx.compass.CompassView>
 -->
     </RelativeLayout>
+
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:layout_marginTop="15dp">
-        <!--
-       <Button
-           android:layout_width="40dp"
-           android:layout_height="40dp"
-           android:layout_gravity="center"
-           android:background="@drawable/arrow_button_bk"
-           android:onClick="getTimedWalking">
-       </Button>
-      <Button
-           android:layout_width="40dp"
-           android:layout_height="40dp"
-           android:layout_marginLeft="20dp"
-           android:layout_gravity="center"
-           android:background="@drawable/arrow_button"
-           android:onClick="getUpAndGo">
-       </Button>-->
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:gravity="center">
+        <ImageView
+            android:id="@+id/img_6mon"
+            android:layout_width="wrap_content"
+            android:layout_height="120dp"
+            android:background="@mipmap/walk12_frame_0001"
+            />
+
     </LinearLayout>
 </LinearLayout>

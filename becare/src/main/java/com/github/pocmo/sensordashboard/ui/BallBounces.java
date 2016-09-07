@@ -17,6 +17,7 @@ import android.view.SurfaceView;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
 
+import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.utils.FileUtils;
@@ -44,6 +45,7 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     int ballX; //Ball x position.
     int ballY; //Ball y position.
     int pathX, pathY;
+    int prevEventY;
     int initialY;
     float dY; //Ball vertical speed.
     int ballW;
@@ -356,7 +358,8 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                         ballX = (int) ev.getX() - ballW / 2;
                         ballY = (int) ev.getY() - ballH / 2;
                         //Log.d("pathDebug", "tY:" + ev.getY() + ", tX:" + ev.getX() + ", pathX:" + pathX);
-                        if (mRemoteSensorManager != null && started) {
+                        if (mRemoteSensorManager != null && started && Math.abs(pathY - prevEventY) > AppConfig.DEFAULT_SNOOKER_EVENT_DELTA) {
+                            prevEventY = pathY;
                             String value = "(" + pathX + "," + pathY + ") (" + (int) ev.getX() + "," + (int) ev.getY() + ")";
                             long now = System.currentTimeMillis();
                             if (preTime == 0)

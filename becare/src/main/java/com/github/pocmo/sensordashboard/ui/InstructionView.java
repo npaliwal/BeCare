@@ -13,6 +13,10 @@ public class InstructionView extends TextView {
     private String instruction = "";
     private String message = "";
 
+    public String getTimeLapsed() {
+        return formatTime(timeLapsed, true);
+    }
+
     public enum STATE {
         SHOW_INSTRUCTION,
         SHOW_TIMER,
@@ -84,17 +88,17 @@ public class InstructionView extends TextView {
             case SHOW_TIMER:
                 this.setTextSize(24);
                 timeLapsed = System.currentTimeMillis() - this.startTime;
-                this.setText(formatTime(timeLapsed));
+                this.setText(formatTime(timeLapsed, false));
                 break;
 
             case PAUSE_TIMER:
                 this.setTextSize(24);
-                this.setText(formatTime(timeLapsed));
+                this.setText(formatTime(timeLapsed, false));
                 break;
         }
     }
 
-    private String formatTime(long millis) {
+    private String formatTime(long millis, boolean formated) {
 
         String output = "00:00:00";
         try {
@@ -122,7 +126,17 @@ public class InstructionView extends TextView {
             if (days < 10)
                 day = "0" + days;
 
-            output = hur + ":" + min + ":" + sec;
+            if(formated){
+                if(hours > 0){
+                    output = hur + " Hr : " + min + " Min : " + sec + " Sec";
+                }else if(minutes > 0){
+                    output = min + " Min : " + sec + " Sec";
+                }else{
+                    output = sec + " Sec";
+                }
+            }else {
+                output = hur + ":" + min + ":" + sec;
+            }
             if(days > 0) {
                 output = day + "D " + output;
             }
@@ -131,4 +145,5 @@ public class InstructionView extends TextView {
         }
         return output;
     }
+
 }

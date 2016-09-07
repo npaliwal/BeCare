@@ -8,6 +8,7 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -181,6 +182,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             if(exercises.size() <= temp){
                 exercises.add(new TwoImageInfo());
                 exercises.get(temp).setLeftImage(currExercise);
+                if(random.nextBoolean()){
+                    Log.d(TAG, "Putting same shade exercise for right as well");
+                    exercises.get(temp).setRightImage(currExercise);
+                    temp++;
+                }
             }else{
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;
@@ -194,6 +200,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             if(exercises.size() <= temp){
                 exercises.add(new TwoImageInfo());
                 exercises.get(temp).setLeftImage(currExercise);
+                if(random.nextBoolean()){
+                    Log.d(TAG, "Putting same itchi exercise for right as well");
+                    exercises.get(temp).setRightImage(currExercise);
+                    temp++;
+                }
             }else{
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;
@@ -207,6 +218,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             if(exercises.size() <= temp){
                 exercises.add(new TwoImageInfo());
                 exercises.get(temp).setLeftImage(currExercise);
+                if(random.nextBoolean()){
+                    Log.d(TAG, "Putting same pattern exercise for right as well");
+                    exercises.get(temp).setRightImage(currExercise);
+                    temp++;
+                }
             }else{
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;

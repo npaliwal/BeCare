@@ -280,7 +280,7 @@ public class BecareRemoteSensorManager {
 
     public void uploadActivityDataAsyn(Hashtable table) {
         try {
-            Log.d(TAG, "upload data string upload");
+            Log.d(TAG, "upload data string upload " + table.toString());
             Gson gson = new Gson();
             String str = gson.toJson(table);
             socketManager.pushDataAsyncronously(str);

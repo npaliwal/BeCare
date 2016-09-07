@@ -58,6 +58,7 @@
     <string name="see_you_later">See you later</string>
 
     <string name="transcript_performance">✔ %1$d \t\t  ✖ %2$d </string>
+    <string name="transcript_performance_time">✔ %1$d \t\t  ✖ %2$d\t\t in %3$s</string>
 
 
     <string name="next">Next</string>

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -51,9 +52,8 @@ import java.util.Random;
 public class TranscriptionTestActivity extends AppCompatActivity {
 
     View speaker;
-    TextView startEnd, header, performance;
+    TextView startEnd, performance;
     InstructionView message;
-    EditText input;
     SeekBar volumeSeekbar;
     FlowLayout flowLayout;
 
@@ -71,6 +71,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     private BecareRemoteSensorManager mRemoteSensorManager;
     private long timeConsumed = 0;
     private boolean autoSpeakerPlay = true;
+    private CountDownTimer cTimer = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +86,28 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(TranscriptionTestActivity.this);
         preferenceStorage = new PreferenceStorage(TranscriptionTestActivity.this);
 
+        initTimer();
         initControls();
         initUIElements();
         initExercises();
+    }
+
+    private void initTimer() {
+        cTimer = new CountDownTimer(5000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                if(millisUntilFinished > 4000){
+                    message.setMessage(currExercise == 0 ? "Get Ready..." : "Next...", false);
+                }else {
+                    message.setMessage(4 - (millisUntilFinished/1000) + "", false);
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                populateTextForAudio();
+            }
+        };
     }
 
     private void customTitleBar(){
@@ -174,57 +195,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         container2.addView(quadrantMap.get(quadrantOrder.get(2)));
         container2.addView(quadrantMap.get(quadrantOrder.get(3)));
 
-        input = (EditText)findViewById(R.id.et_user_input);
-        //input.setRawInputType(InputType.TYPE_CLASS_TEXT);
-        input.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                int inType = input.getInputType(); // backup the input type
-                input.setInputType(InputType.TYPE_NULL); // disable soft input
-                input.onTouchEvent(event); // call native handler
-                input.setInputType(inType); // restore input type
-                return true; // consume touch even
-            }
-        });
-        input.setTextIsSelectable(true);
-        input.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (TextUtils.isEmpty(s) || before > count)
-                    return;
-                CharSequence keys = s.subSequence(start + before, start + count);
-                int keysCount = keys.length();
-                while (keysCount > 0) {
-                    String value = getUserActivityStats(keys.subSequence(keysCount - 1, keysCount));
-                    Gson gson = new Gson();
-                    Hashtable dictionary = gson.fromJson(value, Hashtable.class);
-                    double seq = (double) dictionary.get("seq");
-                    dictionary.put("seq", (int) seq);
-                    dictionary.put("activityname", "Transcription Test");
-                    long now = System.currentTimeMillis();
-                    long dur = (prevTime == 0) ? 0 : now - prevTime;
-                    dictionary.put("dur", dur);
-                    mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-                    keysCount--;
-                    currKeyCount++;
-                    prevTime = now;
-                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-
         speaker = findViewById(R.id.speaker);
         startEnd = (TextView) findViewById(R.id.start_end);
-        header = (TextView) findViewById(R.id.exercise_header);
         performance = (TextView) findViewById(R.id.tv_performance);
 
         speaker.setOnClickListener(new View.OnClickListener() {
@@ -256,7 +228,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 if(message.getState() == InstructionView.STATE.SHOW_INSTRUCTION){
                     startEnd.setVisibility(View.GONE);
                     flowLayout.setVisibility(View.VISIBLE);
-                    populateTextForAudio();
+                    cTimer.start();
                 }else{
                     finish();
                 }
@@ -293,14 +265,11 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                             progress, 0);
                 }
             });
-
-
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-
     }
 
     private void initExercises(){
@@ -322,11 +291,16 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         message.setInstruction(getString(R.string.transcript_instruction));
     }
 
+    private void setPerformanceWithTime(String time){
+        performance.setVisibility(View.VISIBLE);
+        performance.setText(getString(R.string.transcript_performance_time, correctInputCount, incorrectInputCount, time));
+    }
+
     private void populateTextForAudio(){
         flowLayout.removeAllViews();
-        performance.setVisibility(View.VISIBLE);
+        flowLayout.setClickable(true);
         correctInputCount = incorrectInputCount = 0;
-        performance.setText(getString(R.string.transcript_performance, correctInputCount, incorrectInputCount));
+        performance.setVisibility(View.INVISIBLE);
         speaker.setVisibility(View.VISIBLE);
         this.currCharIndex = 0;
         this.currWordIndex = 0;
@@ -385,7 +359,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 incorrectInputCount++;
                 bubbleChar.setBackgroundResource(R.color.red);
             }
-            performance.setText(getString(R.string.transcript_performance, correctInputCount, incorrectInputCount));
+            setPerformanceWithTime(message.getTimeLapsed());
             ((TextView)bubbleChar).setText(currCharinput);
             currInputIndex++;
             currCharIndex++;
@@ -394,7 +368,10 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 this.currInputIndex = 0;
 
                 if(this.currExercise < this.numExercises) {
-                    populateTextForAudio();
+                    //populateTextForAudio();
+                    flowLayout.setClickable(false);
+                    message.setState(InstructionView.STATE.LARGE_TEXT);
+                    cTimer.start();
                 }else {
                     message.setState(InstructionView.STATE.PAUSE_TIMER);
                     startEnd.setText("END");
@@ -409,23 +386,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     currInputIndex++;
                     currWordIndex++;
                 }
-            }
-        }
-    }
-
-    public void addSpaceToInput(View key){
-        if(key instanceof TextView) {
-            input.setText(input.getText().toString() + " ");
-            input.setSelection(input.getText().length());
-
-        }
-    }
-
-    public void removeFromInput(View key){
-        if(key instanceof TextView) {
-            if(!TextUtils.isEmpty(input.getText().toString())) {
-                input.setText(input.getText().subSequence(0, input.getText().length() - 1));
-                input.setSelection(input.getText().length());
             }
         }
     }

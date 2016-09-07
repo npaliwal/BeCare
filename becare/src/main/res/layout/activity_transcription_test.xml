@@ -28,10 +28,20 @@
             android:textColor="@color/black"
             android:background="@drawable/rounded_green_rectangle"
             android:padding="5dp"
-            android:layout_margin="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="10dp"
             android:minHeight="120dp"
             android:text="@string/transcript_instruction"/>
-
+        <TextView
+            android:id="@+id/tv_performance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/transcript_performance"
+            android:visibility="invisible"
+            />
     </LinearLayout>
 
     <ScrollView
@@ -44,25 +54,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:weightSum="2"
-                android:visibility="gone">
-                <TextView
-                    android:id="@+id/exercise_header"
-                    android:layout_width="0px"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Audio #1"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="18sp"
-                    android:gravity="center"
-                    android:layout_margin="5dp"
-                    />
-
-
-            </LinearLayout>
             <LinearLayout
                 android:id="@+id/speaker"
                 android:layout_width="match_parent"
@@ -96,15 +87,17 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="25dp"
                 android:layout_marginRight="25dp"
+                android:visibility="visible"
                 />
 
             <com.github.pocmo.sensordashboard.ui.FlowLayout
                 android:id="@+id/user_input"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
-                android:visibility="gone"
+                android:visibility="visible"
                 >
             </com.github.pocmo.sensordashboard.ui.FlowLayout>
 
@@ -126,15 +119,7 @@
                 />
         </LinearLayout>
     </ScrollView>
-    <TextView
-        android:id="@+id/tv_performance"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/transcript_performance"
-        android:visibility="invisible"
-        android:layout_below="@+id/scroll_container"
-        />
+
     <include
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"

@@ -1,7 +1,6 @@
 package com.github.pocmo.sensordashboard.activities;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -9,17 +8,9 @@ import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.util.AttributeSet;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -32,10 +23,7 @@ import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.AudioData;
 import com.github.pocmo.sensordashboard.ui.FlowLayout;
 import com.github.pocmo.sensordashboard.ui.InstructionView;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -57,7 +45,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     SeekBar volumeSeekbar;
     FlowLayout flowLayout;
 
-    private int currKeyCount = 0;
     private int numExercises = 0;
     private int currExercise = 0, currWordIndex = 0, currCharIndex = 0, currInputIndex = 0;
     private int correctInputCount = 0, incorrectInputCount = 0;
@@ -160,6 +147,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         super.onResume();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(getString(R.string.exercise_transcription), null);
         mRemoteSensorManager.startMeasurement();
+        prevTime = System.currentTimeMillis();
     }
 
 
@@ -327,17 +315,17 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         }
     }
 
-    public String getUserActivityStats(CharSequence currChar) {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("exercise_id", currExercise);
-            obj.put("audio_id", exercises.get(currExercise).getTextRes());
-            obj.put("key", currChar);
-            obj.put("seq", currKeyCount);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return obj.toString();
+    public void uploadUserActivityStats(CharSequence origChar, CharSequence userInput) {
+        String value = "{\"orig_char\":" + origChar + ", \"user_char\":" + userInput + "}";
+        long readTime = System.currentTimeMillis();
+        Hashtable dictionary = new Hashtable();
+        dictionary.put("value",value );
+        dictionary.put("activityname", "transcription");
+        dictionary.put("seq", currInputIndex);
+        dictionary.put("dur (ms)", readTime - prevTime);
+        dictionary.put("time", DateUtils.formatDateTime(readTime));
+        prevTime = readTime;
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
     }
 
     public void addToInput(View key){
@@ -359,6 +347,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 incorrectInputCount++;
                 bubbleChar.setBackgroundResource(R.color.red);
             }
+            uploadUserActivityStats(expectedChar, currCharinput);
             setPerformanceWithTime(message.getTimeLapsed());
             ((TextView)bubbleChar).setText(currCharinput);
             currInputIndex++;
@@ -372,7 +361,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     flowLayout.setClickable(false);
                     message.setState(InstructionView.STATE.LARGE_TEXT);
                     cTimer.start();
-                }else {
+                } else {
                     message.setState(InstructionView.STATE.PAUSE_TIMER);
                     startEnd.setText("END");
                     startEnd.setVisibility(View.VISIBLE);

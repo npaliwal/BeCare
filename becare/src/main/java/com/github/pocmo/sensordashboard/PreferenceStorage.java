@@ -3,6 +3,7 @@ package com.github.pocmo.sensordashboard;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 
 import com.github.pocmo.sensordashboard.activities.StartingActivity;
 
@@ -38,11 +39,13 @@ public class PreferenceStorage {
     }
 
     public int getSocketPort(){
+
+
         return sharedPreferences.getInt(PreferenceStorage.SOCKET_PORT, -1);
     }
 
     public String getUserId() {
-        return sharedPreferences.getString(PreferenceStorage.USER_ID, null);
+        return sharedPreferences.getString(PreferenceStorage.USER_ID, "");
     }
 
     public void setUserId(String userId) {
@@ -58,7 +61,7 @@ public class PreferenceStorage {
     }
 
     public boolean isLoggedIn(){
-        if(getUserId() != null){
+        if(TextUtils.isEmpty( getUserId())){
             return true;
         }
         return getSkipReg();

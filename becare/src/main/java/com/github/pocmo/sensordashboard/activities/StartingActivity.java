@@ -68,7 +68,6 @@ public class StartingActivity extends AppCompatActivity {
             Intent loginIntent = new Intent(StartingActivity.this, LoginActivity.class);
             startActivityForResult(loginIntent, LoginActivity.REQUEST_LOGIN_CODE);
         }
-        uploadAppLaunchEvent();
     }
 
     private void uploadAppLaunchEvent(){
@@ -88,6 +87,7 @@ public class StartingActivity extends AppCompatActivity {
         remoteSensorManager = BecareRemoteSensorManager.getInstance(StartingActivity.this);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        uploadAppLaunchEvent();
 
         checkSensorCompatiblity();
     }

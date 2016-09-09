@@ -61,7 +61,7 @@ public class PreferenceStorage {
     }
 
     public boolean isLoggedIn(){
-        if(TextUtils.isEmpty( getUserId())){
+        if(!TextUtils.isEmpty( getUserId())){
             return true;
         }
         return getSkipReg();

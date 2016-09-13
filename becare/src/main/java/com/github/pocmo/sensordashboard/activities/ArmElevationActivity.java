@@ -25,9 +25,11 @@ import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 
@@ -270,6 +272,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
+        uploadEnd();
          sensorManager.unregisterListener(this);
     }
 
@@ -445,16 +448,17 @@ private void orientationChange(SensorEvent event) {
             deltaText.setText("Up");
             rectangle.setBackgroundColor(Color.rgb(10, 160,92));
            // rectangle.setBackgroundColor(Color.rgb(65, 99,181));
-            Hashtable dictionary = new Hashtable();
+            LinkedHashMap dictionary = new LinkedHashMap();
             double ratio = 4.0 / 5.0;
             //double dur = (now - armDownTime) * ratio;
             double dur = (armDownTime == 0)? 0: (now - armDownTime);
             long ms = (long) dur;
 
             dictionary.put("activityname", getString(R.string.exercise_arm_elevation));
+            dictionary.put("seq", seq);
             dictionary.put("arm motion", "up");
             dictionary.put("dur (millsecond)", ms);
-            dictionary.put("seq", seq);
+
           //  dictionary.put("azimuth", azimuth);
             mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
@@ -479,14 +483,15 @@ private void orientationChange(SensorEvent event) {
             downMotionFound = false;
             //  motionFound = false;
             if (Math.abs(diff) <= 30 && downSendData) {
-                Hashtable dictionary = new Hashtable();
+                LinkedHashMap dictionary = new LinkedHashMap();
                 // long dur = (armDownTime - armUpTime) + upReminder;
                 long now = System.currentTimeMillis();
                 long dur = now - armUpTime;
                 dictionary.put("activityname", getString(R.string.exercise_arm_elevation));
+                dictionary.put("seq", seq);
                 dictionary.put("arm motion", "down");
                 dictionary.put("dur (millsecond)", dur);
-                dictionary.put("seq", seq);
+
             //    dictionary.put("azimuth", azimuth);
                 mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
@@ -508,6 +513,19 @@ private void orientationChange(SensorEvent event) {
             return true;
         }
         return false;
+    }
+
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactity", getString(R.string.exercise_arm_elevation));
+        dictionary.put("user_id", mRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", mRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
     }
 
     public static float[] filter(float[] input, float[] prev, float ALPHA) {

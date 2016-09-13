@@ -26,9 +26,10 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SimpleStepDetector;
 import com.github.pocmo.sensordashboard.StepListener;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -227,10 +228,10 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
                 lastTime = SystemClock.elapsedRealtime();
                 String durStr = String.format("%d", dur);
 
-                Hashtable dictionary = new Hashtable();
+                LinkedHashMap dictionary = new LinkedHashMap();
                 dictionary.put("activityname", getString(R.string.up_and_go));
-                dictionary.put("dur (ms)", durStr);
                 dictionary.put("motion", raisingMsg);
+                dictionary.put("dur (ms)", durStr);
                 becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
                 currMotion = walkingMsg;
@@ -270,10 +271,10 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
                 lastTime = SystemClock.elapsedRealtime();
                 String durStr = String.format("%d", dur);
 
-                Hashtable dictionary = new Hashtable();
+                LinkedHashMap dictionary = new LinkedHashMap();
                 dictionary.put("activityname", getString(R.string.up_and_go));
-                dictionary.put("dur (ms)", durStr);
                 dictionary.put("motion", turningMsg);
+                dictionary.put("dur (ms)", durStr);
                 becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
                 currMotion = walkingBackMsg;
@@ -307,6 +308,7 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         super.onPause();
         sensorManager.unregisterListener(this);
         startMeasure = false;
+        uploadEnd();
     }
 
     @Override
@@ -410,10 +412,10 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
                         lastTime = SystemClock.elapsedRealtime();
                         String durStr = String.format("%d", dur);
 
-                        Hashtable dictionary = new Hashtable();
+                        LinkedHashMap dictionary = new LinkedHashMap();
                         dictionary.put("activityname", getString(R.string.up_and_go));
-                        dictionary.put("dur (ms)", durStr);
                         dictionary.put("motion", motion);
+                        dictionary.put("dur (ms)", durStr);
                         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
                     } else
                         return;
@@ -630,10 +632,11 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
     {
         String durStr = String.format("%d", dur);
 
-        Hashtable dictionary = new Hashtable();
+        LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", getString(R.string.up_and_go));
-        dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", motion);
+        dictionary.put("dur (ms)", durStr);
+
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
     }
 
@@ -660,11 +663,11 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
 
         String durStr = String.format("%d", dur);
         String stepsStr = String.format("%d", numSteps);
-        Hashtable dictionary = new Hashtable();
+        LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", getString(R.string.up_and_go));
-        dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", currMotion);
         dictionary.put("step num", stepsStr);
+        dictionary.put("dur (ms)", durStr);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
         setImageColor(currMotion);
     }
@@ -674,10 +677,10 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         deltaText.setText("stop");
 
         String durStr = String.format("%d", dur);
-        Hashtable dictionary = new Hashtable();
+        LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", getString(R.string.up_and_go));
-        dictionary.put("dur (ms)", durStr);
         dictionary.put("motion", "stop");
+        dictionary.put("dur (ms)", durStr);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
       //  lastTime = SystemClock.elapsedRealtime();
 
@@ -858,35 +861,7 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
             }
         }
     }
-/*
-    void setImageBlue(String motion)
-    {
-        if (motion.equals(sittingMsg)) {
-            sit.setImageResource(R.drawable.sit_blue);
-            sit.setTag("blue");
-        }
-        if (motion.equals(raisingMsg)) {
-            stand.setImageResource(R.drawable.stand_blue);
-            stand.setTag("blue");
-        }
-        if (motion.equals(walkingMsg)) {
-            walk.setImageResource(R.drawable.walk_blue);
-            walk.setTag("blue");
-        }
-        if (motion.equals(turningMsg)) {
-            turn.setImageResource(R.drawable.return_blue);
-            turn.setTag("blue");
-        }
-        if (motion.equals(walkingBackMsg)) {
-            walkBack.setImageResource(R.drawable.walk_back_blue);
-            walkBack.setTag("blue");
-        }
-        if (motion.equals(sittingBackMsg)) {
-            sitBack.setImageResource(R.drawable.sit_blue);
-            sitBack.setTag("blue");
-        }
-    }
-*/
+
     void resetImageColor()
     {
         sit.setImageResource(R.drawable.sit_green);
@@ -917,6 +892,20 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         else
             message.setBackgroundColor(Color.rgb(222, 220,222));
     }
+
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactity", getString(R.string.up_and_go));
+        dictionary.put("user_id", becareRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", becareRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
+
     public static float[] filter(float[] input, float[] prev, float ALPHA) {
         if (input == null || prev == null) throw new NullPointerException("input and prev float arrays must be non-NULL");
         if (input.length != prev.length) throw new IllegalArgumentException("input and prev must be the same length");

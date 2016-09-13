@@ -24,9 +24,10 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.SimpleStepDetector;
 import com.github.pocmo.sensordashboard.StepListener;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 
 import java.text.SimpleDateFormat;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Locale;
 
 
@@ -229,7 +230,7 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
         sensorManager.unregisterListener(this);
         becareRemoteSensorManager.stopMeasurement();
         becareRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
-
+        uploadEnd();
     }
 
     @Override
@@ -407,13 +408,13 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
       //  long currTime = System.currentTimeMillis();
        // long dur = currTime - startTime;
 
-        Hashtable dictionary = new Hashtable();
+        LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", getString(R.string.twenty_five_steps));
-        dictionary.put("dur (ms)", elapsedMillis);
-        dictionary.put("speed (ft/sec)", speedStr);
-        dictionary.put("distance (ft)", feetStr);
         dictionary.put("step number",  stepsStr);
         dictionary.put("height",  heightStr);
+        dictionary.put("speed (ft/sec)", speedStr);
+        dictionary.put("distance (ft)", feetStr);
+        dictionary.put("dur (ms)", elapsedMillis);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
 
      //   setImage();
@@ -425,4 +426,16 @@ public class  TwentyFiveStepsActivity extends AppCompatActivity implements Senso
         }
     }
 
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactity", getString(R.string.twenty_five_steps));
+        dictionary.put("user_id", becareRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", becareRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
 }

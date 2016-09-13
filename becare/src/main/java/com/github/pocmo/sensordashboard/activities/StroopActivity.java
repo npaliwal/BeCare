@@ -22,8 +22,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 /**
@@ -45,11 +48,14 @@ public class StroopActivity extends AppCompatActivity {
     private CountDownTimer cTimer2 = null;
     private CountDownTimer ringTimer = null;
     private Animation mLoadAnimation = null;
-    private Button matchButton;
+    private Button matchButton, stopButton;
     private int count = 0;
     private int answerIndex =0;
     private Ringtone ring;
     Random random = null;
+    private BecareRemoteSensorManager becareRemoteSensorManager;
+    private wordData currentData = new wordData();
+    private long currTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,6 +86,7 @@ public class StroopActivity extends AppCompatActivity {
             public void onClick(View v) {
                 button.setVisibility(View.GONE);
                 number.setVisibility(View.VISIBLE);
+
                 numberImg.setVisibility(View.VISIBLE);
                 numberImg.setImageResource(R.drawable.one);
                 ValueAnimator valueAnimator1 = ValueAnimator.ofInt(0,2);
@@ -102,6 +109,7 @@ public class StroopActivity extends AppCompatActivity {
                     {
                         numberImg.setImageResource(R.drawable.two);
                         valueAnimator2.start();
+                        currTime = System.currentTimeMillis();
                     }
                 });
 
@@ -119,11 +127,10 @@ public class StroopActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animator animation)
                     {
+
                         numberImg.setImageResource(R.drawable.three);
                         valueAnimator3.start();
-                     /*   test.setVisibility(View.VISIBLE);
-                        color1.startAnimation(mLoadAnimation);
-                        matchButton.setEnabled(false);*/
+
                     }
                 });
 
@@ -142,11 +149,14 @@ public class StroopActivity extends AppCompatActivity {
                     {
                        // button.setVisibility(View.VISIBLE);
                         message.setText("00:03");
+
                         number.setVisibility(View.GONE);
                         test.setVisibility(View.VISIBLE);
+                        stopButton.setVisibility(View.VISIBLE);
                         for (int i=0; i<answers.length; i++)
                             answers[i] = false;
                         random =new Random();
+
                         setWord();
                         cTimer.start();
                     }
@@ -171,6 +181,21 @@ public class StroopActivity extends AppCompatActivity {
             }
         });
 
+        stopButton = (Button)findViewById(R.id.stop_button);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+                                     @Override
+                                     public void onClick(View v) {
+                                         cTimer.cancel();
+                                         cTimer2.cancel();
+                                         String str = String.format(" You have stopped the test." );
+                                         message.setText(str);
+                                         message.setTextSize(17);
+                                         test.setVisibility(View.GONE);
+                                         button.setVisibility(View.VISIBLE);
+                                         stopButton.setVisibility(View.GONE);
+                                         count = 0;
+                                     }
+                                 });
         cTimer = new CountDownTimer(3700, 500) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
                 float sec = (int) (millisUntilFinished / 1000);
@@ -206,6 +231,7 @@ public class StroopActivity extends AppCompatActivity {
                     message.setTextSize(17);
                     test.setVisibility(View.GONE);
                     button.setVisibility(View.VISIBLE);
+                    stopButton.setVisibility(View.GONE);
                     count = 0;
                 }
             }
@@ -218,6 +244,15 @@ public class StroopActivity extends AppCompatActivity {
             }
 
             public void onFinish() {//   startMeasure = false;
+                if (!currentData.uploaded) {
+                    long dur = System.currentTimeMillis() - currTime;
+                    currTime = System.currentTimeMillis();
+
+                    if (currentData.word1.equals(currentData.word2))
+                        upload("no", count-1, (int)dur);
+                    else
+                        upload("yes", count-1,  (int)dur);
+                }
                 message.setText("00:03");
                 setWord();
                 cTimer.start();
@@ -236,6 +271,16 @@ public class StroopActivity extends AppCompatActivity {
             }
 
         };
+
+        becareRemoteSensorManager = BecareRemoteSensorManager.getInstance(StroopActivity.this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        cTimer.cancel();
+        cTimer2.cancel();
+        uploadEnd();
     }
 
     private void customTitleBar(){
@@ -301,6 +346,9 @@ public class StroopActivity extends AppCompatActivity {
         else
             answers[count-1] = false;
 
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("yes", count-1, (int)dur);
     }
 
     public void noMatchTest(View view) {
@@ -314,6 +362,10 @@ public class StroopActivity extends AppCompatActivity {
             answers[count-1] = true;
         else
             answers[count-1] = false;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("no", count-1, (int)dur);
     }
 
     private void setWord()
@@ -360,6 +412,14 @@ public class StroopActivity extends AppCompatActivity {
       //  color2.setVisibility(View.VISIBLE);
         color1.startAnimation(mLoadAnimation);
         color2.startAnimation(mLoadAnimation);
+
+
+        currentData.word1 = word1;
+        currentData.word2 = word2;
+        currentData.color1 = colorName1;
+        currentData.color2 = colorName2;
+        currentData.uploaded = false;
+
         count++;
     }
 
@@ -412,6 +472,42 @@ public class StroopActivity extends AppCompatActivity {
         int ran = 0;
         ran = random.nextInt(max - min + 1) + min;
         return ran;
+    }
+
+    private void upload(String match, int seq, int dur){
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("activityname", getString(R.string.stroop));
+        dictionary.put("seq", seq);
+        dictionary.put("word1", currentData.word1);
+        dictionary.put("word2", currentData.word2);
+        dictionary.put("color1", currentData.color1);
+        dictionary.put("color2",  currentData.color2);
+        dictionary.put("match",  match);
+        dictionary.put("dur",  dur);
+
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+        currentData.uploaded = true;
+    }
+
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactity", getString(R.string.stroop));
+        dictionary.put("user_id", becareRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", becareRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
+
+    public class wordData{
+        public String word1;
+        public String word2;
+        public String color1;
+        public String color2;
+        public Boolean uploaded;
     }
 }
 

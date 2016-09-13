@@ -183,35 +183,7 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 buttonPushTime = System.currentTimeMillis();
                 lastMotionTime = System.currentTimeMillis();
                 baseAzimuth = azimuth;
-                String str= String.format("%f %f",baseAzimuth, mGeomagnetic[2]);
-            //    Toast.makeText(getApplicationContext(), str, Toast.LENGTH_SHORT).show();
-              //  rectangle.setBackgroundColor(Color.rgb(10, 160,92));
-          /*      new CountDownTimer(durationTask*1000 + 3000, 1000) {
-                    int timeSec  = 0;
-                    public void onTick(long millisUntilFinished) {
-                        timeSec = (int) (millisUntilFinished/1000);
-                        if(timeSec > durationTask+2){
-                            timer.setText("GET");
-                        }else if(timeSec > durationTask+1){
-                            timer.setText("GET SET");
-                        }else if(timeSec > durationTask){
-                            timer.setText("GET SET GO !!");
-                        } else{
-                            timer.setText("Time : " + timeSec);
-                        }
 
-                    }
-
-                    public void onFinish() {
-                        startMeasure = false;
-                        phoneArm.startAnimation(mRevAnimation);
-
-                        timer.setText("WELL DONE !!");
-                        startButton.setText("RESTART");
-                        startButton.setClickable(true);
-                    }
-                }.start();
-                */
             }
         });
 
@@ -224,7 +196,16 @@ public class ArmElevationActivity extends AppCompatActivity implements SensorEve
                 rectangle.setBackgroundColor(Color.rgb(255, 200,50));
                 startButton.setClickable(true);
                 startButton.setText("Start");
-
+                Hashtable dictionary = new Hashtable();
+                // long dur = (armDownTime - armUpTime) + upReminder;
+                long now = System.currentTimeMillis();
+                long dur = now - armUpTime;
+                dictionary.put("activityname", getString(R.string.exercise_arm_elevation));
+                dictionary.put("arm motion", "down");
+                dictionary.put("dur (millsecond)", dur);
+                dictionary.put("seq", seq);
+                //    dictionary.put("azimuth", azimuth);
+                mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
             }
         });
     }

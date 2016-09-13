@@ -4,13 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.View;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
-
 
 import com.github.pocmo.sensordashboard.AppConfig;
 import com.github.pocmo.sensordashboard.AppConstant;
@@ -19,12 +18,10 @@ import com.github.pocmo.sensordashboard.MenuAdapter;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.events.BusProvider;
-import com.github.pocmo.sensordashboard.utils.DateUtils;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
 
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -71,15 +68,21 @@ public class StartingActivity extends AppCompatActivity {
     }
 
     private void uploadAppLaunchEvent(){
+    //    msgThread = new startMsgThread();
+     //   msgThread.start();
+
+        /*
         long readTime = System.currentTimeMillis();
         Hashtable dictionary = new Hashtable();
         dictionary.put("user_id", preferenceStorage.getUserId() );
-        dictionary.put("startapp", "becare/user");
+        dictionary.put("startapp", "started");
         dictionary.put("session_token", preferenceStorage.getUserId() +"_" + readTime);
         dictionary.put("date", DateUtils.formatDate(readTime));
         dictionary.put("time", DateUtils.formatTime(readTime));
-        remoteSensorManager.uploadActivityDataAsyn(dictionary);
+        remoteSensorManager.uploadActivityDataSynch(dictionary);*/
+
     }
+
 
     private void initialize(){
         checkAndConfigureSocket();
@@ -111,6 +114,7 @@ public class StartingActivity extends AppCompatActivity {
                 }
             });
         }
+
     }
 
     @Override
@@ -209,5 +213,6 @@ public class StartingActivity extends AppCompatActivity {
             }
         }
     }
+
 
 }

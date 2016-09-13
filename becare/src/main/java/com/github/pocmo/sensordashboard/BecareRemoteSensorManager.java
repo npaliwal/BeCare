@@ -1,7 +1,6 @@
 package com.github.pocmo.sensordashboard;
 
 import android.content.Context;
-import android.hardware.SensorManager;
 import android.util.Log;
 import android.util.SparseArray;
 
@@ -13,19 +12,15 @@ import com.github.pocmo.sensordashboard.data.UploadDataHelper;
 import com.github.pocmo.sensordashboard.events.BusProvider;
 import com.github.pocmo.sensordashboard.events.NewSensorEvent;
 import com.github.pocmo.sensordashboard.events.SensorUpdatedEvent;
-import com.github.pocmo.sensordashboard.events.TagAddedEvent;
-import com.github.pocmo.sensordashboard.model.ActivityUploadData;
 import com.github.pocmo.sensordashboard.model.SensorDataValue;
 import com.github.pocmo.sensordashboard.network.ClientSocketManager;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.NodeApi;
-import com.google.android.gms.wearable.PutDataMapRequest;
-import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 import com.google.gson.Gson;
 
@@ -57,6 +52,7 @@ public class BecareRemoteSensorManager {
     private PreferenceStorage preferenceStorage;
     private ClientSocketManager socketManager;
     private int SnookerSeq = -1;
+    private boolean startMsgSent = false;
 
     private LinkedList<TagData> tags = new LinkedList<>();
 
@@ -280,6 +276,20 @@ public class BecareRemoteSensorManager {
 
     public void uploadActivityDataAsyn(Hashtable table) {
         try {
+            if (!startMsgSent)
+            {
+                long readTime = System.currentTimeMillis();
+                Hashtable dictionary = new Hashtable();
+                dictionary.put("user_id", preferenceStorage.getUserId() );
+                dictionary.put("startapp", "startapp");
+                dictionary.put("session_token", preferenceStorage.getUserId() +"_" + readTime);
+                dictionary.put("date", DateUtils.formatDate(readTime));
+                dictionary.put("time", DateUtils.formatTime(readTime));
+                Gson gson = new Gson();
+                String str = gson.toJson(dictionary);
+                socketManager.pushData(str);
+                 startMsgSent = true;
+            }
             Log.d(TAG, "upload data string upload " + table.toString());
             Gson gson = new Gson();
             String str = gson.toJson(table);
@@ -292,6 +302,20 @@ public class BecareRemoteSensorManager {
 
     public void uploadActivityDataSynch(Hashtable table) {
         try {
+            if (!startMsgSent)
+            {
+                long readTime = System.currentTimeMillis();
+                Hashtable dictionary = new Hashtable();
+                dictionary.put("user_id", preferenceStorage.getUserId() );
+                dictionary.put("startapp", "started");
+                dictionary.put("session_token", preferenceStorage.getUserId() +"_" + readTime);
+                dictionary.put("date", DateUtils.formatDate(readTime));
+                dictionary.put("time", DateUtils.formatTime(readTime));
+                Gson gson = new Gson();
+                String str = gson.toJson(dictionary);
+                socketManager.pushData(str);
+                startMsgSent = true;
+            }
             Log.d(TAG, "upload data string upload");
             Gson gson = new Gson();
             String str = gson.toJson(table);

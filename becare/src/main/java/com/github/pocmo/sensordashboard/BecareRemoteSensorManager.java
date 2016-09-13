@@ -26,6 +26,7 @@ import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -80,6 +81,7 @@ public class BecareRemoteSensorManager {
         this.executorService = Executors.newCachedThreadPool();
     }
 
+    public PreferenceStorage getPreferenceStorage() { return preferenceStorage;}
     public ClientSocketManager getSocketManager(){
         return socketManager;
     }
@@ -279,7 +281,7 @@ public class BecareRemoteSensorManager {
             if (!startMsgSent)
             {
                 long readTime = System.currentTimeMillis();
-                Hashtable dictionary = new Hashtable();
+                LinkedHashMap dictionary = new LinkedHashMap();
                 dictionary.put("user_id", preferenceStorage.getUserId() );
                 dictionary.put("startapp", "startapp");
                 dictionary.put("session_token", preferenceStorage.getUserId() +"_" + readTime);
@@ -289,6 +291,32 @@ public class BecareRemoteSensorManager {
                 String str = gson.toJson(dictionary);
                 socketManager.pushData(str);
                  startMsgSent = true;
+            }
+            Log.d(TAG, "upload data string upload " + table.toString());
+            Gson gson = new Gson();
+            String str = gson.toJson(table);
+            socketManager.pushDataAsyncronously(str);
+
+        }catch (Exception e){
+            Log.d(TAG, "upload data failed : " + e.getMessage());
+        }
+    }
+
+    public void uploadActivityDataAsyn(LinkedHashMap table) {
+        try {
+            if (!startMsgSent)
+            {
+                long readTime = System.currentTimeMillis();
+                LinkedHashMap dictionary = new LinkedHashMap();
+                dictionary.put("startapp", "startapp");
+                dictionary.put("user_id", preferenceStorage.getUserId() );
+                dictionary.put("session_token", preferenceStorage.getUserId() +"_" + readTime);
+                dictionary.put("date", DateUtils.formatDate(readTime));
+                dictionary.put("time", DateUtils.formatTime(readTime));
+                Gson gson = new Gson();
+                String str = gson.toJson(dictionary);
+                socketManager.pushData(str);
+                startMsgSent = true;
             }
             Log.d(TAG, "upload data string upload " + table.toString());
             Gson gson = new Gson();

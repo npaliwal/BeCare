@@ -24,6 +24,7 @@ import com.github.pocmo.sensordashboard.model.ContrastImageInfo;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
 import com.github.pocmo.sensordashboard.ui.InstructionView;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -161,7 +162,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         long now = System.currentTimeMillis();
         long dur = (prevTime == 0)? 0: now - prevTime;
         prevTime = now;
-        dictionary.put("dur", dur);
+        dictionary.put("dur (ms)", dur);
+        dictionary.put("time", DateUtils.formatDateTime(now));
         mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
         seq++;
     }

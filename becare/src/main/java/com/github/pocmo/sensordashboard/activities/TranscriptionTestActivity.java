@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -213,10 +214,15 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         startEnd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(message.getState() == InstructionView.STATE.SHOW_INSTRUCTION){
-                    startEnd.setVisibility(View.GONE);
+                if(startEnd.getText().toString().equalsIgnoreCase("start")){
+                    startEnd.setText("STOP");
                     flowLayout.setVisibility(View.VISIBLE);
                     cTimer.start();
+                }else if(startEnd.getText().toString().equalsIgnoreCase("stop")){
+                    message.setMessage("You have stopped the test", true);
+                    startEnd.setText("DONE");
+                    cTimer.cancel();
+                    findViewById(R.id.keyboard).setVisibility(View.INVISIBLE);
                 }else{
                     finish();
                 }
@@ -296,7 +302,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         speaker.performClick();
         AudioData currAudio = exercises.get(currExercise);
         String audioText = currAudio.getTextRes();
-        FlowLayout.LayoutParams flowLP = new FlowLayout.LayoutParams(5, 5);
+        FlowLayout.LayoutParams flowLP = new FlowLayout.LayoutParams(2, 2);
         View word = getLayoutInflater().inflate(R.layout.bubble_word, null);
         for(int i=0; i <= audioText.length(); i++){
             if(i == audioText.length()){
@@ -318,10 +324,10 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     public void uploadUserActivityStats(CharSequence origChar, CharSequence userInput) {
         String value = "{\"orig_char\":" + origChar + ", \"user_char\":" + userInput + "}";
         long readTime = System.currentTimeMillis();
-        Hashtable dictionary = new Hashtable();
-        dictionary.put("value",value );
+        LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", "transcription");
         dictionary.put("seq", currInputIndex);
+        dictionary.put("value",value );
         dictionary.put("dur (ms)", readTime - prevTime);
         dictionary.put("time", DateUtils.formatDateTime(readTime));
         prevTime = readTime;
@@ -347,7 +353,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 incorrectInputCount++;
                 bubbleChar.setBackgroundResource(R.color.red);
             }
-            uploadUserActivityStats(expectedChar, currCharinput);
+            uploadUserActivityStats(expectedChar.toUpperCase(), currCharinput.toUpperCase());
             setPerformanceWithTime(message.getTimeLapsed());
             ((TextView)bubbleChar).setText(currCharinput);
             currInputIndex++;
@@ -363,7 +369,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     cTimer.start();
                 } else {
                     message.setState(InstructionView.STATE.PAUSE_TIMER);
-                    startEnd.setText("END");
+                    startEnd.setText("DONE");
                     startEnd.setVisibility(View.VISIBLE);
                     flowLayout.setVisibility(View.GONE);
                     speaker.setVisibility(View.INVISIBLE);

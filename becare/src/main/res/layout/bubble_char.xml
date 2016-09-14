@@ -5,9 +5,9 @@
     android:background="@drawable/brown_box"
     android:text="\?"
     android:textColor="@color/white"
-    android:textSize="24sp"
+    android:textSize="18sp"
     android:padding="5dp"
-    android:minWidth="40dp"
+    android:minWidth="30dp"
     android:gravity="center">
 
 

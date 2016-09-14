@@ -32,6 +32,7 @@ import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -297,9 +298,9 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                 if (mRemoteSensorManager != null) {
                     long now = System.currentTimeMillis();
                     String readTime = timeFormat.format(now);
-                    Hashtable dictionary = new Hashtable();
-                    dictionary.put("value", "appdone" );
+                    LinkedHashMap dictionary = new LinkedHashMap();
                     dictionary.put("activityname", "snooker");
+                    dictionary.put("value", "appdone" );
                     dictionary.put("time", readTime);
                     mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
                     mRemoteSensorManager.getUploadDataHelper().setUserActivity(getResources().getString(R.string.exercise_ring_rect), null);
@@ -367,10 +368,10 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
                             long dur = now - preTime;
                             preTime = now;
                             String readTime = timeFormat.format(now);
-                            Hashtable dictionary = new Hashtable();
-                            dictionary.put("value",value );
+                            LinkedHashMap dictionary = new LinkedHashMap();
                             dictionary.put("activityname", "snooker");
                             dictionary.put("seq", seq);
+                            dictionary.put("value",value );
                             dictionary.put("dur (ms)", dur);
                             dictionary.put("time", readTime);
                             mRemoteSensorManager.uploadActivityDataAsyn(dictionary);

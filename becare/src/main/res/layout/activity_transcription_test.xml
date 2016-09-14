@@ -31,7 +31,6 @@
             android:layout_marginTop="20dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:layout_marginBottom="10dp"
             android:minHeight="120dp"
             android:text="@string/transcript_instruction"/>
         <TextView
@@ -48,11 +47,13 @@
         android:id="@+id/scroll_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/start_end"
         android:layout_below="@+id/msg_container">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <LinearLayout
                 android:id="@+id/speaker"
@@ -73,23 +74,6 @@
                     android:layout_weight="1"/>
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/start_end"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="START"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/white"
-                android:padding="10dp"
-                android:textSize="24sp"
-                android:gravity="center"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:visibility="visible"
-                />
-
             <com.github.pocmo.sensordashboard.ui.FlowLayout
                 android:id="@+id/user_input"
                 android:layout_width="match_parent"
@@ -98,8 +82,11 @@
                 android:layout_marginRight="10dp"
                 android:layout_gravity="center|center_horizontal|center_vertical"
                 android:visibility="visible"
+                android:layout_weight="1"
                 >
             </com.github.pocmo.sensordashboard.ui.FlowLayout>
+
+
 
             <EditText
                 android:id="@+id/et_user_input"
@@ -120,10 +107,29 @@
         </LinearLayout>
     </ScrollView>
 
+    <TextView
+        android:id="@+id/start_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/keyboard"
+        android:layout_weight="1"
+        android:text="START"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:padding="5dp"
+        android:textSize="18sp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center|bottom"
+        android:layout_centerInParent="true"
+        android:minWidth="100dp"
+        android:visibility="visible"
+        />
+
     <include
         android:layout_alignParentBottom="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/keyboard"
         layout="@layout/fragment_transcript_keyboard"
         />
 </RelativeLayout>

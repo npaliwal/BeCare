@@ -1,6 +1,7 @@
 package com.github.pocmo.sensordashboard.activities;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,7 +11,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -22,14 +22,11 @@ import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.model.ContrastImageInfo;
 import com.github.pocmo.sensordashboard.model.TwoImageInfo;
+import com.github.pocmo.sensordashboard.ui.InstructionView;
 import com.github.pocmo.sensordashboard.ui.TwoImageFragment;
-import com.google.gson.Gson;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.Random;
 
 
@@ -39,17 +36,20 @@ import java.util.Random;
 public class ContrastSensitivityActivity extends AppCompatActivity {
     private static final String TAG = "ContrastSensitivity";
 
-    private TextView performanceText, matchButton, mismatchButton, done;
+    private TextView performanceText, matchButton, mismatchButton, status;
     private View responseContainer;
+    InstructionView message;
     private ViewPager pager;
+    private View pagerContainer;
     FragmentPagerAdapter adapterViewPager;
-    private String value = null;
     private int seq = 0;
+    private int currentExercise = -1;
     private long prevTime =0;
     private int correctCount = 0;
     public ArrayList<TwoImageInfo> exercises = new ArrayList<>();
     private BecareRemoteSensorManager mRemoteSensorManager;
     private PreferenceStorage preferenceStorage;
+    private CountDownTimer cTimer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,12 +57,15 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         customTitleBar();
         setContentView(R.layout.activity_contrast_sensitivity);
         performanceText = (TextView) findViewById(R.id.tv_performance);
+        pagerContainer = findViewById(R.id.pager_containter);
+        message = (InstructionView)findViewById(R.id.msg);
         mRemoteSensorManager = BecareRemoteSensorManager.getInstance(ContrastSensitivityActivity.this);
         preferenceStorage = new PreferenceStorage(ContrastSensitivityActivity.this);
         AppConfig.initContrastExercises();
         initExercises();
         initViewPager();
         initButtons();
+        initTimer();
     }
 
     private void customTitleBar(){
@@ -110,22 +113,51 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         ab.setCustomView(customActionBar, layout);
     }
 
-    private void setupNextPage(boolean userMatch, int index){
-        if(index >= exercises.size() - 1){
+    private void initTimer() {
+        cTimer = new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                message.setMessage(currentExercise == -1 ? "Get Ready..." : "Next...", false);
+            }
+
+            @Override
+            public void onFinish() {
+                if(currentExercise == exercises.size()-1){
+                    message.setMessage("Congratulations!!", false);
+                }else {
+                    message.setMessage("Mark your response", false);
+                }
+                populateNextPage();
+            }
+        };
+    }
+
+    private void populateNextPage(){
+        pagerContainer.setVisibility(View.VISIBLE);
+        responseContainer.setVisibility(View.VISIBLE);
+
+        if(currentExercise >= exercises.size() - 1){
             responseContainer.setVisibility(View.GONE);
             pager.setVisibility(View.GONE);
-            done.setVisibility(View.VISIBLE);
+            status.setVisibility(View.VISIBLE);
+            status.setText("Done");
         }else {
-            pager.setCurrentItem(index + 1, true);
+            if(currentExercise >= 0){
+                pager.setCurrentItem(currentExercise + 1, true);
+            }
+            currentExercise++;
         }
-        String dataShow = getString(R.string.contrast_performance, correctCount, index+1);
-        performanceText.setText(dataShow);
+    }
 
-        value = getUserActivityStats(userMatch, index);
-        Gson gson = new Gson();
-        Hashtable dictionary = gson.fromJson(value, Hashtable.class);
-        dictionary.put("seq", seq);
+    private void uploadUserActivityData(boolean userMatch){
+        LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", "Contrast Sensitivity");
+        dictionary.put("seq", seq);
+        dictionary.put("exercise_id", currentExercise);
+        dictionary.put("left_color", exercises.get(currentExercise).getLeftImage().getId());
+        dictionary.put("right_color", exercises.get(currentExercise).getRightImage().getId());
+        dictionary.put("left_contrast", exercises.get(currentExercise).getLeftImage().getContrast());
+        dictionary.put("user_response", userMatch ? "match" : "mismatch");
         long now = System.currentTimeMillis();
         long dur = (prevTime == 0)? 0: now - prevTime;
         prevTime = now;
@@ -138,34 +170,52 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         responseContainer = findViewById(R.id.response_container);
         matchButton = (TextView) responseContainer.findViewById(R.id.tv_similar);
         mismatchButton = (TextView) responseContainer.findViewById(R.id.tv_different);
-        done = (TextView) findViewById(R.id.tv_done);
+        status = (TextView) findViewById(R.id.tv_status);
 
         matchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int index = pager.getCurrentItem();
-                TwoImageInfo exercise = exercises.get(index);
+                responseContainer.setClickable(false);
+                TwoImageInfo exercise = exercises.get(currentExercise);
                 if(exercise.getLeftImage() == exercise.getRightImage()){
                     correctCount++;
                 }
-                setupNextPage(true, index);
+                performanceText.setVisibility(View.VISIBLE);
+                String dataShow = getString(R.string.contrast_performance, correctCount, currentExercise+1);
+                performanceText.setText(dataShow);
+                cTimer.start();
+                uploadUserActivityData(true);
             }
         });
         mismatchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int index = pager.getCurrentItem();
-                TwoImageInfo exercise = exercises.get(index);
+                responseContainer.setClickable(false);
+                TwoImageInfo exercise = exercises.get(currentExercise);
                 if(exercise.getLeftImage() != exercise.getRightImage()){
                     correctCount++;
                 }
-                setupNextPage(false, index);
+                performanceText.setVisibility(View.VISIBLE);
+                String dataShow = getString(R.string.contrast_performance, correctCount, currentExercise+1);
+                performanceText.setText(dataShow);
+                cTimer.start();
+                uploadUserActivityData(false);
             }
         });
-        done.setOnClickListener(new View.OnClickListener() {
+        status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                if(status.getText().toString().equalsIgnoreCase("start")){
+                    cTimer.start();
+                    status.setText("STOP");
+                }else if(status.getText().toString().equalsIgnoreCase("stop")) {
+                    cTimer.cancel();
+                    message.setMessage("You have stopped this task", true);
+                    responseContainer.setVisibility(View.INVISIBLE);
+                    status.setText("DONE");
+                }else {
+                    finish();
+                }
             }
         });
     }
@@ -191,6 +241,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;
             }
+            message.setInstruction(getString(R.string.contrast_instruction));
         }
 
         numExercises += preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.ITCHI_PLATE);
@@ -255,20 +306,6 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
-    }
-
-    public String getUserActivityStats(boolean userMatch, int currExercise) {
-        JSONObject obj = new JSONObject();
-        try {
-            obj.put("exercise_id", currExercise);
-            obj.put("left_color", exercises.get(currExercise).getLeftImage().getId());
-            obj.put("right_color", exercises.get(currExercise).getRightImage().getId());
-            obj.put("left_contrast", exercises.get(currExercise).getLeftImage().getContrast());
-            obj.put("user_response", userMatch ? "match" : "mismatch");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return obj.toString();
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {

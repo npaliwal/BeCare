@@ -152,7 +152,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
 
     private void uploadUserActivityData(boolean userMatch){
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("activityname", "Contrast Sensitivity");
+        dictionary.put("activityname", "contrast");
         dictionary.put("seq", seq);
         dictionary.put("exercise_id", currentExercise);
         dictionary.put("left_color", exercises.get(currentExercise).getLeftImage().getId());

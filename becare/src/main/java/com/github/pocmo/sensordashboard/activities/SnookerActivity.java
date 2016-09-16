@@ -13,6 +13,9 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.PreferenceStorage;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.ui.BallBounces;
+import com.github.pocmo.sensordashboard.utils.DateUtils;
+
+import java.util.LinkedHashMap;
 
 
 /**
@@ -116,6 +119,19 @@ public class SnookerActivity extends AppCompatActivity {
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
+        uploadEnd();
     }
 
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactivity", getString(R.string.exercise_ring_rect));
+        dictionary.put("user_id", mRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", mRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
 }

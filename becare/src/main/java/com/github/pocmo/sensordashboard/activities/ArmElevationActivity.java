@@ -518,7 +518,7 @@ private void orientationChange(SensorEvent event) {
     private void uploadEnd(){
         long readTime = System.currentTimeMillis();
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("endactity", getString(R.string.exercise_arm_elevation));
+        dictionary.put("endactivity", getString(R.string.exercise_arm_elevation));
         dictionary.put("user_id", mRemoteSensorManager.getPreferenceStorage().getUserId());
         dictionary.put("session_token", mRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
         dictionary.put("date", DateUtils.formatDate(readTime));

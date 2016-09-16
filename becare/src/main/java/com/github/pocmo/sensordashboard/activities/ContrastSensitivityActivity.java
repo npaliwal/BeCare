@@ -152,7 +152,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
 
     private void uploadUserActivityData(boolean userMatch){
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("activityname", "contrast");
+        dictionary.put("activityname", getString(R.string.exercise_contrast));
         dictionary.put("seq", seq);
         dictionary.put("exercise_id", currentExercise);
         dictionary.put("left_color", exercises.get(currentExercise).getLeftImage().getId());
@@ -295,6 +295,19 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         pager.setAdapter(adapterViewPager);
     }
 
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactivity", getString(R.string.exercise_contrast));
+        dictionary.put("user_id", mRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", mRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -308,6 +321,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
+        uploadEnd();
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {

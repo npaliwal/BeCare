@@ -896,7 +896,7 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
     private void uploadEnd(){
         long readTime = System.currentTimeMillis();
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("endactity", getString(R.string.up_and_go));
+        dictionary.put("endactivity", getString(R.string.up_and_go));
         dictionary.put("user_id", becareRemoteSensorManager.getPreferenceStorage().getUserId());
         dictionary.put("session_token", becareRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
         dictionary.put("date", DateUtils.formatDate(readTime));

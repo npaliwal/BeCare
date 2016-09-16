@@ -28,7 +28,6 @@ import com.github.pocmo.sensordashboard.utils.DateUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -163,6 +162,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
+        uploadEnd();
     }
 
     private void initUIElements() {
@@ -332,11 +332,24 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         }
     }
 
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactivity", getString(R.string.exercise_transcription));
+        dictionary.put("user_id", mRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", mRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
+
     public void uploadUserActivityStats(CharSequence origChar, CharSequence userInput) {
         String value = "{\"orig_char\":" + origChar + ", \"user_char\":" + userInput + "}";
         long readTime = System.currentTimeMillis();
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("activityname", "transcription");
+        dictionary.put("activityname", getString(R.string.exercise_transcription));
         dictionary.put("seq", currInputIndex);
         dictionary.put("value",value );
         dictionary.put("dur (ms)", readTime - prevTime);

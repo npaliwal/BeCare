@@ -480,7 +480,7 @@ public class  SixMinutesActivity extends AppCompatActivity implements SensorEven
     private void uploadEnd(){
         long readTime = System.currentTimeMillis();
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("endactity", getString(R.string.six_minutes_walk));
+        dictionary.put("endactivity", getString(R.string.six_minutes_walk));
         dictionary.put("user_id", becareRemoteSensorManager.getPreferenceStorage().getUserId());
         dictionary.put("session_token", becareRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
         dictionary.put("date", DateUtils.formatDate(readTime));

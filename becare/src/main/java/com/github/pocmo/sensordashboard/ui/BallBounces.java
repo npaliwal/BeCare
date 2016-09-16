@@ -31,7 +31,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -102,17 +101,17 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
     }
     public void initView(Context context) {
         ball = BitmapFactory.decodeResource(getResources(), R.drawable.football); //Load a ball image.
-        bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road2); //Load a background.
+        bgr = BitmapFactory.decodeResource(getResources(), R.drawable.road6); //Load a background.
         tree = BitmapFactory.decodeResource(getResources(),R.drawable.tree); //Load a background.
         stop = BitmapFactory.decodeResource(getResources(),R.drawable.goal5);
 
-        ballW = ball.getWidth();
-        ballH = ball.getHeight();
+        ballW = (int)((double)ball.getWidth() * 0.70);
+        ballH = (int)((double)ball.getHeight() * 0.70);
 
         treeW = tree.getWidth();
         treeH = tree.getHeight();
         tree = Bitmap.createScaledBitmap(tree, treeW/3, treeH/3, true);
-        stop = Bitmap.createScaledBitmap(stop, stop.getWidth()/2, stop.getHeight()/2, true);
+        stop = Bitmap.createScaledBitmap(stop, (int)((double)stop.getWidth()/1.5), (int)((double)stop.getHeight()/1.5), true);
 
         //Create a flag for the onDraw method to alternate background with its mirror image.
         reverseBackroundFirst = false;
@@ -176,8 +175,10 @@ public class BallBounces extends SurfaceView implements SurfaceHolder.Callback {
             stopX = pathPointTemps.get(pathPointTemps.size() - 1).x / 100;
             stopY = pathPointTemps.get(pathPointTemps.size() - 1).y / 100;
 
-            ballX = startX - ballW/2;
-            ballY = startY - ballH/2;
+         //   ballX = startX - ballW/2;
+         //   ballY = startY - ballH/2;
+            ballX = startX - (int)((double)ballW/1.5);
+            ballY = startY - (int)((double)ballH/1.5);
         }
     }
 

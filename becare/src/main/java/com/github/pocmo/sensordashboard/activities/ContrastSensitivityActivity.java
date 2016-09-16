@@ -165,7 +165,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
 
     private void uploadUserActivityData(boolean userMatch){
         LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("activityname", "contrast");
+        dictionary.put("activityname", getString(R.string.exercise_contrast));
         dictionary.put("seq", currentExercise);
         dictionary.put("exercise_id", currentExercise);
         dictionary.put("left_color", exercises.get(currentExercise).getLeftImage().getId());
@@ -191,11 +191,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 matchButton.setClickable(false);
                 mismatchButton.setClickable(false);
                 TwoImageInfo exercise = exercises.get(currentExercise);
-                if(exercise.getLeftImage() == exercise.getRightImage()){
+                if (exercise.getLeftImage() == exercise.getRightImage()) {
                     correctCount++;
                 }
                 performanceText.setVisibility(View.VISIBLE);
-                String dataShow = getString(R.string.contrast_performance, correctCount, currentExercise+1);
+                String dataShow = getString(R.string.contrast_performance, correctCount, currentExercise + 1);
                 performanceText.setText(dataShow);
                 cTimer.start();
                 uploadUserActivityData(true);
@@ -207,11 +207,11 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                 matchButton.setClickable(false);
                 mismatchButton.setClickable(false);
                 TwoImageInfo exercise = exercises.get(currentExercise);
-                if(exercise.getLeftImage() != exercise.getRightImage()){
+                if (exercise.getLeftImage() != exercise.getRightImage()) {
                     correctCount++;
                 }
                 performanceText.setVisibility(View.VISIBLE);
-                String dataShow = getString(R.string.contrast_performance, correctCount, currentExercise+1);
+                String dataShow = getString(R.string.contrast_performance, correctCount, currentExercise + 1);
                 performanceText.setText(dataShow);
                 cTimer.start();
                 uploadUserActivityData(false);
@@ -220,20 +220,20 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         status.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(status.getText().toString().equalsIgnoreCase("start")){
+                if (status.getText().toString().equalsIgnoreCase("start")) {
                     initVariables();
                     cTimer.start();
                     status.setText("STOP");
                     pagerContainer.setVisibility(View.VISIBLE);
                     //responseContainer.setVisibility(View.VISIBLE);
-                }else if(status.getText().toString().equalsIgnoreCase("stop")) {
+                } else if (status.getText().toString().equalsIgnoreCase("stop")) {
                     cTimer.cancel();
                     message.setMessage("You have stopped this task", true);
                     responseContainer.setVisibility(View.INVISIBLE);
                     status.setText("START");
                     pagerContainer.setVisibility(View.INVISIBLE);
                     performanceText.setVisibility(View.INVISIBLE);
-                }else {
+                } else {
                     finish();
                 }
             }
@@ -313,6 +313,19 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         pager.setAdapter(adapterViewPager);
     }
 
+    private void uploadEnd(){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("endactivity", getString(R.string.exercise_contrast));
+        dictionary.put("user_id", mRemoteSensorManager.getPreferenceStorage().getUserId());
+        dictionary.put("session_token", mRemoteSensorManager.getPreferenceStorage().getUserId() +"_" + readTime);
+        dictionary.put("date", DateUtils.formatDate(readTime));
+        dictionary.put("time", DateUtils.formatTime(readTime));
+
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -326,6 +339,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         super.onPause();
         mRemoteSensorManager.getUploadDataHelper().setUserActivity(null, null);
         mRemoteSensorManager.stopMeasurement();
+        uploadEnd();
     }
 
     public static class MyPagerAdapter extends FragmentPagerAdapter {

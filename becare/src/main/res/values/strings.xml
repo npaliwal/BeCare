@@ -46,7 +46,7 @@
     <string name="contrast_performance">Performance: %1$d correct out of %2$d</string>
 
 
-    <string name="contrast_instruction">Mark your response with match if you find both pallet similar and mismatch otherwise </string>
+    <string name="contrast_instruction">Mark your response with\nMatch if you find both pallet similar\nMismatch otherwise </string>
     <string name="transcript_instruction">Type the phrase using the quadrant keyboard as quickly as possible.\nContinue past wrong key"</string>
 
     <string name="another_day">Another day</string>

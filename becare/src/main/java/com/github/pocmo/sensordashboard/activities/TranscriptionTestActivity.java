@@ -80,14 +80,20 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         initExercises();
     }
 
+    private void initVariables(){
+        currExercise = 0; currWordIndex = 0; currCharIndex = 0; currInputIndex = 0;
+        correctInputCount = 0; incorrectInputCount = 0;
+        prevTime = 0;
+    }
+
     private void initTimer() {
-        cTimer = new CountDownTimer(5000, 1000) {
+        cTimer = new CountDownTimer(4500, 500) {
             @Override
             public void onTick(long millisUntilFinished) {
-                if(millisUntilFinished > 4000){
+                if(millisUntilFinished > 3000){
                     message.setMessage(currExercise == 0 ? "Get Ready..." : "Next...", false);
                 }else {
-                    message.setMessage(4 - (millisUntilFinished/1000) + "", false);
+                    message.setMessage(1 + millisUntilFinished/1000 + "", false);
                 }
             }
 
@@ -215,14 +221,19 @@ public class TranscriptionTestActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(startEnd.getText().toString().equalsIgnoreCase("start")){
+                    initVariables();
                     startEnd.setText("STOP");
+                    findViewById(R.id.keyboard).setVisibility(View.VISIBLE);
                     flowLayout.setVisibility(View.VISIBLE);
                     cTimer.start();
                 }else if(startEnd.getText().toString().equalsIgnoreCase("stop")){
                     message.setMessage("You have stopped the test", true);
-                    startEnd.setText("DONE");
+                    startEnd.setText("START");
                     cTimer.cancel();
                     findViewById(R.id.keyboard).setVisibility(View.INVISIBLE);
+                    flowLayout.removeAllViews();
+                    flowLayout.setVisibility(View.INVISIBLE);
+                    performance.setVisibility(View.INVISIBLE);
                 }else{
                     finish();
                 }
@@ -369,6 +380,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     cTimer.start();
                 } else {
                     message.setState(InstructionView.STATE.PAUSE_TIMER);
+                    message.setMessage("Congratulations!!", true);
                     startEnd.setText("DONE");
                     startEnd.setVisibility(View.VISIBLE);
                     flowLayout.setVisibility(View.GONE);

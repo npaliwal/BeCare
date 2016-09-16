@@ -43,7 +43,6 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
     private ViewPager pager;
     private View pagerContainer;
     FragmentPagerAdapter adapterViewPager;
-    private int seq = 0;
     private int currentExercise = -1;
     private long prevTime =0;
     private int correctCount = 0;
@@ -114,11 +113,22 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         ab.setCustomView(customActionBar, layout);
     }
 
+    private void initVariables(){
+        currentExercise = -1;
+        prevTime =0;
+        correctCount = 0;
+        pager.setCurrentItem(0);
+    }
+
     private void initTimer() {
-        cTimer = new CountDownTimer(2000, 1000) {
+        cTimer = new CountDownTimer(4500, 500) {
             @Override
             public void onTick(long millisUntilFinished) {
-                message.setMessage(currentExercise == -1 ? "Get Ready..." : "Next...", false);
+                if(millisUntilFinished > 3000){
+                    message.setMessage(currentExercise == -1 ? "Get Ready..." : "Next...", false);
+                }else {
+                    message.setMessage(1 + millisUntilFinished/1000 + "", false);
+                }
             }
 
             @Override
@@ -141,31 +151,32 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             responseContainer.setVisibility(View.GONE);
             pager.setVisibility(View.GONE);
             status.setVisibility(View.VISIBLE);
-            status.setText("Done");
+            status.setText("DONE");
         }else {
             if(currentExercise >= 0){
                 pager.setCurrentItem(currentExercise + 1, true);
             }
             currentExercise++;
         }
+        matchButton.setClickable(true);
+        mismatchButton.setClickable(true);
+        prevTime = System.currentTimeMillis();
     }
 
     private void uploadUserActivityData(boolean userMatch){
         LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", "contrast");
-        dictionary.put("seq", seq);
+        dictionary.put("seq", currentExercise);
         dictionary.put("exercise_id", currentExercise);
         dictionary.put("left_color", exercises.get(currentExercise).getLeftImage().getId());
         dictionary.put("right_color", exercises.get(currentExercise).getRightImage().getId());
-        dictionary.put("left_contrast", exercises.get(currentExercise).getLeftImage().getContrast());
+        //dictionary.put("left_contrast", exercises.get(currentExercise).getLeftImage().getContrast());
         dictionary.put("user_response", userMatch ? "match" : "mismatch");
         long now = System.currentTimeMillis();
         long dur = (prevTime == 0)? 0: now - prevTime;
-        prevTime = now;
         dictionary.put("dur (ms)", dur);
         dictionary.put("time", DateUtils.formatDateTime(now));
         mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-        seq++;
     }
 
     private void initButtons(){
@@ -177,7 +188,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         matchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                responseContainer.setClickable(false);
+                matchButton.setClickable(false);
+                mismatchButton.setClickable(false);
                 TwoImageInfo exercise = exercises.get(currentExercise);
                 if(exercise.getLeftImage() == exercise.getRightImage()){
                     correctCount++;
@@ -192,7 +204,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         mismatchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                responseContainer.setClickable(false);
+                matchButton.setClickable(false);
+                mismatchButton.setClickable(false);
                 TwoImageInfo exercise = exercises.get(currentExercise);
                 if(exercise.getLeftImage() != exercise.getRightImage()){
                     correctCount++;
@@ -208,13 +221,18 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(status.getText().toString().equalsIgnoreCase("start")){
+                    initVariables();
                     cTimer.start();
                     status.setText("STOP");
+                    pagerContainer.setVisibility(View.VISIBLE);
+                    //responseContainer.setVisibility(View.VISIBLE);
                 }else if(status.getText().toString().equalsIgnoreCase("stop")) {
                     cTimer.cancel();
                     message.setMessage("You have stopped this task", true);
                     responseContainer.setVisibility(View.INVISIBLE);
-                    status.setText("DONE");
+                    status.setText("START");
+                    pagerContainer.setVisibility(View.INVISIBLE);
+                    performanceText.setVisibility(View.INVISIBLE);
                 }else {
                     finish();
                 }

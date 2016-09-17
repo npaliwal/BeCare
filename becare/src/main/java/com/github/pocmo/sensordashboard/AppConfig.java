@@ -100,6 +100,9 @@ public class AppConfig {
         CONTRAST_EXERCISES_PATTERN.add(new ContrastImageInfo("pattern_2", R.drawable.pattern_2, ContrastTestType.PATTERN));
         CONTRAST_EXERCISES_PATTERN.add(new ContrastImageInfo("pattern_3", R.drawable.pattern_3, ContrastTestType.PATTERN));
         CONTRAST_EXERCISES_PATTERN.add(new ContrastImageInfo("pattern_4", R.drawable.pattern_4, ContrastTestType.PATTERN));
+        CONTRAST_EXERCISES_PATTERN.add(new ContrastImageInfo("pattern_5", R.drawable.pattern_5, ContrastTestType.PATTERN));
+        CONTRAST_EXERCISES_PATTERN.add(new ContrastImageInfo("pattern_6", R.drawable.pattern_6, ContrastTestType.PATTERN));
+        CONTRAST_EXERCISES_PATTERN.add(new ContrastImageInfo("pattern_7", R.drawable.pattern_7, ContrastTestType.PATTERN));
 
     }
 

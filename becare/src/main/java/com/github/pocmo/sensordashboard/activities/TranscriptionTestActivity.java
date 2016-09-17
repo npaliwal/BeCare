@@ -231,6 +231,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                     startEnd.setText("START");
                     cTimer.cancel();
                     findViewById(R.id.keyboard).setVisibility(View.INVISIBLE);
+                    speaker.setVisibility(View.INVISIBLE);
                     flowLayout.removeAllViews();
                     flowLayout.setVisibility(View.INVISIBLE);
                     performance.setVisibility(View.INVISIBLE);
@@ -332,6 +333,17 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         }
     }
 
+    private void uploadSummary(int count, int accuracy){
+        long readTime = System.currentTimeMillis();
+        LinkedHashMap dictionary = new LinkedHashMap();
+        dictionary.put("activityname", getString(R.string.exercise_transcription));
+        dictionary.put("letter_cnt", count);
+        dictionary.put("accuracy", accuracy);
+        dictionary.put("time", DateUtils.formatDateTime(readTime));
+
+        mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
+    }
+
     private void uploadEnd(){
         long readTime = System.currentTimeMillis();
         LinkedHashMap dictionary = new LinkedHashMap();
@@ -342,7 +354,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         dictionary.put("time", DateUtils.formatTime(readTime));
 
         mRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-
     }
 
     public void uploadUserActivityStats(CharSequence origChar, CharSequence userInput) {
@@ -383,6 +394,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
             currInputIndex++;
             currCharIndex++;
             if(currInputIndex == originalText.length()){
+                uploadSummary(originalText.replace(" ", "").length(), correctInputCount);
+
                 this.currExercise++;
                 this.currInputIndex = 0;
 

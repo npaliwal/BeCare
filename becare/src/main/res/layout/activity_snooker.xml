@@ -8,8 +8,22 @@
     <com.github.pocmo.sensordashboard.ui.BallBounces
         android:id="@+id/arena"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+       android:layout_alignParentBottom="true"
+        android:layout_marginBottom="20dp"
+        />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Drag the ball along the path to the goalpost"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="0dp"
+        android:gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorYellow"
+        />
 
     <TextView
         android:id="@+id/tv_path_build"

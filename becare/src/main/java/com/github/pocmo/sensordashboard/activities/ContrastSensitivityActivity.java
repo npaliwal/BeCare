@@ -224,7 +224,7 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
                     initVariables();
                     cTimer.start();
                     status.setText("STOP");
-                    pagerContainer.setVisibility(View.VISIBLE);
+                    //pagerContainer.setVisibility(View.VISIBLE);
                     //responseContainer.setVisibility(View.VISIBLE);
                 } else if (status.getText().toString().equalsIgnoreCase("stop")) {
                     cTimer.cancel();
@@ -240,6 +240,16 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         });
     }
 
+    private boolean genRandomBoolean(Random r, int seedSize){
+        int temp = 0;
+        for(int i=0; i<10; i++){
+            if(r.nextInt(seedSize) < seedSize/2){
+                temp++;
+            }
+        }
+        return temp < 5;
+    }
+
     private void initExercises(){
         exercises.clear();
         int numExercises = preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.SHADES);
@@ -252,16 +262,18 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             if(exercises.size() <= temp){
                 exercises.add(new TwoImageInfo());
                 exercises.get(temp).setLeftImage(currExercise);
-                if(random.nextBoolean()){
+                if(genRandomBoolean(random, AppConfig.CONTRAST_EXERCISES_SHADES.size())){
                     Log.d(TAG, "Putting same shade exercise for right as well");
                     exercises.get(temp).setRightImage(currExercise);
                     temp++;
                 }
             }else{
+                if(currExercise == exercises.get(temp).getLeftImage()){
+                    currExercise = AppConfig.CONTRAST_EXERCISES_SHADES.get((currId+1)%AppConfig.CONTRAST_EXERCISES_SHADES.size());
+                }
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;
             }
-            message.setInstruction(getString(R.string.contrast_instruction));
         }
 
         numExercises += preferenceStorage.getNumContrastExercise(AppConfig.ContrastTestType.ITCHI_PLATE);
@@ -271,12 +283,15 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             if(exercises.size() <= temp){
                 exercises.add(new TwoImageInfo());
                 exercises.get(temp).setLeftImage(currExercise);
-                if(random.nextBoolean()){
+                if(genRandomBoolean(random, AppConfig.CONTRAST_EXERCISES_ITCHI.size())){
                     Log.d(TAG, "Putting same itchi exercise for right as well");
                     exercises.get(temp).setRightImage(currExercise);
                     temp++;
                 }
             }else{
+                if(currExercise == exercises.get(temp).getLeftImage()){
+                    currExercise = AppConfig.CONTRAST_EXERCISES_ITCHI.get((currId+1)%AppConfig.CONTRAST_EXERCISES_ITCHI.size());
+                }
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;
             }
@@ -289,16 +304,20 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
             if(exercises.size() <= temp){
                 exercises.add(new TwoImageInfo());
                 exercises.get(temp).setLeftImage(currExercise);
-                if(random.nextBoolean()){
+                if(genRandomBoolean(random, AppConfig.CONTRAST_EXERCISES_PATTERN.size())){
                     Log.d(TAG, "Putting same pattern exercise for right as well");
                     exercises.get(temp).setRightImage(currExercise);
                     temp++;
                 }
             }else{
+                if(currExercise == exercises.get(temp).getLeftImage()){
+                    currExercise = AppConfig.CONTRAST_EXERCISES_PATTERN.get((currId+1)%AppConfig.CONTRAST_EXERCISES_PATTERN.size());
+                }
                 exercises.get(temp).setRightImage(currExercise);
                 temp++;
             }
         }
+        message.setInstruction(getString(R.string.contrast_instruction));
     }
 
     private void initViewPager(){
@@ -311,6 +330,8 @@ public class ContrastSensitivityActivity extends AppCompatActivity {
         });
         adapterViewPager = new MyPagerAdapter(getSupportFragmentManager(), exercises);
         pager.setAdapter(adapterViewPager);
+        pagerContainer.setVisibility(View.INVISIBLE);
+
     }
 
     private void uploadEnd(){

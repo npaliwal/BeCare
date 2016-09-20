@@ -586,7 +586,7 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
                 grav[1] = smoothed[1];
                 grav[2] = smoothed[2];
             } else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) {
-                smoothed = filter(event.values, mag, (float)0.6);
+                smoothed = filter(event.values, mag, (float)0.7);
                 mag[0] = smoothed[0];
                 mag[1] = smoothed[1];
                 mag[2] = smoothed[2];

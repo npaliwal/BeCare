@@ -43,7 +43,7 @@ public class StroopActivity extends AppCompatActivity {
     private TextView color1, color2;
     private String[] colors = {"Green", "Blue", "Red", "Purple", "Yellow", "Black", "Gray",  "Brown"};
 
-    private Boolean[] answers = new Boolean[TRIALS];
+    private int[] answers = new int[TRIALS]; //0--no answer, 1--yes, 2--no
     private CountDownTimer cTimer = null;
     private CountDownTimer cTimer2 = null;
     private CountDownTimer ringTimer = null;
@@ -154,7 +154,7 @@ public class StroopActivity extends AppCompatActivity {
                         test.setVisibility(View.VISIBLE);
                         stopButton.setVisibility(View.VISIBLE);
                         for (int i=0; i<answers.length; i++)
-                            answers[i] = false;
+                            answers[i] = 0;
                         random =new Random();
 
                         setWord();
@@ -221,7 +221,7 @@ public class StroopActivity extends AppCompatActivity {
                 else{
                     int correct = 0;
                     for (int i=0; i<answers.length; i++)
-                        if (answers[i])
+                        if (answers[i] == 1)
                             correct++;
                     double score = (double)correct / (double)answers.length * 100;
                     int s = (int)score;
@@ -341,10 +341,13 @@ public class StroopActivity extends AppCompatActivity {
         if (word1.equals("") || word2.equals(""))
             return;
 
+        if (answers[count-1] != 0) // have answered
+            return;
+
         if (word1.equals(word2))
-            answers[count-1] = true;
+            answers[count-1] = 1;
         else
-            answers[count-1] = false;
+            answers[count-1] = 2;
 
         long dur = System.currentTimeMillis() - currTime;
         currTime = System.currentTimeMillis();
@@ -358,10 +361,13 @@ public class StroopActivity extends AppCompatActivity {
         if (word1.equals("") || word2.equals(""))
             return;
 
+        if (answers[count-1] != 0) // have answered
+            return;
+
         if (!word1.equals(word2))
-            answers[count-1] = true;
+            answers[count-1] = 1;
         else
-            answers[count-1] = false;
+            answers[count-1] = 2;
 
         long dur = System.currentTimeMillis() - currTime;
         currTime = System.currentTimeMillis();

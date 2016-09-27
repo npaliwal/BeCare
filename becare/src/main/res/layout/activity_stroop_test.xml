@@ -23,7 +23,7 @@
             android:textSize="15sp"
             android:textStyle="bold"
             android:background="@drawable/timer"
-            android:text=" You are given 3 seconds to \n answer each question. You \n will determine if the two color\n  names are the same."/>
+            android:text=" You are given 3 seconds to \n answer each question. You \n will respond each color name."/>
 
 
     </LinearLayout>
@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:layout_marginTop="30dp"
+
         android:orientation="horizontal">
         <Button
             android:id="@+id/start_button"
@@ -69,84 +70,103 @@
         android:background="@color/stroopBg"
         android:visibility="gone"
         android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
 
-            android:orientation="horizontal">
             <LinearLayout
+                android:id="@+id/colorFrame"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="55dp"
+                android:layout_marginTop="10dp"
                 android:background="@color/stroopGrey"
-                android:padding="5dp"
+
                 android:orientation="vertical">
                 <TextView
                     android:id="@+id/color1"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
+                    android:layout_width="110dp"
+                    android:layout_height="55dp"
                     android:gravity="center"
                     android:background="@color/colorLINEN"
-
-                    android:textSize="20sp"
+                    android:visibility="gone"
+                    android:textSize="24sp"
                     android:textStyle="bold"
-                    android:text="Red"/>
-                <TextView
-                    android:text=" "
-                    android:layout_width="5dp"
-                    android:layout_height="4dp"
-                    android:gravity="center"
-                    android:background="@color/stroopGrey"
-                    android:textSize="18dip" />
-                <TextView
-                    android:id="@+id/color2"
-                    android:layout_width="100dp"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:background="@color/colorLINEN"
+                    android:text="color"/>
 
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    android:text="Red"/>
             </LinearLayout>
-            <!--      <ImageView
-                      android:id="@+id/matchOrNo"
-                      android:layout_width="30dp"
-                      android:layout_height="30dp"
-                      android:layout_marginTop="30dp"
-                      android:layout_marginLeft="30dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/stroopGrey"
+            android:layout_marginTop="20dp"
+            android:paddingTop="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/red_button"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Red"
+                android:onClick="redColor"
+                ></Button>
+            <Button
 
-                      />-->
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+
+                android:text="Blue"
+                android:onClick="blueColor"
+                ></Button>
+            <Button
+
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+
+                android:text="Yellow"
+                android:onClick="yellowColor"
+                ></Button>
+            <Button
+
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Green"
+                android:onClick="greenColor"
+                ></Button>
         </LinearLayout>
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
+            android:background="@color/stroopGrey"
+            android:paddingBottom="5dp"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
             android:orientation="horizontal">
-
-
             <Button
-                android:id="@+id/matchButton"
-                android:layout_width="150dp"
+
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="@color/green"
-                android:onClick="matchTest"
-                android:text="Match"/>
-
-
+                android:text="Gray"
+                android:onClick="grayColor"
+                ></Button>
             <Button
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:textSize="17sp"
-                android:textStyle="bold"
-                android:textColor="@color/red"
-                android:onClick="noMatchTest"
-                android:text="Not Match"/>
 
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Purple"
+                android:onClick="purpleColor"
+                ></Button>
+            <Button
+
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="Black"
+                android:onClick="blackColor"
+                ></Button>
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:text="White"
+                android:onClick="whiteColor"
+                ></Button>
         </LinearLayout>
-
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

@@ -1,7 +1,5 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,6 +24,7 @@ import com.github.pocmo.sensordashboard.BecareRemoteSensorManager;
 import com.github.pocmo.sensordashboard.R;
 import com.github.pocmo.sensordashboard.utils.DateUtils;
 
+import java.util.Calendar;
 import java.util.LinkedHashMap;
 import java.util.Random;
 
@@ -34,15 +33,16 @@ import java.util.Random;
  */
 public class StroopActivity extends AppCompatActivity {
     private final int TRIALS = 10;
-    private ImageView numberImg;
+    private LinearLayout colorFrame;
     private TextView message;
     private ImageView match;
     private LinearLayout button;
     private LinearLayout test;
     private LinearLayout number;
     private TextView color1, color2;
-    private String[] colors = {"Green", "Blue", "Red", "Purple", "Yellow", "Black", "Gray",  "Brown"};
-
+    private String[] colors = {"Red", "Blue", "Yellow", "Green", "Gray", "Purple", "Black",  "White"};
+    private String[] currentColors = new String[TRIALS];
+    private String[] currentWords = new String[TRIALS];
     private int[] answers = new int[TRIALS]; //0--no answer, 1--yes, 2--no
     private CountDownTimer cTimer = null;
     private CountDownTimer cTimer2 = null;
@@ -63,7 +63,7 @@ public class StroopActivity extends AppCompatActivity {
 
         customTitleBar();
         setContentView(R.layout.activity_stroop_test);
-        numberImg = (ImageView) findViewById(R.id.one);
+        colorFrame = (LinearLayout) findViewById(R.id.colorFrame);
         message = (TextView) findViewById(R.id.msg);
       //  match = (ImageView) findViewById(R.id.matchOrNo);
      //   match.setImageResource(R.drawable.yes);
@@ -72,9 +72,9 @@ public class StroopActivity extends AppCompatActivity {
         number = (LinearLayout) findViewById(R.id.number);
 
         color1 = (TextView) findViewById(R.id.color1);
-        color2 = (TextView) findViewById(R.id.color2);
+     //   color2 = (TextView) findViewById(R.id.color2);
 
-        matchButton =(Button)findViewById(R.id.matchButton);
+     //   matchButton =(Button)findViewById(R.id.matchButton);
 
         Uri notification  = RingtoneManager.getDefaultUri( RingtoneManager.TYPE_ALARM);
         ring = RingtoneManager.getRingtone(getApplicationContext(), notification);
@@ -85,98 +85,21 @@ public class StroopActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 button.setVisibility(View.GONE);
-                number.setVisibility(View.VISIBLE);
+             //   number.setVisibility(View.VISIBLE);
+                test.setVisibility(View.VISIBLE);
 
-                numberImg.setVisibility(View.VISIBLE);
-                numberImg.setImageResource(R.drawable.one);
                 ValueAnimator valueAnimator1 = ValueAnimator.ofInt(0,2);
                 final ValueAnimator valueAnimator2 = ValueAnimator.ofInt(0,2);
                 final ValueAnimator valueAnimator3 = ValueAnimator.ofInt(0,2);
                  mLoadAnimation = AnimationUtils.loadAnimation(getApplicationContext(), android.R.anim.fade_in);
                 mLoadAnimation.setDuration(1000);
-                valueAnimator1.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float animProgress =  animation.getAnimatedFraction();
-                        numberImg.setAlpha(animation.getAnimatedFraction());
-
-                    }
-                });
-                valueAnimator1.addListener(new AnimatorListenerAdapter()
-                {
-                    @Override
-                    public void onAnimationEnd(Animator animation)
-                    {
-                        numberImg.setImageResource(R.drawable.two);
-                        valueAnimator2.start();
-                        currTime = System.currentTimeMillis();
-                    }
-                });
 
 
-                valueAnimator2.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float animProgress =  animation.getAnimatedFraction();
-                        numberImg.setAlpha(animation.getAnimatedFraction());
 
-                    }
-                });
-                valueAnimator2.addListener(new AnimatorListenerAdapter()
-                {
-                    @Override
-                    public void onAnimationEnd(Animator animation)
-                    {
 
-                        numberImg.setImageResource(R.drawable.three);
-                        valueAnimator3.start();
-
-                    }
-                });
-
-                valueAnimator3.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator animation) {
-                        float animProgress =  animation.getAnimatedFraction();
-                        numberImg.setAlpha(animation.getAnimatedFraction());
-
-                    }
-                });
-                valueAnimator3.addListener(new AnimatorListenerAdapter()
-                {
-                    @Override
-                    public void onAnimationEnd(Animator animation)
-                    {
-                       // button.setVisibility(View.VISIBLE);
-                        message.setText("00:03");
-
-                        number.setVisibility(View.GONE);
-                        test.setVisibility(View.VISIBLE);
-                        stopButton.setVisibility(View.VISIBLE);
-                        for (int i=0; i<answers.length; i++)
-                            answers[i] = 0;
-                        random =new Random();
-
-                        setWord();
-                        cTimer.start();
-                    }
-                });
-
-                valueAnimator1.setDuration(500);
-                valueAnimator1.setRepeatCount(1);
-                valueAnimator1.setRepeatMode(ValueAnimator.REVERSE);
-
-                valueAnimator2.setDuration(500);
-                valueAnimator2.setRepeatCount(1);
-                valueAnimator2.setRepeatMode(ValueAnimator.REVERSE);
-
-                valueAnimator3.setDuration(500);
-                valueAnimator3.setRepeatCount(1);
-                valueAnimator3.setRepeatMode(ValueAnimator.REVERSE);
-
-                message.setTextSize(25);
-                message.setText("Get Ready");
-                valueAnimator1.start();
+                message.setTextSize(20);
+                message.setText("Get Ready.\nKnow the color buttons.\n 00:05");
+                cTimer2.start();
 
             }
         });
@@ -193,30 +116,38 @@ public class StroopActivity extends AppCompatActivity {
                                          test.setVisibility(View.GONE);
                                          button.setVisibility(View.VISIBLE);
                                          stopButton.setVisibility(View.GONE);
+                                         color1.setVisibility(View.GONE);
                                          count = 0;
                                      }
                                  });
-        cTimer = new CountDownTimer(3700, 500) { // adjust the milli seconds here
+        cTimer = new CountDownTimer(4000, 500) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
                 float sec = (int) (millisUntilFinished / 1000);
 
                 if (sec == 3 || sec == 2 || sec == 1) {
                     int d = (int)sec;
-                    String str = String.format("00:0%d", d);
+                    String str = String.format("What color is the word?\n00:0%d", d);
                     message.setText(str);
                 }
+
+
             }
 
             public void onFinish() {//   startMeasure = false;
 
                 if (count < TRIALS) {
-                  //  setWord();
+                    if (!currentData.uploaded) {
+                        long dur = System.currentTimeMillis() - currTime;
+                        currTime = System.currentTimeMillis();
+                        upload("no answer", count-1,  (int)dur);
+                    }
                     message.setText("Next...");
-                    color1.setText("");
-                    color2.setText("");
+
                     color1.startAnimation(mLoadAnimation);
-                    color2.startAnimation(mLoadAnimation);
-                    cTimer2.start();
+                    message.setText("00:03");
+                    setWord();
+                    cTimer.start();
+
                 }
                 else{
                     int correct = 0;
@@ -232,28 +163,35 @@ public class StroopActivity extends AppCompatActivity {
                     test.setVisibility(View.GONE);
                     button.setVisibility(View.VISIBLE);
                     stopButton.setVisibility(View.GONE);
+                    color1.setVisibility(View.GONE);
                     count = 0;
                 }
             }
         };
 
-        cTimer2 = new CountDownTimer(1500, 1000) { // adjust the milli seconds here
+        cTimer2 = new CountDownTimer(5700, 1000) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
                 float sec = (int) (millisUntilFinished / 1000);
 
+                if (sec == 5 || sec == 4 || sec == 3 || sec == 2 || sec == 1) {
+                    int d = (int)sec;
+                    String str = String.format("Get Ready.\n Know the color buttons.\n00:0%d", d);
+                    message.setText(str);
+                }
             }
 
             public void onFinish() {//   startMeasure = false;
-                if (!currentData.uploaded) {
-                    long dur = System.currentTimeMillis() - currTime;
-                    currTime = System.currentTimeMillis();
-
-                    if (currentData.word1.equals(currentData.word2))
-                        upload("no", count-1, (int)dur);
-                    else
-                        upload("yes", count-1,  (int)dur);
-                }
                 message.setText("00:03");
+
+                color1.setVisibility(View.VISIBLE);
+                test.setVisibility(View.VISIBLE);
+                stopButton.setVisibility(View.VISIBLE);
+                for (int i=0; i<answers.length; i++) {
+                    answers[i] = 0;
+                    currentColors[i] = "";
+                    currentWords[i] = "";
+                }
+                random =new Random();
                 setWord();
                 cTimer.start();
             }
@@ -334,28 +272,129 @@ public class StroopActivity extends AppCompatActivity {
 
     }
 
-    public void matchTest(View view) {
-        String word1 = color1.getText().toString();
-        String word2 = color2.getText().toString();
-
-        if (word1.equals("") || word2.equals(""))
-            return;
+    public void redColor(View view) {
 
         if (answers[count-1] != 0) // have answered
             return;
 
-        if (word1.equals(word2))
+        if (currentData.color1.equals("Red"))
             answers[count-1] = 1;
         else
             answers[count-1] = 2;
 
         long dur = System.currentTimeMillis() - currTime;
         currTime = System.currentTimeMillis();
-        upload("yes", count-1, (int)dur);
+        upload("Red", count-1, (int)dur);
     }
 
+    public void blueColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("Blue"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("Blue", count-1, (int)dur);
+    }
+
+    public void yellowColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("Yellow"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("Yellow", count-1, (int)dur);
+    }
+
+    public void greenColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("Green"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("Green", count-1, (int)dur);
+    }
+
+    public void grayColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("Gray"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("Gray", count-1, (int)dur);
+    }
+
+    public void purpleColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("Purple"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("Purple", count-1, (int)dur);
+    }
+
+    public void blackColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("Black"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("Black", count-1, (int)dur);
+    }
+
+    public void whiteColor(View view) {
+
+        if (answers[count-1] != 0) // have answered
+            return;
+
+        if (currentData.color1.equals("White"))
+            answers[count-1] = 1;
+        else
+            answers[count-1] = 2;
+
+        long dur = System.currentTimeMillis() - currTime;
+        currTime = System.currentTimeMillis();
+        upload("White", count-1, (int)dur);
+    }
+
+
     public void noMatchTest(View view) {
-        String word1 = color1.getText().toString();
+   /*     String word1 = color1.getText().toString();
         String word2 = color2.getText().toString();
 
         if (word1.equals("") || word2.equals(""))
@@ -371,59 +410,78 @@ public class StroopActivity extends AppCompatActivity {
 
         long dur = System.currentTimeMillis() - currTime;
         currTime = System.currentTimeMillis();
-        upload("no", count-1, (int)dur);
+        upload("no", count-1, (int)dur);*/
     }
 
     private void setWord()
     {
-        String word1, word2, colorName1=null, colorName2=null;
+        String word1,  colorName1=null, colorName2=null;
 
-        int index = randomGen();
+        int index =0;
+
+        int sec = Calendar.getInstance().get(Calendar.SECOND);
+        //set color
+        for (int i=0; i<sec; i++)
+            index = randomGen();
+
+        if (index >= colors.length)
+            return;
+        colorName1 = colors[index];
+
+        Boolean found = false;
+        for (int i=0; i<count; i++)
+            if (currentColors[i].equals(colorName1))
+                found = true;
+        if (found)
+            index = randomGen();
+        found = false;
+        for (int i=0; i<count; i++)
+            if (currentColors[i].equals(colorName1))
+                found = true;
+        if (found)
+            index = randomGen();
+        colorName1 = colors[index];
+        currentColors[count] = colorName1;
+
+        //set color
+        for (int i=0; i<sec; i++)
+            index = randomGen();
+
         if (index >= colors.length)
             return;
         word1 = colors[index];
 
-        Boolean yes = genIndexLeft();
-        if (yes)
-            word2 = word1;
-        else {
+        //set word
+        for (int i=0; i<sec; i++)
             index = randomGen();
-            while (colors[index] == word1)
-                index = randomGen();
-            word2 = colors[index];
-        }
 
-        //get color index for word1
-        index = randomGen();
-        while (colors[index] == word1)
-            index = randomGen();
-        colorName1 = colors[index];
+        if (index >= colors.length)
+            return;
+        word1 = colors[index];
 
-        //get color index for word2
-        index = randomGen();
-        while (colors[index] == colorName1)
+        found = false;
+        for (int i=0; i<count; i++)
+            if (currentWords[i].equals(word1))
+                found = true;
+        if (found)
             index = randomGen();
-        colorName2 = colors[index];
+        found = false;
+        for (int i=0; i<count; i++)
+            if (currentWords[i].equals(word1))
+                found = true;
+        if (found)
+            index = randomGen();
+        word1 = colors[index];
+        currentWords[count] = word1;
 
         ring.play();
         ringTimer.start();
 
         color1.setText(word1);
-        color2.setText(word2);
-
         setWordColor(colorName1, color1);
-        setWordColor(colorName2, color2);
 
-      //  color1.setVisibility(View.VISIBLE);
-      //  color2.setVisibility(View.VISIBLE);
-        color1.startAnimation(mLoadAnimation);
-        color2.startAnimation(mLoadAnimation);
-
-
-        currentData.word1 = word1;
-        currentData.word2 = word2;
         currentData.color1 = colorName1;
-        currentData.color2 = colorName2;
+        currentData.word1 = word1;
         currentData.uploaded = false;
 
         count++;
@@ -431,29 +489,45 @@ public class StroopActivity extends AppCompatActivity {
 
     private void setWordColor(String word, TextView color)
     {
-        if (word == "Green")
+        if (word == "Green") {
             color.setTextColor(Color.rgb(10, 160, 92));
 
-        if (word == "Red")
+        }
+
+        if (word == "Red") {
             color.setTextColor(Color.rgb(215, 58, 49));
 
-        if (word == "Blue")
-            color.setTextColor(Color.rgb(63, 81,181));
+        }
 
-        if (word == "Yellow")
+        if (word == "Blue") {
+            color.setTextColor(Color.rgb(63, 81, 181));
+
+        }
+
+        if (word == "Yellow") {
             color.setTextColor(Color.rgb(255, 193, 7));
 
-        if (word == "Black")
+        }
+
+        if (word == "Black") {
             color.setTextColor(Color.rgb(0, 0, 0));
 
-        if (word == "Purple")
+        }
+
+        if (word == "Purple") {
             color.setTextColor(Color.rgb(156, 39, 176));
 
-        if (word == "Brown")
-            color.setTextColor(Color.rgb(153, 76, 0));
+        }
 
-        if (word == "Gray")
-            color.setTextColor(Color.rgb(110, 110, 110));
+        if (word == "Gray") {
+            color.setTextColor(Color.rgb(130, 130, 130));
+
+        }
+
+        if (word == "White") {
+            color.setTextColor(Color.rgb(255, 255, 255));
+
+        }
     }
 
     private Boolean genIndexLeft()
@@ -480,15 +554,13 @@ public class StroopActivity extends AppCompatActivity {
         return ran;
     }
 
-    private void upload(String match, int seq, int dur){
+    private void upload(String answer, int seq, int dur){
         LinkedHashMap dictionary = new LinkedHashMap();
         dictionary.put("activityname", getString(R.string.stroop));
         dictionary.put("seq", seq);
-        dictionary.put("word1", currentData.word1);
-        dictionary.put("word2", currentData.word2);
-        dictionary.put("color1", currentData.color1);
-        dictionary.put("color2",  currentData.color2);
-        dictionary.put("match",  match);
+        dictionary.put("word", currentData.word1);
+        dictionary.put("color", currentData.color1);
+        dictionary.put("answer",  answer);
         dictionary.put("dur",  dur);
 
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
@@ -510,9 +582,7 @@ public class StroopActivity extends AppCompatActivity {
 
     public class wordData{
         public String word1;
-        public String word2;
         public String color1;
-        public String color2;
         public Boolean uploaded;
     }
 }

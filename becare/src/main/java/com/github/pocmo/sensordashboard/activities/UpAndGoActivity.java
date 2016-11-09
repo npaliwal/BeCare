@@ -458,7 +458,7 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         if (lastAzimuth == 0)
             lastAzimuth = azimuth;
 
-        if (Math.abs(azimuth - lastAzimuth) > 120) {
+        if (Math.abs(azimuth - lastAzimuth) > 140) {
             if (!currMotion.equals(walkingMsg))
                 return false;
 

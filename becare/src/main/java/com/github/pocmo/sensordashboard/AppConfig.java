@@ -7,6 +7,7 @@ import com.github.pocmo.sensordashboard.activities.ArmElevationActivity;
 import com.github.pocmo.sensordashboard.activities.ContrastSensitivityActivity;
 import com.github.pocmo.sensordashboard.activities.SnookerActivity;
 import com.github.pocmo.sensordashboard.activities.StroopActivity;
+import com.github.pocmo.sensordashboard.activities.TapTaskActivity;
 import com.github.pocmo.sensordashboard.activities.TimedWalkedActivity;
 import com.github.pocmo.sensordashboard.activities.TranscriptionTestActivity;
 import com.github.pocmo.sensordashboard.activities.UpAndGoActivity;
@@ -56,6 +57,7 @@ public class AppConfig {
         ALL_TAKSK.add(new WellnessTask(R.string.exercise_contrast, R.string.description_contrast, R.drawable.contrast, ContrastSensitivityActivity.class));
         ALL_TAKSK.add(new WellnessTask(R.string.exercise_timed_walk, R.string.description_timed_walk, R.drawable.timed, TimedWalkedActivity.class));
         ALL_TAKSK.add(new WellnessTask(R.string.up_and_go, R.string.description_up_and_go, R.drawable.up, UpAndGoActivity.class));
+        ALL_TAKSK.add(new WellnessTask(R.string.description_tap_test, R.string.taptask_instruction, R.drawable.chest_icon, TapTaskActivity.class));
         ALL_TAKSK.add(new WellnessTask(R.string.stroop, R.string.description_stroop_test, R.drawable.stroop, StroopActivity.class));
     }
 

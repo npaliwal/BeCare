@@ -37,13 +37,13 @@ public class MenuUtils{
         context.startActivity(intent);
     }
 
-    public static void getUpAndGo(Context context) {
-        Intent intent = new Intent(context, UpAndGoActivity.class);
+    public static void getStroop(Context context) {
+        Intent intent = new Intent(context, StroopActivity.class);
         context.startActivity(intent);
     }
 
-    public static void getStroop(Context context) {
-        Intent intent = new Intent(context, StroopActivity.class);
+    public static void getTapTask(Context context) {
+        Intent intent = new Intent(context, TapTaskActivity.class);
         context.startActivity(intent);
     }
 

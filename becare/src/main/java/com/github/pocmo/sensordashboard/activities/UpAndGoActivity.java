@@ -545,7 +545,7 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MenuUtils.getStroop(UpAndGoActivity.this);
+                MenuUtils.getTapTask(UpAndGoActivity.this);
                 overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
                 finish();
             }
@@ -670,33 +670,6 @@ public class UpAndGoActivity extends AppCompatActivity implements SensorEventLis
         dictionary.put("dur (ms)", durStr);
         becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
         setImageColor(currMotion);
-    }
-
-    private void sendStopMsg(long dur)
-    {
-        deltaText.setText("stop");
-
-        String durStr = String.format("%d", dur);
-        LinkedHashMap dictionary = new LinkedHashMap();
-        dictionary.put("activityname", getString(R.string.up_and_go));
-        dictionary.put("motion", "stop");
-        dictionary.put("dur (ms)", durStr);
-        becareRemoteSensorManager.uploadActivityDataAsyn(dictionary);
-      //  lastTime = SystemClock.elapsedRealtime();
-
-        setImageColor(stopMsg);
-     /*   if (!stand.getTag().equals("green")) {
-            stand.setImageResource(R.drawable.stand_green);
-            stand.setTag("green");
-        }
-        if (sit.getTag().equals("green")) {
-            sit.setImageResource(R.drawable.sit);
-            sit.setTag("purple");
-        }
-        if (walk.getTag().equals("green")) {
-            walk.setImageResource(R.drawable.walking);
-            walk.setTag("purple");
-        }*/
     }
 
     void setImageColor(String motion)

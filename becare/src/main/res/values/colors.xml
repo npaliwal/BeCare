@@ -114,4 +114,8 @@
     <color name="stroopWordGrey">#6a686a</color>
     <color name="stroopBg">#ebebeb</color>
     <color name="stroopWhite">#fafafa</color>
+
+    <color name="progress_circle_fill">#ff00ddff</color>
+    <color name="progress_circle_unfill">#aaa</color>
+    <color name="progress_circle_textcolor">#ffcc0000</color>
 </resources>

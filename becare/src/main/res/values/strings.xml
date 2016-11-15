@@ -64,6 +64,8 @@
     <string name="transcript_performance">✔ %1$d \t\t  ✖ %2$d </string>
     <string name="transcript_performance_time">✔ %1$d \t\t  ✖ %2$d\t\t in %3$s</string>
 
+    <string name="tap_performance">Bronze: %1$d \t\t  Silver: %2$d\t\t  Gold: %3$d</string>
+
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>

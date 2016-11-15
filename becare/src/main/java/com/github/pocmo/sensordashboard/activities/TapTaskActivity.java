@@ -1,11 +1,6 @@
 package com.github.pocmo.sensordashboard.activities;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Point;
-import android.media.Image;
+
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.app.NavUtils;
@@ -25,10 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.pocmo.sensordashboard.R;
-import com.github.pocmo.sensordashboard.animation.AnimatedSprite;
+import com.github.pocmo.sensordashboard.animation.ProgressCircle;
 import com.github.pocmo.sensordashboard.ui.InstructionView;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,9 +37,13 @@ public class TapTaskActivity extends AppCompatActivity {
     private CountDownTimer animationTimer;
 
     private ImageView chest, bronze, silver, gold;
+    private TextView startEnd, performance;
+    private ProgressCircle bronzeProgress, silverProgress, goldProgress;
     private InstructionView message;
     private ViewGroup container;
+    private CountDownTimer cTimer = null, eTimer = null;
 
+    private int currentExercise = 0, numBronzeCoins = 0, numSilverCoins = 0,  numGoldCoins = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +56,13 @@ public class TapTaskActivity extends AppCompatActivity {
         bronze = (ImageView)findViewById(R.id.bronze);
         silver = (ImageView)findViewById(R.id.silver);
         gold = (ImageView)findViewById(R.id.gold);
+
+        startEnd = (TextView) findViewById(R.id.start_end);
+        performance = (TextView) findViewById(R.id.tv_performance);
+
+        bronzeProgress = (ProgressCircle)findViewById(R.id.bronze_progress);
+        silverProgress = (ProgressCircle)findViewById(R.id.silver_progress);
+        goldProgress = (ProgressCircle)findViewById(R.id.gold_progress);
 
         message = (InstructionView)findViewById(R.id.msg);
 
@@ -89,6 +94,7 @@ public class TapTaskActivity extends AppCompatActivity {
 
         initCoinFrameMap();
         initUI();
+        initTimer();
     }
 
     private void customTitleBar(){
@@ -136,26 +142,143 @@ public class TapTaskActivity extends AppCompatActivity {
         ab.setCustomView(customActionBar, layout);
     }
 
+    private String getCoinType(){
+        switch (currentExercise){
+            case 0: return "Bronze";
+            case 1: return "Silver";
+            default:return "Gold";
+        }
+    }
+
+    private void disableCoinClicks(){
+        bronze.setClickable(false); bronzeProgress.setClickable(false);
+        silver.setClickable(false); silverProgress.setClickable(false);
+        gold.setClickable(false); goldProgress.setClickable(false);
+
+        bronzeProgress.setProgress(0f);
+        bronzeProgress.startAnimation(1);
+        silverProgress.setProgress(0f);
+        silverProgress.startAnimation(1);
+        goldProgress.setProgress(0f);
+        goldProgress.startAnimation(100);
+    }
+
+    private void enableCoinType(){
+        switch (currentExercise){
+            case 0:
+                bronze.setClickable(true);
+                bronzeProgress.setClickable(true);
+                bronzeProgress.setProgress(1f);
+                bronzeProgress.startAnimation(100);
+                break;
+
+            case 1:
+                silver.setClickable(true);
+                silverProgress.setClickable(true);
+                silverProgress.setProgress(1f);
+                silverProgress.startAnimation(100);
+                break;
+
+            default:
+                gold.setClickable(true);
+                goldProgress.setClickable(true);
+                goldProgress.setProgress(1f);
+                goldProgress.startAnimation(100);;
+        }
+    }
+
+    private void initTimer() {
+        cTimer = new CountDownTimer(3999, 500) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                message.setMessage("Collect "+getCoinType()+" coins\n" + (1+ millisUntilFinished/1000), true);
+            }
+
+            @Override
+            public void onFinish() {
+                eTimer.start();
+                enableCoinType();
+            }
+        };
+
+        eTimer = new CountDownTimer(29999, 500) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                message.setMessage("Timer : "+(1 + millisUntilFinished/1000) +" secs", false);
+            }
+
+            @Override
+            public void onFinish() {
+                disableCoinClicks();
+                if(currentExercise == 2){
+                    message.setMessage("Congratulations!!\nTotal score is " + (numGoldCoins+numSilverCoins+numBronzeCoins), true);
+                }else {
+                    currentExercise++;
+                    cTimer.start();
+                }
+            }
+        };
+    }
+
+    private void setPerformance(){
+        performance.setVisibility(View.VISIBLE);
+        performance.setText(getString(R.string.tap_performance, numBronzeCoins, numSilverCoins, numGoldCoins));
+    }
+
     private void initUI(){
-        bronze.setOnClickListener(new View.OnClickListener() {
+        bronzeProgress.setProgress(0f); bronzeProgress.startAnimation(1);
+        silverProgress.setProgress(0f);silverProgress.startAnimation(1);
+        goldProgress.setProgress(0f);goldProgress.startAnimation(1);
+
+        View.OnClickListener bronzeClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //bronzeProgress.setProgress(1f);
+                //bronzeProgress.startAnimation(1000);
                 animationTimer.start();
-                addCoin("bronze", bronze);
+                numBronzeCoins++;
+                setPerformance();
+                addCoin("bronze", bronze, bronzeProgress, 1000);
             }
-        });
-        gold.setOnClickListener(new View.OnClickListener() {
+        };
+        bronzeProgress.setOnClickListener(bronzeClick);
+        bronze.setOnClickListener(bronzeClick);
+
+        View.OnClickListener silverClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //silverProgress.setProgress(1f);
+                //silverProgress.startAnimation(2000);
                 animationTimer.start();
-                addCoin("gold", gold);
+                numSilverCoins++;
+                setPerformance();
+                addCoin("silver", silver, silverProgress, 1000);
             }
-        });
-        silver.setOnClickListener(new View.OnClickListener() {
+        };
+        silverProgress.setOnClickListener(silverClick);
+        silver.setOnClickListener(silverClick);
+
+        View.OnClickListener goldClick = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //goldProgress.setProgress(1f);
+                //goldProgress.startAnimation(3000);
                 animationTimer.start();
-                addCoin("silver", silver);
+                numGoldCoins++;
+                setPerformance();
+                addCoin("gold", gold, goldProgress, 1000);
+            }
+        };
+        goldProgress.setOnClickListener(goldClick);
+        gold.setOnClickListener(goldClick);
+
+        disableCoinClicks();
+        startEnd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                cTimer.start();
+                startEnd.setVisibility(View.INVISIBLE);
+                chest.setVisibility(View.VISIBLE);
             }
         });
         message.setInstruction(getString(R.string.taptask_instruction));
@@ -201,29 +324,31 @@ public class TapTaskActivity extends AppCompatActivity {
 
     }
 
-    private void addCoin(final String coinType, View coinView){
+    private void addCoin(final String coinType, final View coinView, final ProgressCircle coinProgress, int duration){
         final RelativeLayout rl = (RelativeLayout) findViewById(R.id.container);
         final ImageView iv = new ImageView(this);
 
         int[] coinLocations = new int[2];
-        coinView.getLocationOnScreen(coinLocations);
+        coinProgress.getLocationOnScreen(coinLocations);
 
         int[] chestLocations = new int[2];
         chest.getLocationOnScreen(chestLocations);
 
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(coinView.getWidth(), coinView.getHeight());
-        params.leftMargin = coinLocations[0];
-        params.topMargin = container.getHeight() - 2*coinView.getHeight();
+        params.leftMargin = coinLocations[0] + coinProgress.getWidth()/2;
+        params.topMargin = coinLocations[1] - coinProgress.getHeight()/2;
         rl.addView(iv, params);
 
 
         final Animation animation = new TranslateAnimation(0 , chestLocations[0]-coinLocations[0] ,
-                                                        0, chestLocations[1]-coinLocations[1] + chest.getHeight()/2);
-        animation.setDuration(1000);
+                                                        0, chestLocations[1]-coinLocations[1] + chest.getHeight()/2 - coinProgress.getHeight()/2);
+        animation.setDuration(duration);
         animation.setFillAfter(true);
         iv.startAnimation(animation);
 
-        CountDownTimer coinTimer = new CountDownTimer(1000, 50) {
+        //coinProgress.setClickable(false);
+        //coinView.setClickable(false);
+        CountDownTimer coinTimer = new CountDownTimer(duration, 50) {
             int animationCounter = 1;
 
             @Override
@@ -238,6 +363,10 @@ public class TapTaskActivity extends AppCompatActivity {
             @Override
             public void onFinish() {
                 rl.removeView(iv);
+                coinProgress.setProgress(0);
+                coinProgress.invalidate();
+                //coinProgress.setClickable(true);
+                //coinView.setClickable(true);
             }
         };
         coinTimer.start();

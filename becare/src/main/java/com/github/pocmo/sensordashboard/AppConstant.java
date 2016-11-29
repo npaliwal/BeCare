@@ -5,8 +5,8 @@ package com.github.pocmo.sensordashboard;
  */
 public interface AppConstant {
     String BECARE_FILE_NAME     = "becare_preferences";
-    String DEFAULT_SOCKET_IP    = "13.92.137.207";
-    int DEFAULT_SOCKET_PORT     = 8181;
+    String DEFAULT_SOCKET_IP    = "192.168.1.3";//"13.92.137.207";
+    int DEFAULT_SOCKET_PORT     = 4567;//8181;
 
     String HIVE_API_KEY         = "oNm5GQT3HY47uL8JAFeiyZgpR";
     String COMB_DEVICE          = "devicecmb";

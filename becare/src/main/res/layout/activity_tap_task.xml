@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:id="@+id/msg_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <com.github.pocmo.sensordashboard.ui.InstructionView
+                android:id="@+id/msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:background="@drawable/rounded_green_rectangle"
+                android:padding="5dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:minHeight="120dp"
+                android:text="@string/taptask_instruction"/>
+            <TextView
+                android:id="@+id/tv_performance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/tap_performance"
+                android:visibility="invisible"
+                />
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/chest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/chest3_frame1"
+            android:layout_below="@+id/msg_container"
+            android:layout_centerHorizontal="true"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:id="@+id/start_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="START"
+            android:background="@color/colorPrimary"
+            android:textColor="@color/white"
+            android:padding="5dp"
+            android:textSize="18sp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center|bottom"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/coins_container"
+            android:minWidth="100dp"
+            android:visibility="visible"
+            />
+        <LinearLayout
+            android:id="@+id/coins_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="20dp"
+            android:layout_alignParentBottom="true"
+            android:visibility="visible"
+            >
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center">
+                <com.github.pocmo.sensordashboard.animation.ProgressCircle
+                    android:id="@+id/bronze_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:progressColor="#BBD452"
+                    app:incompleteProgressColor="#D4D4D4"
+                    android:layout_margin="25dp"/>
+                <ImageView
+                    android:id="@+id/bronze"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/bronze9_frame1"
+                    android:layout_gravity="center"
+                 />
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center">
+                <com.github.pocmo.sensordashboard.animation.ProgressCircle
+                    android:id="@+id/silver_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:progressColor="#BBD452"
+                    app:incompleteProgressColor="#D4D4D4"
+                    android:layout_margin="25dp"/>
+                <ImageView
+                    android:id="@+id/silver"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/silver9_frame1"
+                    android:layout_gravity="center"
+                    />
+            </FrameLayout>
+
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center">
+                <com.github.pocmo.sensordashboard.animation.ProgressCircle
+                    android:id="@+id/gold_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:progressColor="#BBD452"
+                    app:incompleteProgressColor="#D4D4D4"
+                    android:layout_margin="25dp"/>
+                <ImageView
+                    android:id="@+id/gold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/gold9_frame1"
+                    android:layout_gravity="center"
+                    />
+            </FrameLayout>
+
+        </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

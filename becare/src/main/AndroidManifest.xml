@@ -86,8 +86,13 @@
         <activity android:name=".activities.TimedWalkedActivity"
             android:screenOrientation="portrait"
             android:label="@string/exercise_timed_walk">
-
         </activity>
+
+        <activity android:name=".activities.TapTaskActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/exercise_tap_task">
+        </activity>
+
         <activity
             android:name=".activities.TwentyFiveStepsActivity"
             android:label="25 Steps Walking"

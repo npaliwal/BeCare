@@ -165,12 +165,7 @@ public class TranscriptionTestActivity extends AppCompatActivity {
         uploadEnd();
     }
 
-    private void initUIElements() {
-        quadrantOrder.clear();
-        quadrantOrder.add(1);
-        quadrantOrder.add(2);
-        quadrantOrder.add(3);
-        quadrantOrder.add(4);
+    private void shuffleQuadrants(){
         Collections.shuffle(quadrantOrder);
 
         Map<Integer, View> quadrantMap = new HashMap<>();
@@ -189,7 +184,16 @@ public class TranscriptionTestActivity extends AppCompatActivity {
 
         container2.addView(quadrantMap.get(quadrantOrder.get(2)));
         container2.addView(quadrantMap.get(quadrantOrder.get(3)));
+    }
 
+    private void initUIElements() {
+        quadrantOrder.clear();
+        quadrantOrder.add(1);
+        quadrantOrder.add(2);
+        quadrantOrder.add(3);
+        quadrantOrder.add(4);
+
+        findViewById(R.id.keyboard).setVisibility(View.INVISIBLE);
         speaker = findViewById(R.id.speaker);
         startEnd = (TextView) findViewById(R.id.start_end);
         performance = (TextView) findViewById(R.id.tv_performance);
@@ -223,7 +227,6 @@ public class TranscriptionTestActivity extends AppCompatActivity {
                 if(startEnd.getText().toString().equalsIgnoreCase("start")){
                     initVariables();
                     startEnd.setText("STOP");
-                    findViewById(R.id.keyboard).setVisibility(View.VISIBLE);
                     flowLayout.setVisibility(View.VISIBLE);
                     cTimer.start();
                 }else if(startEnd.getText().toString().equalsIgnoreCase("stop")){
@@ -303,6 +306,8 @@ public class TranscriptionTestActivity extends AppCompatActivity {
     }
 
     private void populateTextForAudio(){
+        shuffleQuadrants();
+        findViewById(R.id.keyboard).setVisibility(View.VISIBLE);
         flowLayout.removeAllViews();
         flowLayout.setClickable(true);
         correctInputCount = incorrectInputCount = 0;

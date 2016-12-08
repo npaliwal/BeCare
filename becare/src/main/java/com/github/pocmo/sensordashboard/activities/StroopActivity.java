@@ -238,7 +238,7 @@ public class StroopActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MenuUtils.getTapTask(StroopActivity.this);
+                MenuUtils.getUpAndGo(StroopActivity.this);
                 overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
                 finish();
             }

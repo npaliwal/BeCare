@@ -55,7 +55,7 @@ public class TimedWalkedActivity extends AppCompatActivity{
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MenuUtils.getUpAndGoActivity(TimedWalkedActivity.this);
+                MenuUtils.getUpAndGo(TimedWalkedActivity.this);
                 overridePendingTransition(R.anim.trans_left_in, R.anim.trans_left_out);
                 finish();
             }

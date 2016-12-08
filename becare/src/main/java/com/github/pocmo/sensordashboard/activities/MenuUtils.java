@@ -57,7 +57,7 @@ public class MenuUtils{
         context.startActivity(intent);
     }
 
-    public static void getUpAndGoActivity(Context context) {
+    public static void getUpAndGo(Context context) {
         Intent intent = new Intent(context, UpAndGoActivity.class);
         context.startActivity(intent);
     }
@@ -66,4 +66,6 @@ public class MenuUtils{
         Intent intent = new Intent(context, UtilityActivity.class);
         context.startActivity(intent);
     }
+
+
 }

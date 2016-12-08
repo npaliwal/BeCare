@@ -7,12 +7,9 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
@@ -114,7 +111,7 @@ public class TapTaskActivity extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MenuUtils.getUpAndGoActivity(TapTaskActivity.this);
+                MenuUtils.getUpAndGo(TapTaskActivity.this);
                 overridePendingTransition(R.anim.trans_right_in, R.anim.trans_right_out);
                 finish();
             }
